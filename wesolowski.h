@@ -1,7 +1,7 @@
 #ifndef WESOLOWSKI_H
 #define WESOLOWSKI_H
 
-#include </usr/local/include/gmp.h>
+#include <gmp.h>
 #include <vector>
 #include <chrono>
 

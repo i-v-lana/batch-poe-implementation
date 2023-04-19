@@ -3,7 +3,7 @@
 #include <fstream>
 #include <iostream>
 #include <math.h>
-#include "/usr/local/include/gmp.h"
+#include <gmp.h>
 
 
 #include "wesolowski.h"

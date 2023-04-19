@@ -8,7 +8,7 @@
 //#include "sha512.h"
 //#include "utils.h"
 #include "wesolowski.h"
-#include </usr/local/include/gmpxx.h>
+#include <gmpxx.h>
 
 
 void generate_prime(mpz_t& rop, gmp_randstate_t& rstate, const mp_bitcnt_t& n){

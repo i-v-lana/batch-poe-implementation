@@ -1,7 +1,7 @@
 #ifndef PROOF_H
 #define PROOF_H
 
-#include </usr/local/include/gmpxx.h>
+#include <gmpxx.h>
 
 class Proof {
 public:
