@@ -1,7 +1,7 @@
 #ifndef WESOLOWSKI_H
 #define WESOLOWSKI_H
 
-#include </usr/local/include/gmpxx.h>
+#include </usr/local/include/gmp.h>
 #include <vector>
 #include <chrono>
 
@@ -9,39 +9,39 @@
 
 class Wesolowski {
 public:
-Wesolowski();
+    Wesolowski();
 
-void setup(int lambda, int k);
-void generate(mpz_class& dest);
-Proof evaluate(mpz_class l, mpz_class pi, const mpz_class x,
-               long challenge);
-bool parallel_verify(mpz_class x, long challenge, mpz_class l, mpz_class pi);
-bool parallel_diff_verify(mpz_class x, long challenge, mpz_class l, mpz_class pi);
-bool naive_verify(mpz_class x, long challenge, mpz_class l, mpz_class pi);
-bool optimized_verify(mpz_class x, long challenge, mpz_class l, mpz_class pi, int w);
-std::chrono::duration<double> setup_time;
-std::chrono::duration<double> eval_time;
-std::chrono::duration<double> proof_time;
-std::chrono::duration<double> verif_time;
-std::chrono::duration<double> verif_time_opti;
+    void setup(int lambda, int k);
+    void generate(mpz_t& dest);
+    Proof evaluate(mpz_t l, mpz_t pi, const mpz_t x,
+                   long challenge);
+    bool parallel_verify(mpz_t x, long challenge, mpz_t l, mpz_t pi);
+    bool parallel_diff_verify(mpz_t x, long challenge, mpz_t l, mpz_t pi);
+    bool naive_verify(mpz_t x, long challenge, mpz_t l, mpz_t pi);
+    bool optimized_verify(mpz_t x, long challenge, mpz_t l, mpz_t pi, int w);
+    std::chrono::duration<double> setup_time;
+    std::chrono::duration<double> eval_time;
+    std::chrono::duration<double> proof_time;
+    std::chrono::duration<double> verif_time;
+    std::chrono::duration<double> verif_time_opti;
 
 private:
-mpz_class y_saved;
-mpz_class N;
-mpz_class p;
-mpz_class q;
-int k;
-int lambda;
-mpz_class challenge;
+    mpz_t y_saved;
+    mpz_t N;
+    mpz_t p;
+    mpz_t q;
+    int k;
+    int lambda;
+    mpz_t challenge;
 
-gmp_randstate_t rstate;
+    gmp_randstate_t rstate;
 
-void HashG(mpz_class& dest, mpz_class hashed);
-void hash_prime(mpz_class l, const mpz_class input);
+    void HashG(mpz_t& dest, mpz_t hashed);
+    void hash_prime(mpz_t l, const mpz_t input);
 
-void unit_test();
+    void unit_test();
 
-int bit_length;
+    int bit_length;
 };
 
 #endif
