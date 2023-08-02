@@ -30,32 +30,24 @@ int main(int argc, char *argv[]) {
 
     srand(time(NULL));
 
-    Batching batch = Batching(lambda, k, 10);
+    Batching batch = Batching(lambda, k, t, 3);
+    batch.evaluate();
+    if (w == 0) {
+        result_verif = vdf.naive_verify(x, pow(2, t), l, pi);
+    }
+    else if(w == -1)
+    {
+        result_verif = vdf.parallel_verify(x, pow(2, t), l, pi);
+    }
+    else if(w == -2)
+    {
+        result_verif = vdf.parallel_diff_verify(x, pow(2, t), l, pi);
+    }
+    else
+    {
+        result_verif = vdf.optimized_verify(x, pow(2, t), l, pi, w);
+    }
 
-//    //Here is the evaluation part. We combine the evaluation and proof however there are two chrono for the separate phases.
-//    mpz_t l, pi;
-//    mpz_init(l);
-//    mpz_init(pi);
-//    vdf.evaluate(l, pi, x, pow(2, t));
-//
-//    // Here we run the naive and optimized verifications
-//    bool result_verif;
-//    if(w==0)
-//    {
-//        result_verif = vdf.naive_verify(x, pow(2, t), l, pi);
-//    }
-//    else if(w == -1)
-//    {
-//        result_verif = vdf.parallel_verify(x, pow(2, t), l, pi);
-//    }
-//    else if(w == -2)
-//    {
-//        result_verif = vdf.parallel_diff_verify(x, pow(2, t), l, pi);
-//    }
-//    else
-//    {
-//        result_verif = vdf.optimized_verify(x, pow(2, t), l, pi, w);
-//    }
     std::ofstream file;
 
     file.open("result/" + std::to_string(t) + "_" +
