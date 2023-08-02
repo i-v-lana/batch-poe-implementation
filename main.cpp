@@ -30,23 +30,24 @@ int main(int argc, char *argv[]) {
 
     srand(time(NULL));
 
-    Batching batch = Batching(lambda, k, t, 3);
-    batch.evaluate();
-    if (w == 0) {
-        result_verif = vdf.naive_verify(x, pow(2, t), l, pi);
-    }
-    else if(w == -1)
-    {
-        result_verif = vdf.parallel_verify(x, pow(2, t), l, pi);
-    }
-    else if(w == -2)
-    {
-        result_verif = vdf.parallel_diff_verify(x, pow(2, t), l, pi);
-    }
-    else
-    {
-        result_verif = vdf.optimized_verify(x, pow(2, t), l, pi, w);
-    }
+    Batching batch = Batching(lambda, k, t, 3, 4);
+    batch.batch();
+//    batch.evaluate();
+//    if (w == 0) {
+//        result_verif = vdf.naive_verify(x, pow(2, t), l, pi);
+//    }
+//    else if(w == -1)
+//    {
+//        result_verif = vdf.parallel_verify(x, pow(2, t), l, pi);
+//    }
+//    else if(w == -2)
+//    {
+//        result_verif = vdf.parallel_diff_verify(x, pow(2, t), l, pi);
+//    }
+//    else
+//    {
+//        result_verif = vdf.optimized_verify(x, pow(2, t), l, pi, w);
+//    }
 
     std::ofstream file;
 

@@ -9,20 +9,21 @@
 #include <vector>
 #include <gmp.h>
 #include "wesolowski.h"
+#include "mpz_helper.h"
+#include "PRF.h"
 #include <fstream>
 
 class Batching {
 private:
-    mpz_t x_instances[1000];
-    mpz_t y[1000];
+    PRF prf = PRF(bigint(), 0, 4, 0);
     int cnt;
     int t;
-    Wesolowski vdf[1000];
-    void generate(int _cnt);
+    std::vector<bigint> alpha;
+    mpz_helper helper;
 public:
-    Batching(int _lambda, int _k, int _t, int _cnt);
+    Batching(int _lambda, int _k, int _t, int _cnt, int _lambda_batch);
     void print(std::ofstream& file);
-    void evaluate();
+    void batch();
 };
 
 
