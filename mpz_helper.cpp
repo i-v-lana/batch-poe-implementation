@@ -33,3 +33,9 @@ bigint mpz_helper::mul_mod(bigint a, bigint b, bigint mod) {
     mpz_mod(ans.num, ans.num, mod.num);
     return ans;
 }
+
+bigint mpz_helper::get_random_mod(bigint mod) {
+    bigint ans = bigint();
+    mpz_urandomm(ans.num, state, mod.num);
+    return ans;
+}

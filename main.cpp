@@ -30,7 +30,7 @@ int main(int argc, char *argv[]) {
 
     srand(time(NULL));
 
-    Batching batch = Batching(lambda, k, t, 3, 4);
+    Batching batch = Batching(lambda, k, t, 3, 10, bigint(11));
     batch.batch();
 //    batch.evaluate();
 //    if (w == 0) {
@@ -55,7 +55,7 @@ int main(int argc, char *argv[]) {
               std::to_string(lambda) + "_" + std::to_string(k)+ "_" + std::to_string(w) + ".csv",
               std::ofstream::out | std::ofstream::app);
 
-    batch.print(file);
+    // batch.print(file);
 
 //    file << vdf.setup_time.count() << ";" << vdf.eval_time.count() << ";"
 //         << vdf.proof_time.count() << ";" << vdf.verif_time.count() << "\n";

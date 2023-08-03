@@ -18,10 +18,13 @@ private:
     PRF prf = PRF(bigint(), 0, 4, 0);
     int cnt;
     int t;
+    bigint N;
     std::vector<bigint> alpha;
     mpz_helper helper;
+    std::vector<bigint> x, y;
+    void gen();
 public:
-    Batching(int _lambda, int _k, int _t, int _cnt, int _lambda_batch);
+    Batching(int _lambda, int _k, int _t, int _cnt, int _lambda_batch, bigint _N);
     void print(std::ofstream& file);
     void batch();
 };

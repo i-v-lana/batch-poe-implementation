@@ -8,6 +8,7 @@
 
 #include <gmp.h>
 #include <cmath>
+#include <iostream>
 
 struct bigint {
     mpz_t num;
@@ -25,9 +26,6 @@ struct bigint {
     int bits() {
         return mpz_sizeinbase(num, 2);
     }
-    int bytes() {
-        return ceil((double) bits() / 8.0);
-    }
     bigint last_half(int len) {
         bigint ans = bigint();
         int half = len / 2;
@@ -42,7 +40,8 @@ struct bigint {
     }
     bigint first_n_bits(int n) {
         bigint ans = bigint();
-        mpz_tdiv_q_2exp(ans.num, num, n);
+        int len = bits();
+        mpz_tdiv_q_2exp(ans.num, num, len - n);
         return ans;
     }
 };
@@ -50,6 +49,7 @@ struct bigint {
 class mpz_helper {
 public:
     bigint get_random(int bit_cnt);
+    bigint get_random_mod(bigint mod);
     bigint generate_prime(int bit_cnt);
     bigint pow(bigint x, bigint p, bigint mod);
     bigint mul_mod(bigint a, bigint b, bigint mod);
