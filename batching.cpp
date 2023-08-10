@@ -12,6 +12,7 @@ Batching::Batching(int _lambda, int _k, int _t, int _cnt, int _lambda_batch, big
     t = _t;
     cnt = _cnt;
     N = _N;
+    k = _k;
     /// length of an input of PRF function
     int logcnt = 4;
     // int logcnt = std::bitset<MAX_CNT_BITS>(cnt).count();
@@ -43,6 +44,7 @@ void Batching::batch() {
     }
     std::cout << "batched instance" << std::endl;
     std::cout << "x: " << batch_x.num << "; y:" << batch_y.num << std::endl;
+    bool result = run_vdf(batch_x, batch_y);
 }
 
 void Batching::print(std::ofstream& file) {
@@ -59,5 +61,47 @@ void Batching::gen() {
     for (int i = 0; i < cnt; ++i) {
         x[i] = helper.get_random_mod(N);
         y[i] = helper.get_random_mod(N);
+    }
+}
+
+bool Batching::run_vdf(bigint cur_x, bigint cur_y) {
+    bigint real_y = trapdoor(cur_x);
+    Wesolowski vdf = Wesolowski();
+    vdf.setup(lambda, k, N.num);
+    bigint l = bigint();
+    bigint pi = bigint();
+    vdf.evaluate(l.num, pi.num, cur_x.num, t);
+    bool not_failed = vdf.naive_verify(cur_x.num, t, l.num, pi.num);
+    if (!not_failed) {
+        std::cout << "ERROR\n" << std::endl;
+        return false;
+    }
+    if (cur_y == vdf.y_saved)
+        std::cout << cur_x << " to the power of 2^" << t << "equals " << cur_y << std::endl;
+    else
+        std::cout << "expected " << vdf.y_saved << std::endl;
+    return true;
+}
+
+bigint Batching::trapdoor(bigint x) {
+    if (helper.gcd(x, N) != 1) {
+        std::cout << "can't use the trapdoor, going to use naive computation" << std::endl;
+
+    }
+    /// N = pq -> phi = (p - 1) * (q - 1)
+    bigint phi = (p - 1UL) * (q - 1UL);
+    /// counting 2^t mod phi
+    bigint power = helper.pow(bigint(2), bigint(t), phi);
+    bigint ans = helper.pow(x, power, N);
+    return ans;
+}
+
+void Batching::set_trapdoor(bigint& _p, bigint& _q) {
+    if (N == _p * _q) {
+        p = _p;
+        q = _q;
+        std::cout << "trapdoor was set" << std::endl;
+    } else {
+        std::cout << "trapdoor wasn't set" << std::endl;
     }
 }

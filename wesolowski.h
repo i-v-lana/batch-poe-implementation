@@ -11,7 +11,7 @@ class Wesolowski {
 public:
     Wesolowski();
 
-    void setup(int lambda, int k);
+    void setup(int lambda, int k, const mpz_t& _N);
     void generate(mpz_t& dest);
     Proof evaluate(mpz_t l, mpz_t pi, const mpz_t x,
                    long challenge);
@@ -24,9 +24,9 @@ public:
     std::chrono::duration<double> proof_time;
     std::chrono::duration<double> verif_time;
     std::chrono::duration<double> verif_time_opti;
+    mpz_t y_saved;
 
 private:
-    mpz_t y_saved;
     mpz_t N;
     mpz_t p;
     mpz_t q;

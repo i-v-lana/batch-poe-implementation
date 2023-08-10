@@ -23,14 +23,17 @@ int main(int argc, char *argv[]) {
 //    int k = std::atoi(argv[3]);
 //    int w = std::atoi(argv[4]);
 
-    t = 6;
+    t = pow(2, 4);
     lambda = 8192;
-    k = 128;
+    k = 3;
     w = 0;
+    bigint p = bigint(31);
+    bigint q = bigint(19);
 
     srand(time(NULL));
 
-    Batching batch = Batching(lambda, k, t, 3, 10, bigint(11));
+    Batching batch = Batching(lambda, k, t, 3, 10, bigint(589));
+    batch.set_trapdoor(p, q);
     batch.batch();
 //    batch.evaluate();
 //    if (w == 0) {

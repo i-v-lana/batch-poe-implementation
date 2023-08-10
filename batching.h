@@ -18,15 +18,20 @@ private:
     PRF prf = PRF(bigint(), 0, 4, 0);
     int cnt;
     int t;
-    bigint N;
+    int lambda;
+    int k;
+    bigint N, p, q;
     std::vector<bigint> alpha;
     mpz_helper helper;
     std::vector<bigint> x, y;
     void gen();
+    bool run_vdf(bigint cur_x, bigint cur_y);
 public:
+    void set_trapdoor(bigint& _p, bigint& _q);
     Batching(int _lambda, int _k, int _t, int _cnt, int _lambda_batch, bigint _N);
     void print(std::ofstream& file);
     void batch();
+    bigint trapdoor(bigint x);
 };
 
 
