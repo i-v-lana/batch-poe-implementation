@@ -56,6 +56,28 @@ void Wesolowski::generate(mpz_t& dest) {
     mpz_urandomm(dest, rstate, N);
 }
 
+Proof Wesolowski::prover(mpz_t l, mpz_t pi, const mpz_t x, const long challenge) {
+    mpz_t exp_challenge;
+    mpz_init(exp_challenge);
+    mpz_ui_pow_ui(exp_challenge, 2, challenge);
+
+    mpz_t two;
+    mpz_init(two);
+    mpz_set_si(two, 2);
+    hash_prime(l, two);
+
+    mpz_t _q;
+    mpz_init(_q);
+    mpz_fdiv_q(_q, exp_challenge, l);
+
+    mpz_powm(pi, x, _q, N);
+
+
+
+    Proof proof_sent = Proof();
+    return proof_sent;
+}
+
 Proof Wesolowski::evaluate(mpz_t l, mpz_t pi, const mpz_t x,
                            const long challenge) {
 
@@ -120,6 +142,9 @@ bool Wesolowski::naive_verify(mpz_t x, long challenge, mpz_t l, mpz_t pi) {
     mpz_init(two);
     mpz_set_ui(two, 2);
 
+    /// x^r, r = 2^T mod l
+    /// tau_mod = 2^T mod phi(l)
+    /// r = 2^tau_mod mod l
     mpz_t r;
     mpz_init(r);
     mpz_powm(r, two, tau_mod, l);
@@ -161,6 +186,63 @@ bool Wesolowski::naive_verify(mpz_t x, long challenge, mpz_t l, mpz_t pi) {
         exit(1);
         return 0;
     }
+}
+
+bool Wesolowski::verifier(mpz_t x, mpz_t y_check, long challenge, mpz_t l, mpz_t pi) {
+    auto start_verif = std::chrono::high_resolution_clock::now();
+
+
+    mpz_t phi_l;
+    mpz_init(phi_l);
+    mpz_sub_ui(phi_l, l, 1);
+
+    mpz_t tau_mod;
+    mpz_init(tau_mod);
+    mpz_set_ui(tau_mod, challenge);
+    mpz_mod(tau_mod, tau_mod, phi_l);
+
+    mpz_t two;
+    mpz_init(two);
+    mpz_set_ui(two, 2);
+
+    /// x^r, r = 2^T mod l
+    /// tau_mod = 2^T mod phi(l)
+    /// r = 2^tau_mod mod l
+    mpz_t r;
+    mpz_init(r);
+    mpz_powm(r, two, tau_mod, l);
+
+    std::chrono::duration<double> exp_time;
+
+    auto start_exp = std::chrono::high_resolution_clock::now();
+
+    mpz_t y, y_tmp;
+    mpz_init(y);
+    mpz_init(y_tmp);
+    mpz_powm(y, pi, l, N);
+    mpz_powm(y_tmp, x, r, N);
+    mpz_mul(y, y, y_tmp);
+    mpz_mod(y, y, N);
+
+    auto finish_exp = std::chrono::high_resolution_clock::now();
+
+
+    std::cout << "X = " << x << std::endl;
+    std::cout << "PI = " << pi << std::endl;
+    std::cout << "r = " << r << std::endl;
+    std::cout << "l = " << l << std::endl;
+    std::cout << "y = " << y << std::endl;
+    std::cout << "N = " << N << std::endl;
+    std::cout << "CHALLENGE = " << challenge << std::endl;
+    std::cout << "Y_CHECK = " << y_check << std::endl;
+    bool verify_result = (mpz_cmp(y, y_check) == 0);
+    auto finish_verif = std::chrono::high_resolution_clock::now();
+    verif_time = finish_verif - start_verif;
+
+    exp_time = finish_exp - start_exp;
+    std::cout << "EXP : " << exp_time.count() << std::endl;
+    //std::cout << verif_time.count() << std::endl;
+    return verify_result;
 }
 
 

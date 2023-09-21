@@ -40,7 +40,7 @@ bigint mpz_helper::get_random_mod(bigint mod) {
     return ans;
 }
 
-bigint mpz_helper::gcd(bigint a, bigint b) {
+bigint mpz_helper::gcd(bigint& a, bigint& b) {
     bigint ans = bigint();
     mpz_gcd(ans.num, a.num, b.num);
     return ans;

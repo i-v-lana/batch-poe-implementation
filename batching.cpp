@@ -26,6 +26,7 @@ Batching::Batching(int _lambda, int _k, int _t, int _cnt, int _lambda_batch, big
 }
 
 void Batching::batch() {
+    auto start_batching = std::chrono::high_resolution_clock::now();
     alpha.clear();
     alpha.resize(cnt);
     for (int i = 0; i < cnt; ++i) {
@@ -44,7 +45,12 @@ void Batching::batch() {
     }
     std::cout << "batched instance" << std::endl;
     std::cout << "x: " << batch_x.num << "; y:" << batch_y.num << std::endl;
-    bool result = run_vdf(batch_x, batch_y);
+    auto end_batching = std::chrono::high_resolution_clock::now();
+    bigint _l = bigint();
+    bigint _pi = bigint();
+    batch_prover_part(&_l, &_pi, batch_x);
+    std::pair<bool, long long> result = batch_verifier_part(batch_x, batch_y, _l, _pi);
+    std::cout << "Total time of the Lior Rothem's protocol: " << (end_batching - start_batching).count() + result.second << std::endl;
 }
 
 void Batching::print(std::ofstream& file) {
@@ -60,39 +66,28 @@ void Batching::gen() {
     y.resize(cnt);
     for (int i = 0; i < cnt; ++i) {
         x[i] = helper.get_random_mod(N);
-        y[i] = helper.get_random_mod(N);
+        y[i] = trapdoor(x[i]);
     }
 }
 
-bool Batching::run_vdf(bigint cur_x, bigint cur_y) {
-    bigint real_y = trapdoor(cur_x);
-    Wesolowski vdf = Wesolowski();
-    vdf.setup(lambda, k, N.num);
-    bigint l = bigint();
-    bigint pi = bigint();
-    vdf.evaluate(l.num, pi.num, cur_x.num, t);
-    bool not_failed = vdf.naive_verify(cur_x.num, t, l.num, pi.num);
-    if (!not_failed) {
-        std::cout << "ERROR\n" << std::endl;
-        return false;
+void Batching::naive_prover_part() {
+    l.clear();
+    l.resize(cnt);
+    pi.clear();
+    pi.resize(cnt);
+    for (int i = 0; i < cnt; ++i) {
+        Wesolowski vdf = Wesolowski();
+        vdf.setup(lambda, k, N.num);
+        vdf.prover(l[i].num, pi[i].num, x[i].num, t);
     }
-    if (cur_y == vdf.y_saved)
-        std::cout << cur_x << " to the power of 2^" << t << "equals " << cur_y << std::endl;
-    else
-        std::cout << "expected " << vdf.y_saved << std::endl;
-    return true;
 }
 
-bigint Batching::trapdoor(bigint x) {
-    if (helper.gcd(x, N) != 1) {
-        std::cout << "can't use the trapdoor, going to use naive computation" << std::endl;
-
-    }
+bigint Batching::trapdoor(bigint& _x) {
     /// N = pq -> phi = (p - 1) * (q - 1)
     bigint phi = (p - 1UL) * (q - 1UL);
     /// counting 2^t mod phi
     bigint power = helper.pow(bigint(2), bigint(t), phi);
-    bigint ans = helper.pow(x, power, N);
+    bigint ans = helper.pow(_x, power, N);
     return ans;
 }
 
@@ -104,4 +99,36 @@ void Batching::set_trapdoor(bigint& _p, bigint& _q) {
     } else {
         std::cout << "trapdoor wasn't set" << std::endl;
     }
+}
+
+void Batching::naive_verifier_part() {
+    std::vector<bool> results(cnt, false);
+    auto naive_start = std::chrono::high_resolution_clock::now();
+    for (int i = 0; i < cnt; ++i) {
+        Wesolowski vdf = Wesolowski();
+        vdf.setup(lambda, k, N.num);
+        results[i] = vdf.verifier(x[i].num, y[i].num, t, l[i].num, pi[i].num);
+    }
+    auto naive_finish = std::chrono::high_resolution_clock::now();
+    std::cout << "Total time of the naive approach " << (naive_finish - naive_start).count();
+}
+
+void Batching::naive_approach() {
+    naive_prover_part();
+    naive_verifier_part();
+}
+
+void Batching::batch_prover_part(bigint* _l, bigint* _pi, bigint batch_x) {
+    Wesolowski vdf = Wesolowski();
+    vdf.setup(lambda, k, N.num);
+    vdf.prover(_l->num, _pi->num, batch_x.num, t);
+}
+
+std::pair<bool, long long> Batching::batch_verifier_part(bigint batch_x, bigint batch_y, bigint _l, bigint _pi) {
+    auto wes_start = std::chrono::high_resolution_clock::now();
+    Wesolowski vdf = Wesolowski();
+    vdf.setup(lambda, k, N.num);
+    bool result = vdf.verifier(batch_x.num, batch_y.num, t, _l.num, _pi.num);
+    auto wes_end = std::chrono::high_resolution_clock::now();
+    return std::make_pair(result, (wes_end - wes_start).count());
 }

@@ -35,6 +35,7 @@ int main(int argc, char *argv[]) {
     Batching batch = Batching(lambda, k, t, 3, 10, bigint(589));
     batch.set_trapdoor(p, q);
     batch.batch();
+    batch.naive_approach();
 //    batch.evaluate();
 //    if (w == 0) {
 //        result_verif = vdf.naive_verify(x, pow(2, t), l, pi);
