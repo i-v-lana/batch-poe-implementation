@@ -26,6 +26,7 @@ Batching::Batching(int _lambda, int _k, int _t, int _cnt, int _lambda_batch, big
 }
 
 void Batching::batch() {
+    /// alpha_i
     auto start_batching = std::chrono::high_resolution_clock::now();
     alpha.clear();
     alpha.resize(cnt);

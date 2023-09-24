@@ -17,6 +17,7 @@ void generate_prime(mpz_t& rop, gmp_randstate_t& rstate, const mp_bitcnt_t& n){
 }
 
 void Wesolowski::hash_prime(mpz_t l, const mpz_t input) {
+    /// TODO: l by se melo volit pomoci hashovani, jinak bezpecnostni problem
     mpz_t num, gcd;
     mpz_init(num);
     mpz_init(gcd);
@@ -61,10 +62,7 @@ Proof Wesolowski::prover(mpz_t l, mpz_t pi, const mpz_t x, const long challenge)
     mpz_init(exp_challenge);
     mpz_ui_pow_ui(exp_challenge, 2, challenge);
 
-    mpz_t two;
-    mpz_init(two);
-    mpz_set_si(two, 2);
-    hash_prime(l, two);
+    hash_prime(l, x);
 
     mpz_t _q;
     mpz_init(_q);
@@ -103,16 +101,13 @@ Proof Wesolowski::evaluate(mpz_t l, mpz_t pi, const mpz_t x,
 
     auto start_proof = std::chrono::high_resolution_clock::now();
 
-    mpz_t two;
-    mpz_init(two);
-    mpz_set_si(two, 2);
-    hash_prime(l, two);
+    hash_prime(l, x);
 
-    mpz_t q;
-    mpz_init(q);
-    mpz_fdiv_q(q, exp_challenge, l);
+    mpz_t _q;
+    mpz_init(_q);
+    mpz_fdiv_q(_q, exp_challenge, l);
 
-    mpz_powm(pi, x, q, N);
+    mpz_powm(pi, x, _q, N);
 
 
     auto finish_proof = std::chrono::high_resolution_clock::now();
@@ -157,6 +152,7 @@ bool Wesolowski::naive_verify(mpz_t x, long challenge, mpz_t l, mpz_t pi) {
     mpz_init(y);
     mpz_init(y_tmp);
     mpz_powm(y, pi, l, N);
+    /// X ^ R, Y = PI ^ L * X ^ R
     mpz_powm(y_tmp, x, r, N);
     mpz_mul(y, y, y_tmp);
     mpz_mod(y, y, N);
@@ -226,7 +222,7 @@ bool Wesolowski::verifier(mpz_t x, mpz_t y_check, long challenge, mpz_t l, mpz_t
 
     auto finish_exp = std::chrono::high_resolution_clock::now();
 
-
+    /// TODO: smazat tisk
     std::cout << "X = " << x << std::endl;
     std::cout << "PI = " << pi << std::endl;
     std::cout << "r = " << r << std::endl;

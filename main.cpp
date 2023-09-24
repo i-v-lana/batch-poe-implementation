@@ -8,6 +8,7 @@
 
 #include "wesolowski.h"
 #include "batching.h"
+#include "tests.h"
 
 // argv arguments :
 //    t : log2 of difficulty (must be an integer)
@@ -22,6 +23,8 @@ int main(int argc, char *argv[]) {
 //    int lambda = std::atoi(argv[2]);
 //    int k = std::atoi(argv[3]);
 //    int w = std::atoi(argv[4]);
+    tests test = tests();
+    test.run();
 
     t = pow(2, 4);
     lambda = 8192;

@@ -26,6 +26,9 @@ struct bigint {
     int bits() {
         return mpz_sizeinbase(num, 2);
     }
+    unsigned long int get_num() {
+        return mpz_get_ui(num);
+    }
     bigint last_half(int len) {
         bigint ans = bigint();
         int half = len / 2;
