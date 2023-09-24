@@ -34,15 +34,12 @@ void Wesolowski::hash_prime(mpz_t l, const mpz_t input) {
 Wesolowski::Wesolowski() {
 }
 
-void Wesolowski::setup(int _lambda, int _k, const mpz_t& _N) {
+void Wesolowski::setup(int _k, const mpz_t& _N) {
     auto start = std::chrono::high_resolution_clock::now();
 
-    lambda = _lambda;
     k = _k;
-
     mpz_init(challenge);
 
-    k = _k;
 
     gmp_randinit_mt(rstate);
     mpz_init(N);

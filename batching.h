@@ -13,14 +13,17 @@
 #include "PRF.h"
 #include <fstream>
 
+struct WesolowskiParams {
+    long k;
+};
+
 class Batching {
 private:
     PRF prf = PRF(bigint(), 0, 4, 0);
     int cnt;
     int t;
-    int lambda;
-    int k;
     bigint N, p, q;
+    WesolowskiParams w_params;
     std::vector<bigint> alpha;
     mpz_helper helper;
     std::vector<bigint> x, y, l, pi;
@@ -31,7 +34,7 @@ private:
     void naive_verifier_part();
 public:
     void set_trapdoor(bigint& _p, bigint& _q);
-    Batching(int _lambda, int _k, int _t, int _cnt, int _lambda_batch, bigint _N);
+    Batching(WesolowskiParams _w_params, int _t, int _cnt, int _lambda_batch, bigint _N);
     void naive_approach();
     void print(std::ofstream& file);
     void batch();

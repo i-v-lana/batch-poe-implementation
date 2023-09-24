@@ -11,7 +11,7 @@ class Wesolowski {
 public:
     Wesolowski();
 
-    void setup(int lambda, int k, const mpz_t& _N);
+    void setup(int k, const mpz_t& _N);
     void generate(mpz_t& dest);
     Proof evaluate(mpz_t l, mpz_t pi, const mpz_t x,
                    long challenge);
@@ -33,7 +33,6 @@ private:
     mpz_t p;
     mpz_t q;
     int k;
-    int lambda;
     mpz_t challenge;
 
     gmp_randstate_t rstate;

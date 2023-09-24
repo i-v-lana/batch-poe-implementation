@@ -6,6 +6,7 @@
 #define SRC_TESTS_H
 
 #include "mpz_helper.h"
+#include "wesolowski.h"
 
 class tests {
 public:
@@ -21,8 +22,11 @@ public:
 
 class wesolowski_tests : tests {
 private:
-    int lambda, t, k;
+    int t, k;
     bigint x, N, y;
+    Wesolowski vdf;
+    bool prover_test(bigint& l, bigint& pi);
+    bool verifier_test(bigint l, bigint pi);
 public:
     bool run();
     wesolowski_tests();

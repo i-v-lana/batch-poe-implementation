@@ -8,12 +8,13 @@
 
 const int MAX_CNT_BITS = 1000;
 
-Batching::Batching(int _lambda, int _k, int _t, int _cnt, int _lambda_batch, bigint _N) {
+Batching::Batching(WesolowskiParams _w_params, int _t, int _cnt, int _lambda_batch, bigint _N) {
     t = _t;
     cnt = _cnt;
     N = _N;
-    k = _k;
+    w_params = _w_params;
     /// length of an input of PRF function
+    /// TODO: get rid of this
     int logcnt = 4;
     // int logcnt = std::bitset<MAX_CNT_BITS>(cnt).count();
     /// length of an output of PRF function
@@ -78,7 +79,7 @@ void Batching::naive_prover_part() {
     pi.resize(cnt);
     for (int i = 0; i < cnt; ++i) {
         Wesolowski vdf = Wesolowski();
-        vdf.setup(lambda, k, N.num);
+        vdf.setup(w_params.k, N.num);
         vdf.prover(l[i].num, pi[i].num, x[i].num, t);
     }
 }
@@ -107,7 +108,7 @@ void Batching::naive_verifier_part() {
     auto naive_start = std::chrono::high_resolution_clock::now();
     for (int i = 0; i < cnt; ++i) {
         Wesolowski vdf = Wesolowski();
-        vdf.setup(lambda, k, N.num);
+        vdf.setup(w_params.k, N.num);
         results[i] = vdf.verifier(x[i].num, y[i].num, t, l[i].num, pi[i].num);
     }
     auto naive_finish = std::chrono::high_resolution_clock::now();
@@ -121,14 +122,14 @@ void Batching::naive_approach() {
 
 void Batching::batch_prover_part(bigint* _l, bigint* _pi, bigint batch_x) {
     Wesolowski vdf = Wesolowski();
-    vdf.setup(lambda, k, N.num);
+    vdf.setup(w_params.k, N.num);
     vdf.prover(_l->num, _pi->num, batch_x.num, t);
 }
 
 std::pair<bool, long long> Batching::batch_verifier_part(bigint batch_x, bigint batch_y, bigint _l, bigint _pi) {
     auto wes_start = std::chrono::high_resolution_clock::now();
     Wesolowski vdf = Wesolowski();
-    vdf.setup(lambda, k, N.num);
+    vdf.setup(w_params.k, N.num);
     bool result = vdf.verifier(batch_x.num, batch_y.num, t, _l.num, _pi.num);
     auto wes_end = std::chrono::high_resolution_clock::now();
     return std::make_pair(result, (wes_end - wes_start).count());
