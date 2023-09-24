@@ -8,7 +8,7 @@
 
 const int MAX_CNT_BITS = 1000;
 
-Batching::Batching(WesolowskiParams _w_params, int _t, int _cnt, int _lambda_batch, bigint _N) {
+Batching::Batching(WesolowskiParams _w_params, long _t, int _cnt, int _lambda_batch, bigint _N) {
     t = _t;
     cnt = _cnt;
     N = _N;
@@ -27,12 +27,10 @@ Batching::Batching(WesolowskiParams _w_params, int _t, int _cnt, int _lambda_bat
 }
 
 void Batching::batch() {
-    /// alpha_i
     auto start_batching = std::chrono::high_resolution_clock::now();
     alpha.clear();
     alpha.resize(cnt);
     for (int i = 0; i < cnt; ++i) {
-        // std::cout << "new i: " << i << std::endl;
         alpha[i] = prf.gen(i);
     }
     bigint batch_x = bigint(1);
@@ -42,17 +40,14 @@ void Batching::batch() {
         bigint yi = helper.pow(y[i], alpha[i], N);
         batch_x = helper.mul_mod(batch_x, xi, N);
         batch_y = helper.mul_mod(batch_y, yi, N);
-        std::cout << "cur x: " << x[i].num << "; cur alpha:" << alpha[i].num << "; cur x^alpha:" << xi.num << std::endl;
-        std::cout << "cur y: " << y[i].num << "; cur alpha:" << alpha[i].num << "; cur y^alpha:" << yi.num << std::endl;
     }
-    std::cout << "batched instance" << std::endl;
-    std::cout << "x: " << batch_x.num << "; y:" << batch_y.num << std::endl;
     auto end_batching = std::chrono::high_resolution_clock::now();
     bigint _l = bigint();
     bigint _pi = bigint();
     batch_prover_part(&_l, &_pi, batch_x);
     std::pair<bool, long long> result = batch_verifier_part(batch_x, batch_y, _l, _pi);
     std::cout << "Total time of the Lior Rothem's protocol: " << (end_batching - start_batching).count() + result.second << std::endl;
+
 }
 
 void Batching::print(std::ofstream& file) {
@@ -69,18 +64,6 @@ void Batching::gen() {
     for (int i = 0; i < cnt; ++i) {
         x[i] = helper.get_random_mod(N);
         y[i] = trapdoor(x[i]);
-    }
-}
-
-void Batching::naive_prover_part() {
-    l.clear();
-    l.resize(cnt);
-    pi.clear();
-    pi.resize(cnt);
-    for (int i = 0; i < cnt; ++i) {
-        Wesolowski vdf = Wesolowski();
-        vdf.setup(w_params.k, N.num);
-        vdf.prover(l[i].num, pi[i].num, x[i].num, t);
     }
 }
 
@@ -101,23 +84,6 @@ void Batching::set_trapdoor(bigint& _p, bigint& _q) {
     } else {
         std::cout << "trapdoor wasn't set" << std::endl;
     }
-}
-
-void Batching::naive_verifier_part() {
-    std::vector<bool> results(cnt, false);
-    auto naive_start = std::chrono::high_resolution_clock::now();
-    for (int i = 0; i < cnt; ++i) {
-        Wesolowski vdf = Wesolowski();
-        vdf.setup(w_params.k, N.num);
-        results[i] = vdf.verifier(x[i].num, y[i].num, t, l[i].num, pi[i].num);
-    }
-    auto naive_finish = std::chrono::high_resolution_clock::now();
-    std::cout << "Total time of the naive approach " << (naive_finish - naive_start).count();
-}
-
-void Batching::naive_approach() {
-    naive_prover_part();
-    naive_verifier_part();
 }
 
 void Batching::batch_prover_part(bigint* _l, bigint* _pi, bigint batch_x) {

@@ -9,6 +9,7 @@
 #include "wesolowski.h"
 #include "batching.h"
 #include "tests.h"
+#include "PRF_AES.h"
 
 // argv arguments :
 //    t : log2 of difficulty (must be an integer)
@@ -23,8 +24,17 @@ int main(int argc, char *argv[]) {
 //    int lambda = std::atoi(argv[2]);
 //    int k = std::atoi(argv[3]);
 //    int w = std::atoi(argv[4]);
-    tests test = tests();
-    test.run();
+    tests::run();
+    k = 7;
+
+    bigint big_k = k;
+    std::string iv = "000";
+    std::cout << iv << std::endl;
+    bigint big_x = 10;
+    PRF_AES prf = PRF_AES(big_k, iv, 4);
+    prf.evaluate(big_x);
+
+
 
     t = pow(2, 4);
     lambda = 8192;
@@ -35,10 +45,12 @@ int main(int argc, char *argv[]) {
 
     srand(time(NULL));
 
-    Batching batch = Batching(lambda, k, t, 3, 10, bigint(589));
+    WesolowskiParams w_params;
+    w_params.k = k;
+
+    Batching batch = Batching(w_params, t, 3, 10, bigint(589));
     batch.set_trapdoor(p, q);
     batch.batch();
-    batch.naive_approach();
 //    batch.evaluate();
 //    if (w == 0) {
 //        result_verif = vdf.naive_verify(x, pow(2, t), l, pi);

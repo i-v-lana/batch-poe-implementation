@@ -15,7 +15,7 @@ add_executable(src
         proof.cpp
         proof.h
         wesolowski.cpp
-        wesolowski.h batching.cpp batching.h mpz_helper.cpp mpz_helper.h PRF.cpp PRF.h tests.cpp tests.h)
+        wesolowski.h batching.cpp batching.h mpz_helper.cpp mpz_helper.h PRF.cpp PRF.h tests.cpp tests.h NaiveApproach.cpp NaiveApproach.h PRF_AES.cpp PRF_AES.h)
 
 include_directories("/usr/local/include")
 include_directories("/usr/local/lib")
