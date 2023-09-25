@@ -32,4 +32,12 @@ public:
     wesolowski_tests();
 };
 
+class prf_tests : tests {
+private:
+    bool test(bigint _k, std::string _iv, int _output_bits, bigint _x, bigint _result);
+public:
+    bool run();
+    prf_tests();
+};
+
 #endif //SRC_TESTS_H

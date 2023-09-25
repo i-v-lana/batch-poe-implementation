@@ -9,6 +9,8 @@
 #include <gmp.h>
 #include <cmath>
 #include <iostream>
+#include <algorithm>
+
 
 struct bigint {
     mpz_t num;
@@ -27,8 +29,8 @@ struct bigint {
     bigint() {
         mpz_init(num);
     }
-    void from_bytes(std::string bytes, int bits_cnt) {
-        mpz_init(num);
+    void from_bytes(const std::string& bytes, int bits_cnt=-1) {
+        mpz_set_ui(num, 1);
         for (char byte : bytes) {
             std::bitset<8> bits(byte);
 
@@ -38,7 +40,8 @@ struct bigint {
             }
 
         }
-        mpz_set(num, first_n_bits(bits_cnt).num);
+        if (bits_cnt != -1)
+            mpz_set(num, first_n_bits(bits_cnt).num);
     }
     int bits() {
         return mpz_sizeinbase(num, 2);
@@ -61,7 +64,8 @@ struct bigint {
     bigint first_n_bits(int n) {
         bigint ans = bigint();
         int len = bits();
-        mpz_tdiv_q_2exp(ans.num, num, len - n);
+        int exp = std::max(len - n, 0);
+        mpz_tdiv_q_2exp(ans.num, num, exp);
         return ans;
     }
     std::string bytes_string() {

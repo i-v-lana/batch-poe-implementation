@@ -4,13 +4,17 @@
 
 #include "tests.h"
 #include "wesolowski.h"
+#include "PRF_AES.h"
 
 bool tests::run() {
+    prf_tests prf = prf_tests();
     batching_tests batching = batching_tests();
     wesolowski_tests wesolowski = wesolowski_tests();
+
+    bool prf_result = prf.run();
     bool batching_result = batching.run();
     bool wesolowski_result = wesolowski.run();
-    return batching_result && wesolowski_result;
+    return prf_result && batching_result && wesolowski_result;
 }
 
 tests::tests() = default;
@@ -83,3 +87,19 @@ bool wesolowski_tests::verifier_test(bigint l, bigint pi) {
         return false;
     }
 }
+
+bool prf_tests::run() {
+    bool result = true;
+    result = result && test(bigint(30), "IV000", 16, bigint(58), bigint(58));
+    result = result && test(bigint(30), "IV000", 5, bigint(58), bigint(58));
+    return result;
+}
+
+bool prf_tests::test(bigint _k, std::string _iv, int _output_bits, bigint _x, bigint _result) {
+    PRF_AES prf = PRF_AES(_k, _iv, _output_bits);
+    bigint encrypted = prf.evaluate(_x);
+    bigint decrypted = prf.decrypt(encrypted);
+    return (decrypted == _result);
+}
+
+prf_tests::prf_tests() = default;

@@ -30,13 +30,11 @@ std::string unsigned_chars_to_string(const unsigned char* data, size_t len) {
     return {reinterpret_cast<const char*>(data), len};
 }
 
-void handleErrors(void)
-{
+void handleErrors() {
     unsigned long errCode;
 
     printf("An error occurred\n");
-    while(errCode = ERR_get_error())
-    {
+    while(errCode = ERR_get_error()) {
         char *err = ERR_error_string(errCode, NULL);
         printf("%s\n", err);
     }
@@ -54,7 +52,7 @@ int encrypt(unsigned char *plaintext, int plaintext_len, unsigned char *aad,
     if(!(ctx = EVP_CIPHER_CTX_new())) handleErrors();
 
     /* Initialise the encryption operation. */
-    if(1 != EVP_EncryptInit_ex(ctx, EVP_aes_256_gcm(), NULL, NULL, NULL))
+    if(1 != EVP_EncryptInit_ex(ctx, EVP_aes_128_gcm(), NULL, NULL, NULL))
         handleErrors();
 
     /* Set IV length if default 12 bytes (96 bits) is not appropriate */
@@ -100,7 +98,7 @@ int encrypt(unsigned char *plaintext, int plaintext_len, unsigned char *aad,
     return ciphertext_len;
 }
 
-int decrypt(unsigned char *ciphertext, int ciphertext_len, unsigned char *aad,
+int local_decrypt(unsigned char *ciphertext, int ciphertext_len, unsigned char *aad,
             int aad_len, unsigned char *tag, unsigned char *key, unsigned char *iv,
             unsigned char *plaintext)
 {
@@ -169,11 +167,7 @@ int decrypt(unsigned char *ciphertext, int ciphertext_len, unsigned char *aad,
 
 bigint PRF_AES::evaluate(bigint &x) {
     /* Message to be encrypted */
-    std::string plaintext;
-    plaintext = x.bytes_string();
-
-    /* Some additional data to be authenticated */
-    static const unsigned char aad[] = "Some AAD data";
+    std::string plaintext = x.bytes_string();
 
     /* Buffer for ciphertext. Ensure the buffer is long enough for the
      * ciphertext which may be longer than the plaintext, dependant on the
@@ -181,13 +175,7 @@ bigint PRF_AES::evaluate(bigint &x) {
      */
     unsigned char ciphertext_uch[128];
 
-    /* Buffer for the decrypted text */
-    unsigned char decryptedtext_uch[128];
-
-    /* Buffer for the tag */
-    unsigned char tag[16];
-
-    int decryptedtext_len = 0, ciphertext_len = 0;
+    int ciphertext_len = 0;
 
     unsigned char* plaintext_uch = string_to_unsigned_chars(plaintext);
     unsigned char* key_uch = string_to_unsigned_chars(key);
@@ -200,41 +188,36 @@ bigint PRF_AES::evaluate(bigint &x) {
     bigint result = bigint();
     result.from_bytes(cipher_text, output_bits);
     return result;
-//
-//        /* Do something useful with the ciphertext here */
-//    printf("Ciphertext is:\n");
-//    BIO_dump_fp(stdout, ciphertext_uch, ciphertext_len);
-//    printf("Tag is:\n");
-//    BIO_dump_fp(stdout, tag, 14);
-//
-//    /* Mess with stuff */
-//    /* ciphertext[0] ^= 1; */
-//    /* tag[0] ^= 1; */
-//
-//    /* Decrypt the ciphertext */
-//    decryptedtext_len = decrypt(ciphertext_uch, ciphertext_len, const_cast<unsigned char *>(aad), strlen(
-//            reinterpret_cast<const char *>(aad)), tag, key_uch, iv_uch, decryptedtext_uch);
-//
-//    if(decryptedtext_len < 0)
-//    {
-//        /* Verify error */
-//        printf("Decrypted text failed to verify\n");
-//    }
-//    else
-//    {
-//        /* Add a NULL terminator. We are expecting printable text */
-//        decryptedtext_uch[decryptedtext_len] = '\0';
-//
-//        /* Show the decrypted text */
-//        printf("Decrypted text is:\n");
-//        printf("%s\n", decryptedtext_uch);
-//    }
-//
-//    /* Remove error strings */
-//    std::string decrypted_text = unsigned_chars_to_string(decryptedtext_uch, decryptedtext_len);
-//
-//    bigint result = bigint();
-//    result.from_bytes(decrypted_text, output_bits);
-//    return result;
+}
 
+bigint PRF_AES::decrypt(bigint _cipher) {
+    /* Buffer for the decrypted text */
+    unsigned char decryptedtext_uch[128];
+    int decryptedtext_len = 0;
+    unsigned char* ciphertext_uch = string_to_unsigned_chars(_cipher.bytes_string());
+    unsigned char* key_uch = string_to_unsigned_chars(key);
+    unsigned char* iv_uch = string_to_unsigned_chars(iv);
+
+        /* Decrypt the ciphertext */
+    decryptedtext_len = local_decrypt(ciphertext_uch, strlen(reinterpret_cast<const char *>(ciphertext_uch)), const_cast<unsigned char *>(aad), strlen(
+            reinterpret_cast<const char *>(aad)), tag, key_uch, iv_uch, decryptedtext_uch);
+
+    if(decryptedtext_len < 0)
+    {
+        /* Verify error */
+        std::cout << "TESTS: PRF_AES test failed. Decrypted text failed to verify" << std::endl;
+        return {-1};
+    }
+    else
+    {
+        /* Add a NULL terminator. We are expecting printable text */
+        decryptedtext_uch[decryptedtext_len] = '\0';
+    }
+
+    /* Remove error strings */
+    std::string decrypted_text = unsigned_chars_to_string(decryptedtext_uch, decryptedtext_len);
+
+    bigint result = bigint();
+    result.from_bytes(decrypted_text);
+    return result;
 }
