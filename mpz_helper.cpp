@@ -47,6 +47,8 @@ bigint mpz_helper::gcd(bigint& a, bigint& b) {
 }
 
 std::ostream& operator << (std::ostream& os, const bigint& obj) {
-    os << obj.num;
+    char* str = mpz_get_str(NULL, 10, obj.num);
+    os << str << std::endl;
+    free(str);
     return os;
 }

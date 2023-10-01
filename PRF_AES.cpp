@@ -7,7 +7,7 @@ PRF_AES::PRF_AES(bigint _k, std::string& _iv, int _output_bits) {
 
     /* Set up the key and iv. Do I need to say to not hard code these in a real application? :-) */
 
-    key = _k.bytes_string();
+    key = _k.bytes_string(128);
 
     /* A 128 bit IV */
     iv = _iv;
@@ -167,7 +167,7 @@ int local_decrypt(unsigned char *ciphertext, int ciphertext_len, unsigned char *
 
 bigint PRF_AES::evaluate(bigint &x) {
     /* Message to be encrypted */
-    std::string plaintext = x.bytes_string();
+    std::string plaintext = x.bytes_string(128);
 
     /* Buffer for ciphertext. Ensure the buffer is long enough for the
      * ciphertext which may be longer than the plaintext, dependant on the
@@ -194,7 +194,7 @@ bigint PRF_AES::decrypt(bigint _cipher) {
     /* Buffer for the decrypted text */
     unsigned char decryptedtext_uch[128];
     int decryptedtext_len = 0;
-    unsigned char* ciphertext_uch = string_to_unsigned_chars(_cipher.bytes_string());
+    unsigned char* ciphertext_uch = string_to_unsigned_chars(_cipher.bytes_string(128));
     unsigned char* key_uch = string_to_unsigned_chars(key);
     unsigned char* iv_uch = string_to_unsigned_chars(iv);
 

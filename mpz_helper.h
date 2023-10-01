@@ -10,6 +10,7 @@
 #include <cmath>
 #include <iostream>
 #include <algorithm>
+#include <crypto++/config.h>
 
 
 struct bigint {
@@ -30,18 +31,16 @@ struct bigint {
         mpz_init(num);
     }
     void from_bytes(const std::string& bytes, int bits_cnt=-1) {
-        mpz_set_ui(num, 1);
+        mpz_set_ui(num, 0);
         for (char byte : bytes) {
             std::bitset<8> bits(byte);
-
             for (int i = 7; i >= 0; --i) {
                 mpz_mul_2exp(num, num, 1);
                 mpz_add_ui(num, num, bits[i]);
             }
-
         }
         if (bits_cnt != -1)
-            mpz_set(num, first_n_bits(bits_cnt).num);
+            mpz_set(num, last_n_bits(bits_cnt).num);
     }
     int bits() {
         return mpz_sizeinbase(num, 2);
@@ -68,19 +67,27 @@ struct bigint {
         mpz_tdiv_q_2exp(ans.num, num, exp);
         return ans;
     }
-    std::string bytes_string() {
+    bigint last_n_bits(int n) {
+        bigint ans = bigint();
+        int len = bits();
+        int exp = std::max(n, 0);
+        mpz_tdiv_r_2exp(ans.num, num, exp);
+        return ans;
+    }
+    std::string bytes_string(int bytes_cnt) {
         mpz_t cur;
         mpz_init(cur);
         std::string bytes = "";
         int bytes_len = (this->bits() + 7) / 8;
-        for (size_t i = 0; i < bytes_len; i++) {
-            mpz_set(cur, num);
-            mpz_div_2exp(cur, cur, 8 * i);
-            char byte = mpz_get_ui(cur) & 0xFF;
-            std::cout << byte << std::endl;
-            bytes.push_back(byte);
+        for (size_t i = 0; i < bytes_cnt - bytes_len; ++i) {
+            bytes.push_back(0x00);
         }
-        std::cout << bytes << std::endl;
+        size_t size;
+        unsigned char* byteArray = (unsigned char*)mpz_export(NULL, &size, 1, sizeof(unsigned char), 0, 0, num);
+        for (int i = 0; i < size; ++i) {
+            bytes.push_back(0xFF & byteArray[i]);
+        }
+        free(byteArray);
         return bytes;
     }
     bool operator == (const mpz_t& other) const {

@@ -4,7 +4,7 @@
 
 #include "tests.h"
 #include "wesolowski.h"
-#include "PRF_AES.h"
+#include "PRF_crypto.h"
 
 bool tests::run() {
     prf_tests prf = prf_tests();
@@ -90,16 +90,29 @@ bool wesolowski_tests::verifier_test(bigint l, bigint pi) {
 
 bool prf_tests::run() {
     bool result = true;
-    result = result && test(bigint(30), "IV000", 16, bigint(58), bigint(58));
-    result = result && test(bigint(30), "IV000", 5, bigint(58), bigint(58));
+    result = result && test(bigint(260), "IV000", 128, bigint(58), bigint(58));
+    result = result && test_cut(bigint(260), "IV000", 10, bigint(58), bigint(303));
+    result = result && test(bigint(412), "IV000", 128, bigint(1038), bigint(1038));
     return result;
 }
 
 bool prf_tests::test(bigint _k, std::string _iv, int _output_bits, bigint _x, bigint _result) {
-    PRF_AES prf = PRF_AES(_k, _iv, _output_bits);
+    PRF_crypto prf = PRF_crypto(_k, _iv, _output_bits);
     bigint encrypted = prf.evaluate(_x);
     bigint decrypted = prf.decrypt(encrypted);
-    return (decrypted == _result);
+    bool result = (decrypted == _result);
+    if (result) return result;
+    std::cout << "prf_test failed for k = " << _k << "; x = " << _x << ". Expected result was " << _result << std::endl;
+    return result;
+}
+
+bool prf_tests::test_cut(bigint _k, std::string _iv, int _output_bits, bigint _x, bigint _result) {
+    PRF_crypto prf = PRF_crypto(_k, _iv, _output_bits);
+    bigint encrypted = prf.evaluate(_x);
+    bool result = (encrypted == _result);
+    if (result) return result;
+    std::cout << "prf_test failed for k = " << _k << "; x = " << _x << "; output_len = " << _output_bits << ". Expected result was " << _result << std::endl;
+    return result;
 }
 
 prf_tests::prf_tests() = default;
