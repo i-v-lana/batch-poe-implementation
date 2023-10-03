@@ -24,48 +24,7 @@ int main(int argc, char *argv[]) {
 //    int k = std::atoi(argv[3]);
 //    int w = std::atoi(argv[4]);
     tests::run();
-    k = 7;
 
-    bigint big_k = k;
-    std::string iv = "000";
-    std::cout << iv << std::endl;
-    bigint big_x = 10;
-    PRF_AES prf = PRF_AES(big_k, iv, 4);
-    prf.evaluate(big_x);
-
-
-
-    t = pow(2, 4);
-    lambda = 8192;
-    k = 3;
-    w = 0;
-    bigint p = bigint(31);
-    bigint q = bigint(19);
-
-    srand(time(NULL));
-
-    WesolowskiParams w_params;
-    w_params.k = k;
-
-    Batching batch = Batching(w_params, t, 3, 10, bigint(589));
-    batch.set_trapdoor(p, q);
-    batch.batch();
-//    batch.evaluate();
-//    if (w == 0) {
-//        result_verif = vdf.naive_verify(x, pow(2, t), l, pi);
-//    }
-//    else if(w == -1)
-//    {
-//        result_verif = vdf.parallel_verify(x, pow(2, t), l, pi);
-//    }
-//    else if(w == -2)
-//    {
-//        result_verif = vdf.parallel_diff_verify(x, pow(2, t), l, pi);
-//    }
-//    else
-//    {
-//        result_verif = vdf.optimized_verify(x, pow(2, t), l, pi, w);
-//    }
 
     std::ofstream file;
 

@@ -5,6 +5,7 @@
 #include "tests.h"
 #include "wesolowski.h"
 #include "PRF_crypto.h"
+#include "batching.h"
 
 bool tests::run() {
     prf_tests prf = prf_tests();
@@ -20,7 +21,28 @@ bool tests::run() {
 tests::tests() = default;
 
 bool batching_tests::run() {
+    long t = pow(2, 4);
+//    int lambda = 8192;
+    int k = 3;
+    bigint p = bigint(31);
+    bigint q = bigint(19);
 
+    srand(time(NULL));
+
+    WesolowskiParams w_params;
+    w_params.k = k;
+    BatchingParams b_params;
+    b_params.t = t;
+    b_params.low_order_bits = 3;
+    b_params.lambda_batch_bits = 3;
+    b_params.N = bigint(589);
+    b_params.cnt = 10;
+
+
+    Batching batch = Batching(w_params, b_params);
+    batch.set_trapdoor(p, q);
+    batch.batch();
+    batch.print(std::cout);
     return false;
 }
 
@@ -58,12 +80,12 @@ bool wesolowski_tests::prover_test(bigint &l, bigint &pi) {
     check_pi = check_pi % N.get_num();
 
     bool prover_test = (check_pi == pi.get_num());
-    std::cout << "TESTS: running wesolowski prover test for x = " << x << "; " << "t = " << t << "; l = " << l << "; N = " << N << std::endl;
     if (prover_test) {
-        std::cout << "TESTS: wesolowski prover test finished successfully, pi = " << pi << "\n";
+        std::cout << "TESTS: wesolowski prover test finished successfully." << std::endl;
     } else {
         std::cout << "TESTS: wesolowski prover test failed. Expected pi = " << check_pi << "; ";
         std::cout << "but received pi = " << pi << std::endl;
+        std::cout << "TESTS: failed test parameters: x = " << x << "; " << "t = " << t << "; l = " << l << "; N = " << N << std::endl;
     }
     return prover_test;
 }
@@ -77,13 +99,13 @@ bool wesolowski_tests::verifier_test(bigint l, bigint pi) {
     unsigned long int pi_l = pow(pi.get_num(), l.get_num());
     pi_l = pi_l % N.get_num();
     unsigned long int check_y = (xr * pi_l) % N.get_num();
-    std::cout << "TESTS: running wesolowski verifier test for x = " << x << "; " << "t = " << t << "; l = " << l << "; N = " << N << "; pi = " << pi << std::endl;
 
     if ((check_y == y.get_num()) == verify_result) {
-        std::cout << "TESTS: wesolowski verifier test finished successfully, y = " << check_y << "\n";
+        std::cout << "TESTS: wesolowski verifier test finished successfully." << std::endl;
         return true;
     } else {
         std::cout << "TESTS: wesolowski verifier test failed." << std::endl;
+        std::cout << "TESTS: failed test parameters: x = " << x << "; " << "t = " << t << "; l = " << l << "; N = " << N << "; pi = " << pi << std::endl;
         return false;
     }
 }
