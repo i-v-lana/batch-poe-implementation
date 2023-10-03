@@ -93,6 +93,11 @@ bool prf_tests::run() {
     result = result && test(bigint(260), "IV000", 128, bigint(58), bigint(58));
     result = result && test_cut(bigint(260), "IV000", 10, bigint(58), bigint(303));
     result = result && test(bigint(412), "IV000", 128, bigint(1038), bigint(1038));
+    if (result) {
+        std::cout << "TESTS: prf_tests finished successfully." << std::endl;
+    } else {
+        std::cout << "TESTS: prf_tests failed." << std::endl;
+    }
     return result;
 }
 
@@ -102,7 +107,7 @@ bool prf_tests::test(bigint _k, std::string _iv, int _output_bits, bigint _x, bi
     bigint decrypted = prf.decrypt(encrypted);
     bool result = (decrypted == _result);
     if (result) return result;
-    std::cout << "prf_test failed for k = " << _k << "; x = " << _x << ". Expected result was " << _result << std::endl;
+    std::cout << "TESTS: prf_test failed for k = " << _k << "; x = " << _x << ". Expected result was " << _result << std::endl;
     return result;
 }
 
@@ -111,7 +116,7 @@ bool prf_tests::test_cut(bigint _k, std::string _iv, int _output_bits, bigint _x
     bigint encrypted = prf.evaluate(_x);
     bool result = (encrypted == _result);
     if (result) return result;
-    std::cout << "prf_test failed for k = " << _k << "; x = " << _x << "; output_len = " << _output_bits << ". Expected result was " << _result << std::endl;
+    std::cout << "TESTS: prf_test failed for k = " << _k << "; x = " << _x << "; output_len = " << _output_bits << ". Expected result was " << _result << std::endl;
     return result;
 }
 

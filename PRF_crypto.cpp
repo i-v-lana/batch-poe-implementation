@@ -34,7 +34,6 @@ bigint PRF_crypto::evaluate(bigint &x) {
 
     bigint result = bigint();
     result.from_bytes(ciphertext, output_bits);
-    std::cout << result;
     return result;
 }
 

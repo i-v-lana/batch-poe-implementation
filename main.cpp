@@ -9,7 +9,6 @@
 #include "wesolowski.h"
 #include "batching.h"
 #include "tests.h"
-#include "PRF_AES.h"
 
 // argv arguments :
 //    t : log2 of difficulty (must be an integer)

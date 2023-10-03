@@ -48,28 +48,8 @@ struct bigint {
     unsigned long int get_num() {
         return mpz_get_ui(num);
     }
-    bigint last_half(int len) {
-        bigint ans = bigint();
-        int half = len / 2;
-        mpz_tdiv_r_2exp(ans.num, num, half);
-        return ans;
-    }
-    bigint first_half(int len) {
-        bigint ans = bigint();
-        int half = len / 2;
-        mpz_tdiv_q_2exp(ans.num, num, half);
-        return ans;
-    }
-    bigint first_n_bits(int n) {
-        bigint ans = bigint();
-        int len = bits();
-        int exp = std::max(len - n, 0);
-        mpz_tdiv_q_2exp(ans.num, num, exp);
-        return ans;
-    }
     bigint last_n_bits(int n) {
         bigint ans = bigint();
-        int len = bits();
         int exp = std::max(n, 0);
         mpz_tdiv_r_2exp(ans.num, num, exp);
         return ans;

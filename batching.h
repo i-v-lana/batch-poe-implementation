@@ -10,7 +10,6 @@
 #include <gmp.h>
 #include "wesolowski.h"
 #include "mpz_helper.h"
-#include "PRF.h"
 #include <fstream>
 
 struct WesolowskiParams {
