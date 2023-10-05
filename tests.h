@@ -15,6 +15,9 @@ public:
 };
 
 class batching_tests : tests {
+private:
+    bool small_test();
+    bool normal_test();
 public:
     bool run();
     batching_tests();

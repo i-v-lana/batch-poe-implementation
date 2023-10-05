@@ -11,11 +11,12 @@ void Batching::init(WesolowskiParams _w_params, BatchingParams _b_params) {
     w_params = _w_params;
     helper = mpz_helper();
     std::string _iv = "IVinput";
-    prf = PRF_crypto(helper.get_random(b_params.lambda_batch_bits), _iv, b_params.low_order_bits);
+    prf = PRF_crypto(helper.get_random(b_params.lambda_prf), _iv, b_params.low_order_bits);
 }
 
-Batching::Batching(WesolowskiParams _w_params, BatchingParams _b_params) {
+Batching::Batching(WesolowskiParams _w_params, BatchingParams _b_params, std::pair<bigint, bigint> _trapdoor) {
     init(_w_params, _b_params);
+    set_trapdoor(_trapdoor.first, _trapdoor.second);
     gen();
 }
 
@@ -31,7 +32,7 @@ Batching::Batching(WesolowskiParams _w_params, BatchingParams _b_params, std::ve
     }
 }
 
-void Batching::batch() {
+BatchingResult Batching::batch() {
     auto start_batching = std::chrono::high_resolution_clock::now();
     alpha.clear();
     alpha.resize(b_params.cnt);
@@ -54,13 +55,24 @@ void Batching::batch() {
     std::pair<bool, std::chrono::duration<double>> result = batch_verifier_part(batch_x, batch_y, _l, _pi);
     std::chrono::duration<double> lior_rothem_time = end_batching - start_batching + result.second;
     std::cout << "Total time of the Lior Rothem's protocol: " << lior_rothem_time.count() << std::endl;
-
+    BatchingResult batch_result;
+    batch_result.result = result.first;
+    batch_result.batch_x = batch_x;
+    batch_result.batch_y = batch_y;
+    return batch_result;
 }
 
 void Batching::print(std::ofstream& file) {
     for (int i = 0; i < b_params.cnt; ++i) {
         file << x[i].num << " " << y[i].num << std::endl;
         file << alpha[i].num << std::endl;
+    }
+}
+
+void Batching::print_cout() {
+    for (int i = 0; i < b_params.cnt; ++i) {
+        std::cout << "x = " << x[i].num << "; y = " << y[i].num << std::endl;
+        std::cout << "alpha[i] = " << alpha[i].num << std::endl;
     }
 }
 

@@ -20,10 +20,16 @@ struct WesolowskiParams {
 struct BatchingParams {
     long t;
     int cnt;
-    int lambda_batch_bits;
+    int lambda_prf;
     bigint N;
     int low_order_bits;
     bigint low_order;
+};
+
+struct BatchingResult {
+    bigint batch_x;
+    bigint batch_y;
+    bool result;
 };
 
 class Batching {
@@ -38,14 +44,15 @@ private:
     std::vector<bigint> x, y;
     void gen();
     void init(WesolowskiParams _w_params, BatchingParams _b_params);
+    void set_trapdoor(bigint& _p, bigint& _q);
     void batch_prover_part(bigint* _l, bigint* _pi, bigint batch_x);
     std::pair<bool, std::chrono::duration<double>> batch_verifier_part(bigint batch_x, bigint batch_y, bigint _l, bigint _pi);
 public:
-    void set_trapdoor(bigint& _p, bigint& _q);
-    Batching(WesolowskiParams _w_params, BatchingParams _b_params);
+    Batching(WesolowskiParams _w_params, BatchingParams _b_params, std::pair<bigint, bigint> _trapdoor);
     Batching(WesolowskiParams _w_params, BatchingParams _b_params, std::vector<std::pair<bigint, bigint> > xy);
     void print(std::ofstream& file);
-    void batch();
+    void print_cout();
+    BatchingResult batch();
     bigint trapdoor(bigint& _x);
 };
 

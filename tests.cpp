@@ -21,29 +21,81 @@ bool tests::run() {
 tests::tests() = default;
 
 bool batching_tests::run() {
+    bool small_result = small_test();
+    bool normal_result = normal_test();
+    bool result = small_result && normal_result;
+    if (result) {
+        std::cout << "TESTS: batching_tests were finished successfully" << std::endl;
+    } else {
+        std::cout << "TESTS: batching_tests failed." << std::endl;
+    }
+    return (small_result && normal_result);
+}
+
+bool batching_tests::small_test() {
+    /// x ^ (2 ^ 16)
     long t = pow(2, 4);
-//    int lambda = 8192;
-    int k = 3;
     bigint p = bigint(31);
     bigint q = bigint(19);
 
     srand(time(NULL));
 
     WesolowskiParams w_params;
-    w_params.k = k;
+    /// l <- prime(1..2^(2*3))
+    w_params.k = 6;
     BatchingParams b_params;
     b_params.t = t;
+    /// PRF returns 3 bits numbers
     b_params.low_order_bits = 3;
-    b_params.lambda_batch_bits = 3;
+    /// and takes 20 bits key.
+    b_params.lambda_prf = 20;
     b_params.N = bigint(589);
     b_params.cnt = 10;
 
 
-    Batching batch = Batching(w_params, b_params);
-    batch.set_trapdoor(p, q);
-    batch.batch();
-    batch.print(std::cout);
-    return false;
+    Batching batch = Batching(w_params, b_params, {p, q});
+    BatchingResult batch_result = batch.batch();
+    bool result = (batch_result.batch_x == bigint(418)) && (batch_result.batch_y == bigint(171)) && batch_result.result;
+    if (!result) {
+        std::cout << "TESTS: simple batching_test failed." << std::endl;
+    }
+    return result;
+}
+
+bool batching_tests::normal_test() {
+    /// x ^ (2 ^ 1024)
+    long t = pow(2, 10);
+    mpz_helper helper = mpz_helper();
+    bigint p = helper.generate_prime(1024);
+    bigint q = helper.generate_prime(1024);
+    bigint N = p * q;
+    std::cout << "p = " << p << std::endl;
+    std::cout << "q = " << q << std::endl;
+    std::cout << "N = " << N << std::endl;
+
+    srand(time(NULL));
+
+    WesolowskiParams w_params;
+    /// l <- prime(1..2^(2*3))
+    w_params.k = 1024;
+    BatchingParams b_params;
+    b_params.t = t;
+    /// PRF returns 128 bits numbers
+    b_params.low_order_bits = 128;
+    /// and takes 128 bits key.
+    b_params.lambda_prf = 128;
+    b_params.N = N;
+    b_params.cnt = 10;
+
+
+    Batching batch = Batching(w_params, b_params, {p, q});
+    BatchingResult batch_result = batch.batch();
+    batch.print_cout();
+    bool result = (batch_result.batch_x == bigint(418)) && (batch_result.batch_y == bigint(171)) && batch_result.result;
+    if (!result) {
+        std::cout << "TESTS: batching_test failed." << std::endl;
+    }
+    return result;
 }
 
 batching_tests::batching_tests() = default;
