@@ -45,7 +45,8 @@ void NaiveApproach::naive_verifier() {
         result = result && results[i];
     }
     auto naive_finish = std::chrono::high_resolution_clock::now();
-    std::cout << "NAIVE APPROACH: Total time of the verifier is " << (naive_finish - naive_start).count();
+    std::chrono::duration<double> naive_time = naive_finish - naive_start;
+    std::cout << "NAIVE APPROACH: Total time of the verifier is " << naive_time.count() << std::endl;
 }
 
 NaiveApproach::NaiveApproach() = default;

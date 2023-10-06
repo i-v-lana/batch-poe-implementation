@@ -54,7 +54,7 @@ BatchingResult Batching::batch() {
     batch_prover_part(&_l, &_pi, batch_x);
     std::pair<bool, std::chrono::duration<double>> result = batch_verifier_part(batch_x, batch_y, _l, _pi);
     std::chrono::duration<double> lior_rothem_time = end_batching - start_batching + result.second;
-    std::cout << "Total time of the Lior Rothem's protocol: " << lior_rothem_time.count() << std::endl;
+    std::cout << "BATCHING: Total time of the Lior Rothem's protocol: " << lior_rothem_time.count() << std::endl;
     BatchingResult batch_result;
     batch_result.result = result.first;
     batch_result.batch_x = batch_x;
@@ -85,6 +85,10 @@ void Batching::gen() {
         x[i] = helper.get_random_mod(b_params.N);
         y[i] = trapdoor(x[i]);
     }
+}
+
+std::pair<std::vector<bigint>, std::vector<bigint> > Batching::get_instances() {
+    return {x, y};
 }
 
 bigint Batching::trapdoor(bigint& _x) {

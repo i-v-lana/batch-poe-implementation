@@ -9,6 +9,39 @@
 #include "wesolowski.h"
 #include "batching.h"
 #include "tests.h"
+#include "NaiveApproach.h"
+
+
+void run_comparison() {
+    std::cout << "=======STARTING COMPARISON=======" << std::endl;
+    long t = pow(2, 12);
+    mpz_helper helper = mpz_helper();
+    bigint p = helper.generate_prime(1024);
+    bigint q = helper.generate_prime(1024);
+    bigint N = p * q;
+
+    srand(time(NULL));
+
+    WesolowskiParams w_params;
+    /// l <- prime(1..2^1024)
+    w_params.k = 1024;
+    BatchingParams b_params;
+    b_params.t = t;
+    /// PRF returns 128 bits numbers
+    b_params.low_order_bits = 128;
+    /// and takes 128 bits key.
+    b_params.lambda_prf = 128;
+    b_params.N = N;
+    b_params.cnt = 1000;
+
+
+    Batching batch = Batching(w_params, b_params, {p, q});
+    BatchingResult batch_result = batch.batch();
+    std::pair<std::vector<bigint>, std::vector<bigint> > xy = batch.get_instances();
+    NaiveApproach naive = NaiveApproach();
+    naive.naive_approach(xy.first, xy.second, w_params, N, t);
+    std::cout << "=======COMPARISON FINISHED=======" << std::endl;
+}
 
 // argv arguments :
 //    t : log2 of difficulty (must be an integer)
@@ -24,13 +57,15 @@ int main(int argc, char *argv[]) {
 //    int k = std::atoi(argv[3]);
 //    int w = std::atoi(argv[4]);
     tests::run();
+    for (int i = 0; i < 10; ++i) {
+        run_comparison();
+    }
 
-
-    std::ofstream file;
-
-    file.open("result/" + std::to_string(t) + "_" +
-              std::to_string(lambda) + "_" + std::to_string(k)+ "_" + std::to_string(w) + ".csv",
-              std::ofstream::out | std::ofstream::app);
+//    std::ofstream file;
+//
+//    file.open("result/" + std::to_string(t) + "_" +
+//              std::to_string(lambda) + "_" + std::to_string(k)+ "_" + std::to_string(w) + ".csv",
+//              std::ofstream::out | std::ofstream::app);
 
     // batch.print(file);
 
@@ -38,6 +73,6 @@ int main(int argc, char *argv[]) {
 //         << vdf.proof_time.count() << ";" << vdf.verif_time.count() << "\n";
 //    std::cout << vdf.verif_time.count() << std::endl;
 
-    file.close();
+    //file.close();
     return 0;
 }

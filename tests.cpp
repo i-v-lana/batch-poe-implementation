@@ -8,6 +8,7 @@
 #include "batching.h"
 
 bool tests::run() {
+    std::cout << "==========RUNNING TESTS==========" << std::endl;
     prf_tests prf = prf_tests();
     batching_tests batching = batching_tests();
     wesolowski_tests wesolowski = wesolowski_tests();
@@ -15,7 +16,15 @@ bool tests::run() {
     bool prf_result = prf.run();
     bool batching_result = batching.run();
     bool wesolowski_result = wesolowski.run();
-    return prf_result && batching_result && wesolowski_result;
+    bool result = prf_result && batching_result && wesolowski_result;
+
+    if (result) {
+        std::cout << "TESTS FINISHED SUCCESSFULLY" << std::endl;
+    } else {
+        std::cout << "TESTS FAILED." << std::endl;
+    }
+    std::cout << "============TESTS DONE============" << std::endl;
+    return result;
 }
 
 tests::tests() = default;
