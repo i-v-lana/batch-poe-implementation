@@ -19,6 +19,10 @@ struct bigint {
         mpz_init(num);
         mpz_set(num, x);
     }
+    bigint(const char *s) {
+        mpz_init(num);
+        mpz_set_str(num, s, 10);
+    }
     bigint(int x) {
         mpz_init(num);
         mpz_set_ui(num, x);
