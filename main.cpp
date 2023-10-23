@@ -14,17 +14,18 @@
 
 void run_comparison() {
     std::cout << "=======STARTING COMPARISON=======" << std::endl;
-    long t = pow(2, 12);
+    long t = pow(2, 9);
     mpz_helper helper = mpz_helper();
-    bigint p = helper.generate_prime(1024);
+    bigint p = helper.generate_prime(2048);
     bigint q = helper.generate_prime(1024);
     bigint N = p * q;
 
     srand(time(NULL));
 
     WesolowskiParams w_params;
-    /// l <- prime(1..2^1024)
-    w_params.k = 1024;
+    /// l <- prime(1..2^2048)
+    /// k bylo 1024, melo by byt 128.
+    w_params.k = 128;
     BatchingParams b_params;
     b_params.t = t;
     /// PRF returns 128 bits numbers
@@ -37,6 +38,7 @@ void run_comparison() {
 
     Batching batch = Batching(w_params, b_params, {p, q});
     BatchingResult batch_result = batch.batch();
+    std::cout << "BATCHING RESULT IS " << batch_result.result << std::endl;
     std::pair<std::vector<bigint>, std::vector<bigint> > xy = batch.get_instances();
     NaiveApproach naive = NaiveApproach();
     naive.naive_approach(xy.first, xy.second, w_params, N, t);
