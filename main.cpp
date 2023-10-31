@@ -14,7 +14,7 @@
 
 void run_comparison() {
     std::cout << "=======STARTING COMPARISON=======" << std::endl;
-    long t = pow(2, 9);
+    long t = pow(2, 35);
     mpz_helper helper = mpz_helper();
     bigint p = helper.generate_prime(2048);
     bigint q = helper.generate_prime(1024);
@@ -40,8 +40,9 @@ void run_comparison() {
     BatchingResult batch_result = batch.batch();
     std::cout << "BATCHING RESULT IS " << batch_result.result << std::endl;
     std::pair<std::vector<bigint>, std::vector<bigint> > xy = batch.get_instances();
-    NaiveApproach naive = NaiveApproach();
-    naive.naive_approach(xy.first, xy.second, w_params, N, t);
+    NaiveApproach naive = NaiveApproach(xy.first, xy.second, w_params, N, t);
+    naive.set_trapdoor(p, q);
+    naive.naive_approach();
     std::cout << "=======COMPARISON FINISHED=======" << std::endl;
 }
 

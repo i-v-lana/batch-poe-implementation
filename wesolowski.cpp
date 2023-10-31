@@ -43,6 +43,25 @@ void Wesolowski::setup(int _k, const mpz_t& _N) {
     setup_time = finish - start;
 }
 
+Proof Wesolowski::prover_trapdoor(mpz_t l, mpz_t pi, const mpz_t x, const long challenge, const mpz_t phi_N) {
+    mpz_t exp_challenge;
+    mpz_init(exp_challenge);
+    mpz_ui_pow_ui(exp_challenge, 2, challenge);
+
+    hash_prime(l, x);
+
+    mpz_t _q;
+    mpz_init(_q);
+    mpz_fdiv_q(_q, exp_challenge, l);
+
+    /// Euler's theorem: x ^ q = x ^ (q mod phi(N))
+    mpz_fdiv_r(_q, _q, phi_N);
+    mpz_powm(pi, x, _q, N);
+
+    Proof proof_sent = Proof();
+    return proof_sent;
+}
+
 Proof Wesolowski::prover(mpz_t l, mpz_t pi, const mpz_t x, const long challenge) {
     mpz_t exp_challenge;
     mpz_init(exp_challenge);

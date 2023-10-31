@@ -29,6 +29,7 @@ private:
     bigint x, N, y;
     Wesolowski vdf;
     bool prover_test(bigint& l, bigint& pi);
+    bool trapdoor_prover_test(bigint &l, bigint &pi, bigint _p, bigint _q);
     bool verifier_test(bigint l, bigint pi);
 public:
     bool run();

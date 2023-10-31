@@ -134,7 +134,7 @@ bool wesolowski_tests::run() {
     /// test for prover
     bigint l = bigint();
     bigint pi = bigint();
-    tests_result = tests_result && prover_test(l, pi);
+    tests_result = tests_result && prover_test(l, pi) && trapdoor_prover_test(l, pi, bigint(5), bigint(11));
 
     /// test for verifier
     tests_result = tests_result && verifier_test(l, pi);
@@ -144,9 +144,9 @@ bool wesolowski_tests::run() {
 wesolowski_tests::wesolowski_tests() {
     t = 5;
     k = 2; /// l will be from 1 to 16
-    N = 5 * 7; /// 3-bits primes
+    N = 5 * 11; /// 3-bits primes
     x = 14;
-    y = 21; /// 16^32 mod 35 = 11
+    y = 31; /// 16^32 mod 35 = 11
     vdf = Wesolowski();
 }
 
@@ -169,14 +169,34 @@ bool wesolowski_tests::prover_test(bigint &l, bigint &pi) {
     return prover_test;
 }
 
+
+bool wesolowski_tests::trapdoor_prover_test(bigint &l, bigint &pi, bigint _p, bigint _q) {
+    vdf.prover_trapdoor(l.num, pi.num, x.num, t, ((_p - 1UL) * (_q - 1UL)).num);
+
+    unsigned long int exp = pow(2, t);
+    exp = exp / l.get_num();
+    unsigned long int check_pi = pow(x.get_num(), exp);
+    check_pi = check_pi % N.get_num();
+
+    bool prover_test = (check_pi == pi.get_num());
+    if (prover_test) {
+        std::cout << "TESTS: wesolowski trapdoor prover test finished successfully." << std::endl;
+    } else {
+        std::cout << "TESTS: wesolowski trapdoor prover test failed. Expected pi = " << check_pi << "; ";
+        std::cout << "but received pi = " << pi << std::endl;
+        std::cout << "TESTS: failed test parameters: x = " << x << "; " << "t = " << t << "; l = " << l << "; N = " << N << std::endl;
+    }
+    return prover_test;
+}
+
+
 bool wesolowski_tests::verifier_test(bigint l, bigint pi) {
     bool verify_result = vdf.verifier(x.num, y.num, t, l.num, pi.num);
     unsigned long int exp = pow(2, t);
     unsigned long int r = exp % l.get_num();
     unsigned long int xr = pow(x.get_num(), r);
     xr = xr % N.get_num();
-    unsigned long int pi_l = pow(pi.get_num(), l.get_num());
-    pi_l = pi_l % N.get_num();
+    unsigned long long pi_l = mpz_helper().pow(pi, l, N).get_num();
     unsigned long int check_y = (xr * pi_l) % N.get_num();
 
     if ((check_y == y.get_num()) == verify_result) {

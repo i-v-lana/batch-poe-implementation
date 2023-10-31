@@ -15,6 +15,7 @@ public:
     void generate(mpz_t& dest);
     Proof evaluate(mpz_t l, mpz_t pi, const mpz_t x,
                    long challenge);
+    Proof prover_trapdoor(mpz_t l, mpz_t pi, const mpz_t x, const long challenge, const mpz_t phi_N);
     Proof prover(mpz_t l, mpz_t pi, const mpz_t x, const long challenge);
     bool parallel_verify(mpz_t x, long challenge, mpz_t l, mpz_t pi);
     bool parallel_diff_verify(mpz_t x, long challenge, mpz_t l, mpz_t pi);
