@@ -33,7 +33,7 @@ struct BatchingResult {
 };
 
 class Batching {
-private:
+protected:
     std::string iv = "ivnone";
     PRF_crypto prf = PRF_crypto(bigint(), iv, 128);
     bigint p, q;

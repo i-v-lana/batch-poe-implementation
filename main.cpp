@@ -14,7 +14,7 @@
 
 void run_comparison() {
     std::cout << "=======STARTING COMPARISON=======" << std::endl;
-    long t = pow(2, 35);
+    long t = pow(2, 30);
     mpz_helper helper = mpz_helper();
     bigint p = helper.generate_prime(2048);
     bigint q = helper.generate_prime(1024);
