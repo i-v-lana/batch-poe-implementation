@@ -65,7 +65,7 @@ Proof Wesolowski::prover_trapdoor(mpz_t l, mpz_t pi, const mpz_t x, const long c
 Proof Wesolowski::prover(mpz_t l, mpz_t pi, const mpz_t x, const long challenge) {
     mpz_t exp_challenge;
     mpz_init(exp_challenge);
-    mpz_ui_pow_ui(exp_challenge, 2, challenge);
+    mpz_ui_pow_ui(exp_challenge, 2, challenge); /// (2^T), where T = 2^40
 
     hash_prime(l, x);
 
@@ -100,8 +100,9 @@ bool Wesolowski::verifier(mpz_t x, mpz_t y_check, long challenge, mpz_t l, mpz_t
     mpz_set_ui(two, 2);
 
     /// x^r, r = 2^T mod l
-    /// tau_mod = 2^T mod phi(l)
+    /// tau_mod = T mod phi(l)
     /// r = 2^tau_mod mod l
+    /// Doesn't make sense: T is much smaller than l.
     mpz_t r;
     mpz_init(r);
     mpz_powm(r, two, tau_mod, l);

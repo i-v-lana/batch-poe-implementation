@@ -51,3 +51,7 @@ bigint PRF_crypto::decrypt(bigint _cipher) {
     result.from_bytes(decryptedtext);
     return result;
 }
+
+int PRF_crypto::length() {
+    return output_bits;
+}

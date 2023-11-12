@@ -64,7 +64,7 @@ bool batching_tests::small_test() {
 
     Batching batch = Batching(w_params, b_params, {p, q});
     BatchingResult batch_result = batch.batch();
-    bool result = (batch_result.batch_x == bigint(418)) && (batch_result.batch_y == bigint(171)) && batch_result.result;
+    bool result = (batch_result.batch_x[0] == bigint(418)) && (batch_result.batch_y[0] == bigint(171)) && batch_result.result;
     if (!result) {
         std::cout << "TESTS: simple batching_test failed." << std::endl;
     }
@@ -117,8 +117,8 @@ bool batching_tests::normal_test() {
                                 "0364145375036193172949585497022064443827483067452"
                                 "3392310178123346686692107318535881373905873623626"
                                 "750898736448925351799860500691484207972181421910473032907301257384991553350801";
-    bool result = (batch_result.batch_x == bigint(test_result_x))
-            && (batch_result.batch_y == bigint(test_result_y)) && batch_result.result;
+    bool result = (batch_result.batch_x[0] == bigint(test_result_x))
+            && (batch_result.batch_y[0] == bigint(test_result_y)) && batch_result.result;
     if (!result) {
         std::cout << "TESTS: batching_test failed." << std::endl;
     }

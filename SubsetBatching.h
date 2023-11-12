@@ -12,17 +12,12 @@
 #include "PRF_crypto.h"
 #include "batching.h"
 
-class SubsetBatching : public batching {
-protected:
-    void batch_prover_part(bigint* _l, bigint* _pi, bigint batch_x);
-    std::pair<bool, std::chrono::duration<double>> batch_verifier_part(bigint batch_x, bigint batch_y, bigint _l, bigint _pi);
+class SubsetBatching : public Batching {
 public:
-    SubsetBatching(WesolowskiParams _w_params, BatchingParams _b_params, std::pair<bigint, bigint> _trapdoor);
-    SubsetBatching(WesolowskiParams _w_params, BatchingParams _b_params, std::vector<std::pair<bigint, bigint> > xy);
-    void print(std::ofstream& file);
-    void print_cout();
-    std::pair<std::vector<bigint>, std::vector<bigint> > get_instances();
-    BatchingResult batch();
+    SubsetBatching(WesolowskiParams _w_params, BatchingParams _b_params,
+                   std::pair<std::vector<bigint>, std::vector<bigint>> xy,
+                   std::pair<bigint, bigint> _trapdoor) : Batching(_w_params, _b_params, xy, _trapdoor) {}
+    BatchingResult batch(int m=100);
 };
 
 #endif //SRC_SUBSETBATCHING_H

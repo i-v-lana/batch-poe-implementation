@@ -74,6 +74,25 @@ struct bigint {
         free(byteArray);
         return bytes;
     }
+    std::vector<bool> get_bool_bits(int bits_cnt) {
+        bigint temp = bigint(num);
+        std::vector<bool> result;
+
+        while (mpz_sgn(temp.num) > 0) {
+            result.push_back(mpz_odd_p(temp.num) != 0);
+            mpz_fdiv_q_2exp(temp.num, temp.num, 1);
+        }
+
+        int bits_len = this->bits();
+        while (bits_len < bits_cnt) {
+            result.push_back(false);
+            ++bits_len;
+        }
+
+        // Reverse the vector to get the correct bit order
+        std::reverse(result.begin(), result.end());
+        return result;
+    };
     bool operator == (const mpz_t& other) const {
         return !(mpz_cmp(this->num, other));
     }
@@ -85,6 +104,11 @@ struct bigint {
         mpz_sub_ui(ans.num, num, x);
         return ans;
     }
+    bigint operator + (const bigint& x) const {
+        bigint ans = bigint();
+        mpz_add(ans.num, num, x.num);
+        return ans;
+    }
     bigint operator * (const bigint& x) const {
         bigint ans = bigint();
         mpz_mul(ans.num, num, x.num);
@@ -93,6 +117,7 @@ struct bigint {
     bool operator != (int& other) const {
         return mpz_cmp_si(this->num, other);
     }
+
 };
 
 class mpz_helper {

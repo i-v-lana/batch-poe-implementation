@@ -20,16 +20,17 @@ Batching::Batching(WesolowskiParams _w_params, BatchingParams _b_params, std::pa
     gen();
 }
 
-Batching::Batching(WesolowskiParams _w_params, BatchingParams _b_params, std::vector<std::pair<bigint, bigint>> xy) {
+Batching::Batching(WesolowskiParams _w_params, BatchingParams _b_params, std::pair<std::vector<bigint>, std::vector<bigint>> xy, std::pair<bigint, bigint> _trapdoor) {
     init(_w_params, _b_params);
     x.clear();
     y.clear();
     x.resize(b_params.cnt);
     y.resize(b_params.cnt);
     for (int i = 0; i < b_params.cnt; ++i) {
-        x[i] = xy[i].first;
-        y[i] = xy[i].second;
+        x[i] = xy.first[i];
+        y[i] = xy.second[i];
     }
+    set_trapdoor(_trapdoor.first, _trapdoor.second);
 }
 
 BatchingResult Batching::batch() {
@@ -57,8 +58,8 @@ BatchingResult Batching::batch() {
     std::cout << "BATCHING: Total time of the Lior Rothem's protocol: " << lior_rothem_time.count() << std::endl;
     BatchingResult batch_result;
     batch_result.result = result.first;
-    batch_result.batch_x = batch_x;
-    batch_result.batch_y = batch_y;
+    batch_result.batch_x = {batch_x};
+    batch_result.batch_y = {batch_y};
     return batch_result;
 }
 
@@ -113,7 +114,7 @@ void Batching::set_trapdoor(bigint& _p, bigint& _q) {
 void Batching::batch_prover_part(bigint* _l, bigint* _pi, bigint batch_x) {
     Wesolowski vdf = Wesolowski();
     vdf.setup(w_params.k, b_params.N.num);
-    vdf.prover(_l->num, _pi->num, batch_x.num, b_params.t);
+    vdf.prover_trapdoor(_l->num, _pi->num, batch_x.num, b_params.t, ((p - 1UL) * (q - 1UL)).num);
 }
 
 std::pair<bool, std::chrono::duration<double>> Batching::batch_verifier_part(bigint batch_x, bigint batch_y, bigint _l, bigint _pi) {

@@ -10,26 +10,27 @@
 #include "batching.h"
 #include "tests.h"
 #include "NaiveApproach.h"
+#include "SubsetBatching.h"
 
 
 void run_comparison() {
     std::cout << "=======STARTING COMPARISON=======" << std::endl;
     long t = pow(2, 30);
     mpz_helper helper = mpz_helper();
-    bigint p = helper.generate_prime(2048);
+    bigint p = helper.generate_prime(1024);
     bigint q = helper.generate_prime(1024);
     bigint N = p * q;
 
     srand(time(NULL));
 
     WesolowskiParams w_params;
-    /// l <- prime(1..2^2048)
+    /// l <- prime(1..2^(2k))
     /// k bylo 1024, melo by byt 128.
     w_params.k = 128;
     BatchingParams b_params;
     b_params.t = t;
-    /// PRF returns 128 bits numbers
-    b_params.low_order_bits = 128;
+    /// PRF returns 128 bits numbers - the length of the alpha is log^2(lambda)
+    b_params.low_order_bits = 49;
     /// and takes 128 bits key.
     b_params.lambda_prf = 128;
     b_params.N = N;
@@ -40,17 +41,18 @@ void run_comparison() {
     BatchingResult batch_result = batch.batch();
     std::cout << "BATCHING RESULT IS " << batch_result.result << std::endl;
     std::pair<std::vector<bigint>, std::vector<bigint> > xy = batch.get_instances();
-    NaiveApproach naive = NaiveApproach(xy.first, xy.second, w_params, N, t);
-    naive.set_trapdoor(p, q);
-    naive.naive_approach();
+
+    SubsetBatching subset_batch = SubsetBatching(w_params, b_params, xy, {p, q});
+    BatchingResult subset_batch_result = subset_batch.batch(100);
+    std::cout << "SUBSET BATCHING RESULT IS " << subset_batch_result.result << std::endl;
+
+
+//    NaiveApproach naive = NaiveApproach(xy.first, xy.second, w_params, N, t);
+//    naive.set_trapdoor(p, q);
+//    naive.naive_approach();
     std::cout << "=======COMPARISON FINISHED=======" << std::endl;
 }
 
-// argv arguments :
-//    t : log2 of difficulty (must be an integer)
-//    lambda : length of modulus
-//    k : bit-level security of hashing function
-//    Size of Lenstra window w
 int main(int argc, char *argv[]) {
 
     // Argument parsing

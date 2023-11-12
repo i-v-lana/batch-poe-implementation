@@ -27,8 +27,8 @@ struct BatchingParams {
 };
 
 struct BatchingResult {
-    bigint batch_x;
-    bigint batch_y;
+    std::vector<bigint> batch_x;
+    std::vector<bigint> batch_y;
     bool result;
 };
 
@@ -51,7 +51,7 @@ protected:
     std::pair<bool, std::chrono::duration<double>> batch_verifier_part(bigint batch_x, bigint batch_y, bigint _l, bigint _pi);
 public:
     Batching(WesolowskiParams _w_params, BatchingParams _b_params, std::pair<bigint, bigint> _trapdoor);
-    Batching(WesolowskiParams _w_params, BatchingParams _b_params, std::vector<std::pair<bigint, bigint> > xy);
+    Batching(WesolowskiParams _w_params, BatchingParams _b_params, std::pair<std::vector<bigint>, std::vector<bigint>> xy, std::pair<bigint, bigint> _trapdoor);
     void print(std::ofstream& file);
     void print_cout();
     std::pair<std::vector<bigint>, std::vector<bigint> > get_instances();
