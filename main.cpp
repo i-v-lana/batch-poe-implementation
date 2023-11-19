@@ -15,7 +15,7 @@
 
 void run_comparison() {
     std::cout << "=======STARTING COMPARISON=======" << std::endl;
-    long t = pow(2, 30);
+    long t = pow(2, 25);
     mpz_helper helper = mpz_helper();
     bigint p = helper.generate_prime(1024);
     bigint q = helper.generate_prime(1024);
@@ -30,11 +30,11 @@ void run_comparison() {
     BatchingParams b_params;
     b_params.t = t;
     /// PRF returns 128 bits numbers - the length of the alpha is log^2(lambda)
-    b_params.low_order_bits = 49;
+    b_params.low_order_bits = 100;
     /// and takes 128 bits key.
     b_params.lambda_prf = 128;
     b_params.N = N;
-    b_params.cnt = 1000;
+    b_params.cnt = 5000;
 
 
     Batching batch = Batching(w_params, b_params, {p, q});
@@ -42,6 +42,7 @@ void run_comparison() {
     std::cout << "BATCHING RESULT IS " << batch_result.result << std::endl;
     std::pair<std::vector<bigint>, std::vector<bigint> > xy = batch.get_instances();
 
+    b_params.low_order_bits = 128;
     SubsetBatching subset_batch = SubsetBatching(w_params, b_params, xy, {p, q});
     BatchingResult subset_batch_result = subset_batch.batch(100);
     std::cout << "SUBSET BATCHING RESULT IS " << subset_batch_result.result << std::endl;

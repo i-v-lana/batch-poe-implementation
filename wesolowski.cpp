@@ -58,6 +58,8 @@ Proof Wesolowski::prover_trapdoor(mpz_t l, mpz_t pi, const mpz_t x, const long c
     mpz_fdiv_r(_q, _q, phi_N);
     mpz_powm(pi, x, _q, N);
 
+    mpz_clear(exp_challenge);
+    mpz_clear(_q);
     Proof proof_sent = Proof();
     return proof_sent;
 }
@@ -76,7 +78,8 @@ Proof Wesolowski::prover(mpz_t l, mpz_t pi, const mpz_t x, const long challenge)
     mpz_powm(pi, x, _q, N);
 
 
-
+    mpz_clear(exp_challenge);
+    mpz_clear(_q);
     Proof proof_sent = Proof();
     return proof_sent;
 }
@@ -136,6 +139,12 @@ bool Wesolowski::verifier(mpz_t x, mpz_t y_check, long challenge, mpz_t l, mpz_t
 
     exp_time = finish_exp - start_exp;
 //    std::cout << "EXP : " << exp_time.count() << std::endl;
+    mpz_clear(phi_l);
+    mpz_clear(r);
+    mpz_clear(tau_mod);
+    mpz_clear(two);
+    mpz_clear(y_tmp);
+    mpz_clear(y);
     return verify_result;
 }
 

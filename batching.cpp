@@ -34,28 +34,34 @@ Batching::Batching(WesolowskiParams _w_params, BatchingParams _b_params, std::pa
 }
 
 BatchingResult Batching::batch() {
-    auto start_batching = std::chrono::high_resolution_clock::now();
     alpha.clear();
     alpha.resize(b_params.cnt);
+    std::chrono::duration<double> total_lior_rothem_time;
+    auto start_total = std::chrono::high_resolution_clock::now();
     for (int i = 0; i < b_params.cnt; ++i) {
         bigint cur_i = bigint(i);
         alpha[i] = prf.evaluate(cur_i);
     }
     bigint batch_x = bigint(1);
     bigint batch_y = bigint(1);
+    std::chrono::duration<double> lior_rothem_time;
     for (int i = 0; i < b_params.cnt; ++i) {
         bigint xi = helper.pow(x[i], alpha[i], b_params.N);
         bigint yi = helper.pow(y[i], alpha[i], b_params.N);
+        auto start_batching = std::chrono::high_resolution_clock::now();
         batch_x = helper.mul_mod(batch_x, xi, b_params.N);
         batch_y = helper.mul_mod(batch_y, yi, b_params.N);
+        auto end_batching = std::chrono::high_resolution_clock::now();
+        lior_rothem_time += end_batching - start_batching;
     }
-    auto end_batching = std::chrono::high_resolution_clock::now();
+    auto end_total = std::chrono::high_resolution_clock::now();
     bigint _l = bigint();
     bigint _pi = bigint();
     batch_prover_part(&_l, &_pi, batch_x);
     std::pair<bool, std::chrono::duration<double>> result = batch_verifier_part(batch_x, batch_y, _l, _pi);
-    std::chrono::duration<double> lior_rothem_time = end_batching - start_batching + result.second;
-    std::cout << "BATCHING: Total time of the Lior Rothem's protocol: " << lior_rothem_time.count() << std::endl;
+    total_lior_rothem_time = end_total - start_total + result.second;
+    std::cout << "BATCHING: Total time of the Lior Rothem's protocol: " << total_lior_rothem_time.count() << " ";
+    std::cout << "Cross multiplication time: " << lior_rothem_time.count() << std::endl;
     BatchingResult batch_result;
     batch_result.result = result.first;
     batch_result.batch_x = {batch_x};
