@@ -30,6 +30,7 @@ struct BatchingResult {
     std::vector<bigint> batch_x;
     std::vector<bigint> batch_y;
     bool result;
+    std::chrono::duration<double> time;
 };
 
 class Batching {

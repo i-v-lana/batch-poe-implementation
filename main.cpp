@@ -11,6 +11,7 @@
 #include "tests.h"
 #include "NaiveApproach.h"
 #include "SubsetBatching.h"
+#include "HybridBatching.h"
 
 
 void run_comparison() {
@@ -43,9 +44,14 @@ void run_comparison() {
     std::pair<std::vector<bigint>, std::vector<bigint> > xy = batch.get_instances();
 
     b_params.low_order_bits = 128;
-    SubsetBatching subset_batch = SubsetBatching(w_params, b_params, xy, {p, q});
-    BatchingResult subset_batch_result = subset_batch.batch(100);
-    std::cout << "SUBSET BATCHING RESULT IS " << subset_batch_result.result << std::endl;
+    HybridBatching hybrid_batch = HybridBatching(w_params, b_params, xy, {p, q});
+    BatchingResult hybrid_batch_result = hybrid_batch.batch(100);
+    std::cout << "HYBRID BATCHING RESULT IS " << hybrid_batch_result.result << std::endl;
+
+//    b_params.low_order_bits = 128;
+//    SubsetBatching subset_batch = SubsetBatching(w_params, b_params, xy, {p, q});
+//    BatchingResult subset_batch_result = subset_batch.batch(100);
+//    std::cout << "SUBSET BATCHING RESULT IS " << subset_batch_result.result << std::endl;
 
 
 //    NaiveApproach naive = NaiveApproach(xy.first, xy.second, w_params, N, t);

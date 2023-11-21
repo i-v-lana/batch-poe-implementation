@@ -66,6 +66,7 @@ BatchingResult Batching::batch() {
     batch_result.result = result.first;
     batch_result.batch_x = {batch_x};
     batch_result.batch_y = {batch_y};
+    batch_result.time = total_lior_rothem_time;
     return batch_result;
 }
 
