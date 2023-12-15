@@ -49,10 +49,10 @@ protected:
     bigint trapdoor(bigint& _x);
 
     void batch_prover_part(bigint* _l, bigint* _pi, bigint batch_x);
-    std::pair<bool, std::chrono::duration<double>> batch_verifier_part(bigint& batch_x, bigint& batch_y, bigint& _l, bigint& _pi);
+    std::pair<bool, std::chrono::duration<double>> batch_verifier_part(bigint batch_x, bigint batch_y, bigint _l, bigint _pi);
 public:
-    Batching(WesolowskiParams _w_params, BatchingParams _b_params, std::pair<bigint&, bigint&> _trapdoor);
-    Batching(WesolowskiParams _w_params, BatchingParams _b_params, std::pair<std::vector<bigint&>, std::vector<bigint&>> xy, std::pair<bigint, bigint> _trapdoor);
+    Batching(WesolowskiParams _w_params, BatchingParams _b_params, std::pair<bigint, bigint> _trapdoor);
+    Batching(WesolowskiParams _w_params, BatchingParams _b_params, std::pair<std::vector<bigint>, std::vector<bigint>> xy, std::pair<bigint, bigint> _trapdoor);
     void print(std::ofstream& file);
     void print_cout();
     std::pair<std::vector<bigint>, std::vector<bigint> > get_instances();

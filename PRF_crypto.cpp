@@ -32,8 +32,7 @@ bigint PRF_crypto::evaluate(bigint &x) {
     stfEncryptor.Put( reinterpret_cast<const unsigned char*>( plaintext.c_str() ), plaintext.length() );
     stfEncryptor.MessageEnd();
 
-    bigint result = bigint();
-    result.from_bytes(ciphertext, output_bits);
+    bigint result = bigint(ciphertext, output_bits);
     return result;
 }
 
@@ -47,8 +46,7 @@ bigint PRF_crypto::decrypt(bigint _cipher) {
     stfDecryptor.Put( reinterpret_cast<const unsigned char*>( ciphertext.c_str() ), ciphertext.size() );
     stfDecryptor.MessageEnd();
 
-    bigint result = bigint();
-    result.from_bytes(decryptedtext);
+    bigint result = bigint(decryptedtext);
     return result;
 }
 

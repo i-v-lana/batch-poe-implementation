@@ -14,7 +14,7 @@ void Batching::init(WesolowskiParams _w_params, BatchingParams _b_params) {
     prf = PRF_crypto(helper.get_random(b_params.lambda_prf), _iv, b_params.low_order_bits);
 }
 
-Batching::Batching(WesolowskiParams _w_params, BatchingParams _b_params, std::pair<bigint&, bigint&> _trapdoor) {
+Batching::Batching(WesolowskiParams _w_params, BatchingParams _b_params, std::pair<bigint, bigint> _trapdoor) {
     init(_w_params, _b_params);
     set_trapdoor(_trapdoor.first, _trapdoor.second);
     gen();
