@@ -37,7 +37,9 @@ BatchingResult BucketBatching::batch(int _bucket_bit) {
         }
         /// Batching instances from buckets into 1 with Random Exponent
         /// init
+        /// TODO: no wesolowski proofs
         BatchingParams rothem_params = b_params;
+        /// TODO: fix, low_order bits to k.
         rothem_params.cnt = bucket_num;
         Batching rothem_batch = Batching(w_params, rothem_params, {buckets_x, buckets_y}, {p, q});
         auto end = std::chrono::high_resolution_clock::now();
