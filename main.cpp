@@ -12,6 +12,7 @@
 #include "NaiveApproach.h"
 #include "SubsetBatching.h"
 #include "HybridBatching.h"
+#include "BucketBatching.h"
 
 
 void run_comparison() {
@@ -35,7 +36,7 @@ void run_comparison() {
     /// and takes 128 bits key.
     b_params.lambda_prf = 128;
     b_params.N = N;
-    b_params.cnt = 5000;
+    b_params.cnt = 100000;
 
 
     Batching batch = Batching(w_params, b_params, {p, q});
@@ -47,6 +48,10 @@ void run_comparison() {
     HybridBatching hybrid_batch = HybridBatching(w_params, b_params, xy, {p, q});
     BatchingResult hybrid_batch_result = hybrid_batch.batch(100);
     std::cout << "HYBRID BATCHING RESULT IS " << hybrid_batch_result.result << std::endl;
+
+    BucketBatching bucket_batch = BucketBatching(w_params, b_params, xy, {p, q});
+    BatchingResult bucket_batch_result = bucket_batch.batch(5);
+    std::cout << "BUCKET BATCHING RESULT IS" << bucket_batch_result.result << std::endl;
 
 //    b_params.low_order_bits = 128;
 //    SubsetBatching subset_batch = SubsetBatching(w_params, b_params, xy, {p, q});

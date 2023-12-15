@@ -5,6 +5,7 @@
 #include "HybridBatching.h"
 
 BatchingResult HybridBatching::batch(int m) {
+    /// TODO: batch_result by nemel podporovat vektory, je to nekonzistentni
     BatchingResult batch_result; batch_result.batch_y = {}; batch_result.batch_x = {}; batch_result.result = true;
     auto start_total = std::chrono::high_resolution_clock::now();
     for (int j = 0; j < m; ++j) {

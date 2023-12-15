@@ -14,7 +14,7 @@ void Batching::init(WesolowskiParams _w_params, BatchingParams _b_params) {
     prf = PRF_crypto(helper.get_random(b_params.lambda_prf), _iv, b_params.low_order_bits);
 }
 
-Batching::Batching(WesolowskiParams _w_params, BatchingParams _b_params, std::pair<bigint, bigint> _trapdoor) {
+Batching::Batching(WesolowskiParams _w_params, BatchingParams _b_params, std::pair<bigint&, bigint&> _trapdoor) {
     init(_w_params, _b_params);
     set_trapdoor(_trapdoor.first, _trapdoor.second);
     gen();
@@ -60,8 +60,8 @@ BatchingResult Batching::batch() {
     batch_prover_part(&_l, &_pi, batch_x);
     std::pair<bool, std::chrono::duration<double>> result = batch_verifier_part(batch_x, batch_y, _l, _pi);
     total_lior_rothem_time = end_total - start_total + result.second;
-    std::cout << "BATCHING: Total time of the Lior Rothem's protocol: " << total_lior_rothem_time.count() << " ";
-    std::cout << "Cross multiplication time: " << lior_rothem_time.count() << std::endl;
+//    std::cout << "BATCHING: Total time of the Lior Rothem's protocol: " << total_lior_rothem_time.count() << " ";
+//    std::cout << "Cross multiplication time: " << lior_rothem_time.count() << std::endl;
     BatchingResult batch_result;
     batch_result.result = result.first;
     batch_result.batch_x = {batch_x};
@@ -112,8 +112,9 @@ void Batching::set_trapdoor(bigint& _p, bigint& _q) {
     if (b_params.N == _p * _q) {
         p = _p;
         q = _q;
-        std::cout << "BATCHING: trapdoor was set." << std::endl;
+//        std::cout << "BATCHING: trapdoor was set." << std::endl;
     } else {
+        /// TODO: show error
         std::cout << "BATCHING: trapdoor wasn't set." << std::endl;
     }
 }

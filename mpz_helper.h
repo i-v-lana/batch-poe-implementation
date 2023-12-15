@@ -34,6 +34,12 @@ struct bigint {
     bigint() {
         mpz_init(num);
     }
+    ~bigint() {
+        char* str = mpz_get_str(NULL, 10, num);
+        std::cout << str << std::endl;
+        free(str);
+        mpz_clear(num);
+    }
     void from_bytes(const std::string& bytes, int bits_cnt=-1) {
         mpz_set_ui(num, 0);
         for (char byte : bytes) {

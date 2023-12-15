@@ -20,7 +20,7 @@ PRF_crypto::PRF_crypto(bigint _k, std::string &_iv, int _output_bits) {
 }
 
 bigint PRF_crypto::evaluate(bigint &x) {
-
+    /// TODO: why 15 bytes?
     std::string plaintext = x.bytes_string(15);
     std::string ciphertext;
 

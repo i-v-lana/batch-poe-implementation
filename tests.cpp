@@ -144,9 +144,9 @@ bool wesolowski_tests::run() {
 wesolowski_tests::wesolowski_tests() {
     t = 5;
     k = 2; /// l will be from 1 to 16
-    N = 5 * 11; /// 3-bits primes
-    x = 14;
-    y = 31; /// 16^32 mod 35 = 11
+    N = bigint(5 * 11); /// 3-bits primes
+    x = bigint(14);
+    y = bigint(31); /// 16^32 mod 35 = 11
     vdf = Wesolowski();
 }
 
