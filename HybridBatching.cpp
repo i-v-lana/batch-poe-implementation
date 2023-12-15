@@ -31,16 +31,6 @@ BatchingResult HybridBatching::batch(int m) {
                 batch_y = helper.mul_mod(batch_y, y[i], b_params.N);
             }
         }
-//        auto end = std::chrono::high_resolution_clock::now();
-//        bigint _l = bigint();
-//        bigint _pi = bigint();
-//        auto end_total = std::chrono::high_resolution_clock::now();
-//        batch_prover_part(&_l, &_pi, batch_x);
-//        std::pair<bool, std::chrono::duration<double>> result = batch_verifier_part(batch_x, batch_y, _l, _pi);
-//
-//        multi_time = multi_time + end - start; //+ result.second;
-//        total_time += end_total - start_total + result.second;
-//        batch_result.result = batch_result.result && result.first;
         batch_result.batch_x.push_back(batch_x);
         batch_result.batch_y.push_back(batch_y);
     }
