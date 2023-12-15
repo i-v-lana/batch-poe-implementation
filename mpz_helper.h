@@ -27,6 +27,11 @@ struct bigint {
         mpz_init(num);
         mpz_set_str(num, s, 10);
     }
+    bigint(std::string& s) {
+        std::string s1 = s;
+        mpz_init(num);
+        mpz_set_str(num, s1.c_str(), 10);
+    }
     bigint(int x) {
         mpz_init(num);
         mpz_set_ui(num, x);

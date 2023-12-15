@@ -20,6 +20,7 @@ public:
     GenInstances() = default;
     GenInstances(bigint _N, std::pair<bigint, bigint> _trapdoor, long _t);
     void gen(long long cnt, std::string file_name);
+    std::pair<std::vector<bigint>, std::vector<bigint> > get_instances(std::string file_name, long long cnt);
 };
 
 

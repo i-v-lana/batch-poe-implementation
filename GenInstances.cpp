@@ -3,16 +3,17 @@
 //
 
 #include "GenInstances.h"
+#include <fstream>
 
 void GenInstances::gen(long long cnt, std::string file_name) {
-    file_name = "t_" + std::to_string(cnt) + "_" + file_name;
-    std::ofstream text_file(file_name, std::ios::binary);
+    file_name = "t_" + std::to_string(t) + "_" + file_name;
+    std::ofstream text_file(file_name, std::ofstream::out);
     for (long long i = 0; i < cnt; ++i) {
         bigint x = helper.get_random_mod(N);
         bigint y = trapdoor(x);
-        text_file.write(reinterpret_cast<char*>(&bigintPairs[0]), bigintPairs.size() * sizeof(std::pair<int64_t, int64_t>));
+        text_file << x << " " << y << std::endl;
     }
-    outFile.close();
+    text_file.close();
 }
 
 bigint GenInstances::trapdoor(bigint& _x) {
@@ -39,4 +40,27 @@ GenInstances::GenInstances(bigint _N, std::pair<bigint, bigint> _trapdoor, long 
     N = _N;
     set_trapdoor(_trapdoor.first, _trapdoor.second);
     t = _t;
+}
+
+std::pair<std::vector<bigint>, std::vector<bigint> > GenInstances::get_instances(std::string file_name, long long cnt) {
+    /// TODO: fix the random choice of instances.
+    std::vector<bigint> x(0), y(0), cur_x(0), cur_y(0);
+    file_name = "t_" + std::to_string(t) + "_" + file_name;
+    std::ifstream text_file(file_name, std::ifstream::in);
+
+    std::string str;
+    long long i = 0;
+    while (text_file >> str) {
+        if (i % 2 == 0) {
+            cur_x.push_back(bigint(str));
+        } else {
+            cur_y.push_back(bigint(str));
+        }
+        ++i;
+    }
+    for (i = 0; i < cnt; ++i) {
+        x.push_back(cur_x[i]);
+        y.push_back(cur_y[i]);
+    }
+    return {x, y};
 }
