@@ -112,7 +112,6 @@ void Batching::set_trapdoor(bigint& _p, bigint& _q) {
     if (b_params.N == _p * _q) {
         p = _p;
         q = _q;
-//        std::cout << "BATCHING: trapdoor was set." << std::endl;
     } else {
         /// TODO: show error
         std::cout << "BATCHING: trapdoor wasn't set." << std::endl;

@@ -70,7 +70,7 @@ BatchingResult BucketBatching::batch(int _bucket_bit) {
 void BucketBatching::init_bucket(int _bucket_bit) {
     bucket_bit = _bucket_bit;
     bucket_num = pow(2, bucket_bit);
-    repeat = ceil((double)w_params.k / ((double)bucket_bit - 1.0));
+    repeat = ceil((double)w_params.k / ((double)bucket_bit - 2.0));
     std::string _iv = "IVinput";
     bucket_prf = PRF_crypto(helper.get_random(b_params.lambda_prf), _iv, bucket_bit);
 }

@@ -15,30 +15,28 @@
 
 struct bigint {
     mpz_t num;
-    bool inited = false;
     bigint(const mpz_t& x) {
         mpz_init(num);
-        inited = true;
         mpz_set(num, x);
+    }
+    bigint(const bigint& x) {
+        mpz_init(num);
+        mpz_set(num, x.num);
     }
     bigint(const char *s) {
         mpz_init(num);
-        inited = true;
         mpz_set_str(num, s, 10);
     }
     bigint(int x) {
         mpz_init(num);
-        inited = true;
         mpz_set_ui(num, x);
     }
     bigint(long x) {
         mpz_init(num);
-        inited = true;
         mpz_set_ui(num, x);
     }
     bigint(const std::string& bytes, int bits_cnt=-1) {
         mpz_init(num);
-        inited = true;
         mpz_set_ui(num, 0);
         for (char byte : bytes) {
             std::bitset<8> bits(byte);
@@ -52,24 +50,14 @@ struct bigint {
     }
     bigint() {
         mpz_init(num);
-        inited = true;
     }
     bigint& operator=(const bigint& other) {
         if (this != &other) {
-            if (!inited) {
-                std::cout << "ERROR: Assigning to not initialized bigint!\n";
-                mpz_init(num);
-            }
-            if (!other.inited)
-                std::cout << "ERROR: Assigning not initialized bigint!\n";
             mpz_set(num, other.num);
         }
         return *this;
     }
     ~bigint() {
-        char* str = mpz_get_str(NULL, 10, num);
-        std::cout << str << std::endl;
-        free(str);
         mpz_clear(num);
     }
     int bits() {

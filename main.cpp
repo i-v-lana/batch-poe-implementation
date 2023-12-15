@@ -13,6 +13,7 @@
 #include "SubsetBatching.h"
 #include "HybridBatching.h"
 #include "BucketBatching.h"
+#include "GenInstances.h"
 
 
 void run_comparison() {
@@ -22,6 +23,9 @@ void run_comparison() {
     bigint p = helper.generate_prime(1024);
     bigint q = helper.generate_prime(1024);
     bigint N = p * q;
+
+    GenInstances generator = GenInstances(N, {p, q}, t);
+    generator.gen(pow(10, 7), "instances.txt");
 
     srand(time(NULL));
 
