@@ -56,6 +56,7 @@ public:
     void print(std::ofstream& file);
     void print_cout();
     std::pair<std::vector<bigint>, std::vector<bigint> > get_instances();
+    BatchingResult combine();
     BatchingResult batch();
 };
 

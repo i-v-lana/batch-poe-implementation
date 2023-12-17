@@ -44,13 +44,16 @@ GenInstances::GenInstances(bigint _N, std::pair<bigint, bigint> _trapdoor, long 
 
 std::pair<std::vector<bigint>, std::vector<bigint> > GenInstances::get_instances(std::string file_name, long long cnt) {
     /// TODO: fix the random choice of instances.
+    if (cnt > pow(10, 7)) {
+        cnt = pow(10, 7);
+    }
     std::vector<bigint> x(0), y(0), cur_x(0), cur_y(0);
     file_name = "t_" + std::to_string(t) + "_" + file_name;
     std::ifstream text_file(file_name, std::ifstream::in);
 
     std::string str;
     long long i = 0;
-    while (text_file >> str) {
+    while ((text_file >> str) && (i < cnt)) {
         if (i % 2 == 0) {
             cur_x.push_back(bigint(str));
         } else {
@@ -62,5 +65,6 @@ std::pair<std::vector<bigint>, std::vector<bigint> > GenInstances::get_instances
         x.push_back(cur_x[i]);
         y.push_back(cur_y[i]);
     }
+    text_file.close();
     return {x, y};
 }

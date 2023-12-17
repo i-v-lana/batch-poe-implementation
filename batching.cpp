@@ -33,10 +33,9 @@ Batching::Batching(WesolowskiParams _w_params, BatchingParams _b_params, std::pa
     set_trapdoor(_trapdoor.first, _trapdoor.second);
 }
 
-BatchingResult Batching::batch() {
+BatchingResult Batching::combine() {
     alpha.clear();
     alpha.resize(b_params.cnt);
-    std::chrono::duration<double> total_lior_rothem_time;
     auto start_total = std::chrono::high_resolution_clock::now();
     for (int i = 0; i < b_params.cnt; ++i) {
         bigint cur_i = bigint(i);
@@ -44,28 +43,31 @@ BatchingResult Batching::batch() {
     }
     bigint batch_x = bigint(1);
     bigint batch_y = bigint(1);
-    std::chrono::duration<double> lior_rothem_time;
     for (int i = 0; i < b_params.cnt; ++i) {
         bigint xi = helper.pow(x[i], alpha[i], b_params.N);
         bigint yi = helper.pow(y[i], alpha[i], b_params.N);
-        auto start_batching = std::chrono::high_resolution_clock::now();
         batch_x = helper.mul_mod(batch_x, xi, b_params.N);
         batch_y = helper.mul_mod(batch_y, yi, b_params.N);
-        auto end_batching = std::chrono::high_resolution_clock::now();
-        lior_rothem_time += end_batching - start_batching;
     }
     auto end_total = std::chrono::high_resolution_clock::now();
+    BatchingResult combine_result;
+    combine_result.time = (end_total - start_total);
+    combine_result.batch_x = {batch_x};
+    combine_result.batch_y = {batch_y};
+    combine_result.result = true;
+    return combine_result;
+}
+
+BatchingResult Batching::batch() {
+    BatchingResult batch_result = combine();
     bigint _l = bigint();
     bigint _pi = bigint();
-    batch_prover_part(&_l, &_pi, batch_x);
-    std::pair<bool, std::chrono::duration<double>> result = batch_verifier_part(batch_x, batch_y, _l, _pi);
-    total_lior_rothem_time = end_total - start_total + result.second;
-//    std::cout << "BATCHING: Total time of the Lior Rothem's protocol: " << total_lior_rothem_time.count() << " ";
-//    std::cout << "Cross multiplication time: " << lior_rothem_time.count() << std::endl;
-    BatchingResult batch_result;
+    batch_prover_part(&_l, &_pi, batch_result.batch_x[0]);
+    std::pair<bool, std::chrono::duration<double>> result = batch_verifier_part(batch_result.batch_x[0], batch_result.batch_y[0], _l, _pi);
+
+    auto total_lior_rothem_time = batch_result.time + result.second;
+
     batch_result.result = result.first;
-    batch_result.batch_x = {batch_x};
-    batch_result.batch_y = {batch_y};
     batch_result.time = total_lior_rothem_time;
     return batch_result;
 }

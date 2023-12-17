@@ -16,53 +16,43 @@
 #include "GenInstances.h"
 
 
-void run_comparison() {
+void run_comparison(bigint N, std::pair<bigint, bigint> trapdoor, long long t, std::vector<bigint> x, std::vector<bigint> y) {
     std::cout << "=======STARTING COMPARISON=======" << std::endl;
-    long t = pow(2, 25);
-    srand(time(NULL));
-
-    mpz_helper helper = mpz_helper();
-    bigint p = helper.generate_prime(1024);
-    bigint q = helper.generate_prime(1024);
-    bigint N = p * q;
-
-    GenInstances generator = GenInstances(N, {p, q}, t);
-    generator.gen(10000000, "instances.txt");
-//    generator.get_instances("instances.txt");
+//    generator.gen(10000000, "instances.txt");
+//    generator.get_instances("instances.txt", 1000);
 
 
-//    WesolowskiParams w_params;
-//    /// l <- prime(1..2^(2k))
-//    /// k bylo 1024, melo by byt 128.
-//    w_params.k = 128;
-//    BatchingParams b_params;
-//    b_params.t = t;
-//    /// PRF returns 128 bits numbers - the length of the alpha is log^2(lambda)
-//    b_params.low_order_bits = 100;
-//    /// and takes 128 bits key.
-//    b_params.lambda_prf = 128;
-//    b_params.N = N;
-//    b_params.cnt = 100000;
-//
-//
-//    Batching batch = Batching(w_params, b_params, {p, q});
-//    BatchingResult batch_result = batch.batch();
-//    std::cout << "BATCHING RESULT IS " << batch_result.result << std::endl;
-//    std::pair<std::vector<bigint>, std::vector<bigint> > xy = batch.get_instances();
-//
-//    b_params.low_order_bits = 128;
-//    HybridBatching hybrid_batch = HybridBatching(w_params, b_params, xy, {p, q});
-//    BatchingResult hybrid_batch_result = hybrid_batch.batch(100);
-//    std::cout << "HYBRID BATCHING RESULT IS " << hybrid_batch_result.result << std::endl;
-//
-//    BucketBatching bucket_batch = BucketBatching(w_params, b_params, xy, {p, q});
-//    BatchingResult bucket_batch_result = bucket_batch.batch(5);
-//    std::cout << "BUCKET BATCHING RESULT IS" << bucket_batch_result.result << std::endl;
+    WesolowskiParams w_params;
+    /// l <- prime(1..2^(2k))
+    /// k bylo 1024, melo by byt 128.
+    w_params.k = 128;
+    BatchingParams b_params;
+    b_params.t = t;
+    /// PRF returns 128 bits numbers - the length of the alpha is log^2(lambda)
+    b_params.low_order_bits = 100;
+    /// and takes 128 bits key.
+    b_params.lambda_prf = 128;
+    b_params.N = N;
+    b_params.cnt = x.size();
 
-//    b_params.low_order_bits = 128;
-//    SubsetBatching subset_batch = SubsetBatching(w_params, b_params, xy, {p, q});
-//    BatchingResult subset_batch_result = subset_batch.batch(100);
-//    std::cout << "SUBSET BATCHING RESULT IS " << subset_batch_result.result << std::endl;
+
+    Batching batch = Batching(w_params, b_params, {x, y}, trapdoor);
+    BatchingResult batch_result = batch.batch();
+    std::cout << "BATCHING RESULT IS " << batch_result.result << std::endl;
+
+    b_params.low_order_bits = 128;
+    HybridBatching hybrid_batch = HybridBatching(w_params, b_params, {x, y}, trapdoor);
+    BatchingResult hybrid_batch_result = hybrid_batch.batch(100);
+    std::cout << "HYBRID BATCHING RESULT IS " << hybrid_batch_result.result << std::endl;
+
+    BucketBatching bucket_batch = BucketBatching(w_params, b_params, {x, y}, trapdoor);
+    BatchingResult bucket_batch_result = bucket_batch.batch(5);
+    std::cout << "BUCKET BATCHING RESULT IS" << bucket_batch_result.result << std::endl;
+
+    b_params.low_order_bits = 128;
+    SubsetBatching subset_batch = SubsetBatching(w_params, b_params, {x, y}, trapdoor);
+    BatchingResult subset_batch_result = subset_batch.batch(100);
+    std::cout << "SUBSET BATCHING RESULT IS " << subset_batch_result.result << std::endl;
 
 
 //    NaiveApproach naive = NaiveApproach(xy.first, xy.second, w_params, N, t);
@@ -74,15 +64,27 @@ void run_comparison() {
 int main(int argc, char *argv[]) {
 
     // Argument parsing
-    int t, lambda, k, w;
+    long t = pow(2, 25);
+    srand(time(NULL));
+    long long cnt = 10;
+
+    mpz_helper helper = mpz_helper();
+    bigint p = helper.generate_prime(1024);
+    bigint q = helper.generate_prime(1024);
+    bigint N = p * q;
+
+    GenInstances generator = GenInstances(N, {p, q}, t);
+    auto xy = generator.get_instances("instances.txt", 10 * cnt);
 //    int t = std::atoi(argv[1]);
 //    int lambda = std::atoi(argv[2]);
 //    int k = std::atoi(argv[3]);
 //    int w = std::atoi(argv[4]);
 //    tests::run();
-//    for (int i = 0; i < 10; ++i) {
-        run_comparison();
-//    }
+    for (int i = 0; i < 10; ++i) {
+        std::vector<bigint> cur_x(xy.first.begin() + (long long)i * cnt, xy.first.begin() + (long long)(i + 1) * cnt);
+        std::vector<bigint> cur_y(xy.second.begin() + (long long)i * cnt, xy.second.begin() + (long long)(i + 1) * cnt);
+        run_comparison(N, {p, q}, t, cur_x, cur_y);
+    }
 
 //    std::ofstream file;
 //
