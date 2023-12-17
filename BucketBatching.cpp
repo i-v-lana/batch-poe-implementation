@@ -45,7 +45,7 @@ BatchingResult BucketBatching::batch(int _bucket_bit) {
         Batching rothem_batch = Batching(w_params, rothem_params, {buckets_x, buckets_y}, {p, q});
         auto end = std::chrono::high_resolution_clock::now();
         /// run
-        auto rothem_batch_result = rothem_batch.batch();
+        auto rothem_batch_result = rothem_batch.combine();
         total_time += (end - start) + rothem_batch_result.time;
 
 
