@@ -41,25 +41,25 @@ void run_comparison(bigint N, std::pair<bigint, bigint> trapdoor, long logt, std
 
     Batching batch = Batching(w_params, b_params, {x, y}, trapdoor);
     BatchingResult batch_result = batch.batch();
-    std::cout << "BATCHING: Total time of the rothem batching protocol: " << batch_result.time.count() << std::endl;
-    std::cout << "BATCHING RESULT IS " << batch_result.result << std::endl;
+    std::cout << "Total time of the rothem batching protocol: " << batch_result.time.count() << std::endl;
+//    std::cout << "BATCHING RESULT IS " << batch_result.result << std::endl;
     text_file << batch_result.time.count() << ",";
 
     b_params.low_order_bits = 128;
     HybridBatching hybrid_batch = HybridBatching(w_params, b_params, {x, y}, trapdoor);
     BatchingResult hybrid_batch_result = hybrid_batch.batch(100);
-    std::cout << "HYBRID BATCHING RESULT IS " << hybrid_batch_result.result << std::endl;
+//    std::cout << "HYBRID BATCHING RESULT IS " << hybrid_batch_result.result << std::endl;
     text_file << hybrid_batch_result.time.count() << ",";
 
     BucketBatching bucket_batch = BucketBatching(w_params, b_params, {x, y}, trapdoor);
-    BatchingResult bucket_batch_result = bucket_batch.batch(5);
-    std::cout << "BUCKET BATCHING RESULT IS " << bucket_batch_result.result << std::endl;
+    BatchingResult bucket_batch_result = bucket_batch.batch(12);
+//    std::cout << "BUCKET BATCHING RESULT IS " << bucket_batch_result.result << std::endl;
     text_file << bucket_batch_result.time.count() << ",";
 
     b_params.low_order_bits = 128;
     SubsetBatching subset_batch = SubsetBatching(w_params, b_params, {x, y}, trapdoor);
     BatchingResult subset_batch_result = subset_batch.batch(100);
-    std::cout << "SUBSET BATCHING RESULT IS " << subset_batch_result.result << std::endl;
+//    std::cout << "SUBSET BATCHING RESULT IS " << subset_batch_result.result << std::endl;
     text_file << subset_batch_result.time.count() << "\n";
 
 
@@ -76,7 +76,7 @@ int main(int argc, char *argv[]) {
     long logt = 25;
     long t = pow(2, logt);
     srand(time(NULL));
-    long long cnt = 10;
+    long long cnt = 1e6;
 
     mpz_helper helper = mpz_helper();
     bigint p = helper.generate_prime(1024);
@@ -84,8 +84,9 @@ int main(int argc, char *argv[]) {
     bigint N = p * q;
 
     GenInstances generator = GenInstances(N, {p, q}, t);
-    auto xy = generator.get_instances("instances.txt", 10 * cnt);
-    for (int i = 0; i < 10; ++i) {
+    auto xy = generator.get_instances("instances.txt", 1 * cnt);
+    for (int i = 0; i < 1; ++i) {
+        /// TODO: fix later
         std::vector<bigint> cur_x(xy.first.begin() + (long long)i * cnt, xy.first.begin() + (long long)(i + 1) * cnt);
         std::vector<bigint> cur_y(xy.second.begin() + (long long)i * cnt, xy.second.begin() + (long long)(i + 1) * cnt);
         run_comparison(N, {p, q}, logt, cur_x, cur_y);

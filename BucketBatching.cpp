@@ -66,7 +66,7 @@ BatchingResult BucketBatching::batch(int _bucket_bit) {
     /// run
     batch_result = rothem_batch.batch();
     batch_result.time += total_time + (end - start);
-    std::cout << "BATCHING: Total time of the bucket batching protocol: " << batch_result.time.count() << std::endl;
+    std::cout << "Total time of the bucket batching protocol: " << batch_result.time.count() << std::endl;
     return batch_result;
 }
 

@@ -9,20 +9,28 @@
 //#include "utils.h"
 #include "wesolowski.h"
 #include <gmpxx.h>
+#include "mpz_helper.h"
 
 void Wesolowski::hash_prime(mpz_t l, const mpz_t input) {
     /// TODO: l by se melo volit pomoci hashovani, jinak bezpecnostni problem
-    mpz_t num, gcd;
+
+    mpz_t num, gcd, one;
     mpz_init(num);
     mpz_init(gcd);
+    mpz_init(one);
+
+    mpz_set_ui(one, 1);
     mpz_urandomb(num, rstate, 2*k);
     mpz_nextprime(l, num);
     mpz_gcd(gcd, l, input);
-    while (mpz_cmp_si(gcd, 1)) {
+    while (mpz_cmp(gcd, one)) {
         mpz_urandomb(num, rstate, 2*k);
         mpz_nextprime(l, num);
         mpz_gcd(gcd, l, input);
     }
+    mpz_clear(num);
+    mpz_clear(gcd);
+    mpz_clear(one);
 }
 
 Wesolowski::Wesolowski() {

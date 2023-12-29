@@ -58,6 +58,7 @@ struct bigint {
     }
     bigint& operator=(const bigint& other) {
         if (this != &other) {
+            mpz_init(num);
             mpz_set(num, other.num);
         }
         return *this;

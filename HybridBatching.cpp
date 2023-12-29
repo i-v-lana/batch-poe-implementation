@@ -41,6 +41,6 @@ BatchingResult HybridBatching::batch(int m) {
     auto end_total = std::chrono::high_resolution_clock::now();
     batch_result = rothem_batch.batch();
     batch_result.time += end_total - start_total;
-    std::cout << "BATCHING: Total time of the hybrid batching protocol: " << batch_result.time.count() << std::endl;
+    std::cout << "Total time of the hybrid batching protocol: " << batch_result.time.count() << std::endl;
     return batch_result;
 }
