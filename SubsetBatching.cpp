@@ -46,7 +46,7 @@ BatchingResult SubsetBatching::batch(int m) {
         batch_result.batch_x.push_back(batch_x);
         batch_result.batch_y.push_back(batch_y);
     }
-    std::cout << "BATCHING: Total time of the random subset batching protocol: " << total_time.count() << std::endl;
+    batch_result.time = total_time;
     return batch_result;
 }
 
