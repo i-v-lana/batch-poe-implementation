@@ -52,6 +52,7 @@ BatchingResult Batching::combine() {
     auto end_total = std::chrono::high_resolution_clock::now();
     BatchingResult combine_result;
     combine_result.time = (end_total - start_total);
+    std::cout << "ROTEM: exponensiation time is " << combine_result.time.count() << std::endl;
     combine_result.batch_x = {batch_x};
     combine_result.batch_y = {batch_y};
     combine_result.result = true;

@@ -30,8 +30,8 @@ void run_comparison(bigint N, std::pair<bigint, bigint> trapdoor, long logt, std
     w_params.k = 128;
     BatchingParams b_params;
     b_params.t = t;
-    /// PRF returns 128 bits numbers - the length of the alpha is log^2(lambda)
-    b_params.low_order_bits = 100;
+    /// TODO: think about 100 vs 128. PRF returns 128 bits numbers - the length of the alpha is log^2(lambda)
+    b_params.low_order_bits = 128;
     /// and takes 128 bits key.
     b_params.lambda_prf = 128;
     b_params.N = N;
@@ -41,26 +41,26 @@ void run_comparison(bigint N, std::pair<bigint, bigint> trapdoor, long logt, std
     std::ofstream text_file(file_name, std::ios::app);
     text_file << logt << "," << x.size() << ",";
 
-    Batching batch = Batching(w_params, b_params, {x, y}, trapdoor);
-    BatchingResult batch_result = batch.batch();
-    std::cout << "Total time of the rothem batching protocol: " << batch_result.time.count() << std::endl;
-//    std::cout << "BATCHING RESULT IS " << batch_result.result << std::endl;
-    text_file << batch_result.time.count() << ",";
+//    Batching batch = Batching(w_params, b_params, {x, y}, trapdoor);
+//    BatchingResult batch_result = batch.batch();
+//    std::cout << "Total time of the rothem batching protocol: " << batch_result.time.count() << std::endl;
+////    std::cout << "BATCHING RESULT IS " << batch_result.result << std::endl;
+//    text_file << batch_result.time.count() << ",";
+//
+//    b_params.low_order_bits = 128;
+//    HybridBatching hybrid_batch = HybridBatching(w_params, b_params, {x, y}, trapdoor);
+//    BatchingResult hybrid_batch_result = hybrid_batch.batch(128);
+////    std::cout << "HYBRID BATCHING RESULT IS " << hybrid_batch_result.result << std::endl;
+//    text_file << hybrid_batch_result.time.count() << ",";
+//
+//    BucketBatching bucket_batch = BucketBatching(w_params, b_params, {x, y}, trapdoor);
+//    BatchingResult bucket_batch_result = bucket_batch.batch(12);
+////    std::cout << "BUCKET BATCHING RESULT IS " << bucket_batch_result.result << std::endl;
+//    text_file << bucket_batch_result.time.count() << ",";
 
-    b_params.low_order_bits = 128;
-    HybridBatching hybrid_batch = HybridBatching(w_params, b_params, {x, y}, trapdoor);
-    BatchingResult hybrid_batch_result = hybrid_batch.batch(100);
-//    std::cout << "HYBRID BATCHING RESULT IS " << hybrid_batch_result.result << std::endl;
-    text_file << hybrid_batch_result.time.count() << ",";
-
-    BucketBatching bucket_batch = BucketBatching(w_params, b_params, {x, y}, trapdoor);
-    BatchingResult bucket_batch_result = bucket_batch.batch(12);
-//    std::cout << "BUCKET BATCHING RESULT IS " << bucket_batch_result.result << std::endl;
-    text_file << bucket_batch_result.time.count() << ",";
-
-    b_params.low_order_bits = 128;
+//    b_params.low_order_bits = 128;
     SubsetBatching subset_batch = SubsetBatching(w_params, b_params, {x, y}, trapdoor);
-    BatchingResult subset_batch_result = subset_batch.batch(100);
+    BatchingResult subset_batch_result = subset_batch.batch(128);
     std::cout << "Total time of the random subset batching protocol: " << subset_batch_result.time.count() << std::endl;
 //    std::cout << "SUBSET BATCHING RESULT IS " << subset_batch_result.result << std::endl;
     text_file << subset_batch_result.time.count() << "\n";
@@ -79,7 +79,7 @@ int main(int argc, char *argv[]) {
     long logt = 25;
     long t = pow(2, logt);
     srand(time(NULL));
-    long long cnt = 2e4;
+    long long cnt = 50000;
 
     mpz_helper helper = mpz_helper();
     bigint p = helper.generate_prime(1024);
@@ -87,7 +87,7 @@ int main(int argc, char *argv[]) {
     bigint N = p * q;
 
     GenInstances generator = GenInstances(N, {p, q}, t);
-    auto xy = generator.get_instances("instances.txt", 10 * cnt);
+    auto xy = generator.get_instances("instances.txt", 1 * cnt);
     std::vector<int> indecies;
     for (int i = 0; i < xy.first.size(); ++i) {
         indecies.push_back(i);
