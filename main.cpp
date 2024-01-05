@@ -54,7 +54,7 @@ void run_comparison(bigint N, std::pair<bigint, bigint> trapdoor, long logt, std
 //    text_file << hybrid_batch_result.time.count() << ",";
 //
 //    BucketBatching bucket_batch = BucketBatching(w_params, b_params, {x, y}, trapdoor);
-//    BatchingResult bucket_batch_result = bucket_batch.batch(12);
+//    BatchingResult bucket_batch_result = bucket_batch.batch(11);
 ////    std::cout << "BUCKET BATCHING RESULT IS " << bucket_batch_result.result << std::endl;
 //    text_file << bucket_batch_result.time.count() << ",";
 
@@ -79,7 +79,7 @@ int main(int argc, char *argv[]) {
     long logt = 25;
     long t = pow(2, logt);
     srand(time(NULL));
-    long long cnt = 50000;
+    long long cnt = 5e5;
 
     mpz_helper helper = mpz_helper();
     bigint p = helper.generate_prime(1024);
