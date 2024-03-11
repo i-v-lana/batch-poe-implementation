@@ -10,6 +10,10 @@
 class Wesolowski {
 public:
     Wesolowski();
+    ~Wesolowski() {
+        mpz_clear(N);
+        mpz_clear(challenge);
+    }
 
     void setup(int k, const mpz_t& _N);
     void generate(mpz_t& dest);
@@ -31,17 +35,13 @@ public:
 
 private:
     mpz_t N;
-    mpz_t p;
-    mpz_t q;
     int k;
     mpz_t challenge;
 
     gmp_randstate_t rstate;
 
-    void HashG(mpz_t& dest, mpz_t hashed);
     void hash_prime(mpz_t l, const mpz_t input);
 
-    void unit_test();
 
     int bit_length;
 };

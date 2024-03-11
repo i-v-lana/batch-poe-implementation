@@ -79,7 +79,7 @@ int main(int argc, char *argv[]) {
     long logt = 25;
     long t = pow(2, logt);
     srand(time(NULL));
-    long long cnt = 5e5;
+    long long cnt = 1e6;
 
     mpz_helper helper = mpz_helper();
     bigint p = helper.generate_prime(1024);
