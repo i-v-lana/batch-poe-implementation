@@ -74,12 +74,19 @@ void run_comparison(bigint N, std::pair<bigint, bigint> trapdoor, long logt, std
 }
 
 int main(int argc, char *argv[]) {
+    /// second argument - protocol name (naive/bucket/hybrid/subset/exponential)
+    int i = 0;
+    while (i < argc) {
+        std::cout << "Argument " << i + 1 << ": " << argv[i]
+             << std::endl;
+        i++;
+    }
 
     // Argument parsing
     long logt = 25;
     long t = pow(2, logt);
     srand(time(NULL));
-    long long cnt = 1e6;
+    long long cnt = 200;
 
     mpz_helper helper = mpz_helper();
     bigint p = helper.generate_prime(1024);
@@ -108,18 +115,5 @@ int main(int argc, char *argv[]) {
         }
         run_comparison(N, {p, q}, logt, cur_x, cur_y);
     }
-//    std::ofstream file;
-//
-//    file.open("result/" + std::to_string(t) + "_" +
-//              std::to_string(lambda) + "_" + std::to_string(k)+ "_" + std::to_string(w) + ".csv",
-//              std::ofstream::out | std::ofstream::app);
-
-    // batch.print(file);
-
-//    file << vdf.setup_time.count() << ";" << vdf.eval_time.count() << ";"
-//         << vdf.proof_time.count() << ";" << vdf.verif_time.count() << "\n";
-//    std::cout << vdf.verif_time.count() << std::endl;
-
-    //file.close();
     return 0;
 }

@@ -129,6 +129,174 @@ src/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/src.dir/build.make CMakeFiles/src.dir/build
 .PHONY : src/fast
 
+BucketBatching.o: BucketBatching.cpp.o
+.PHONY : BucketBatching.o
+
+# target to build an object file
+BucketBatching.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/src.dir/build.make CMakeFiles/src.dir/BucketBatching.cpp.o
+.PHONY : BucketBatching.cpp.o
+
+BucketBatching.i: BucketBatching.cpp.i
+.PHONY : BucketBatching.i
+
+# target to preprocess a source file
+BucketBatching.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/src.dir/build.make CMakeFiles/src.dir/BucketBatching.cpp.i
+.PHONY : BucketBatching.cpp.i
+
+BucketBatching.s: BucketBatching.cpp.s
+.PHONY : BucketBatching.s
+
+# target to generate assembly for a file
+BucketBatching.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/src.dir/build.make CMakeFiles/src.dir/BucketBatching.cpp.s
+.PHONY : BucketBatching.cpp.s
+
+GenInstances.o: GenInstances.cpp.o
+.PHONY : GenInstances.o
+
+# target to build an object file
+GenInstances.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/src.dir/build.make CMakeFiles/src.dir/GenInstances.cpp.o
+.PHONY : GenInstances.cpp.o
+
+GenInstances.i: GenInstances.cpp.i
+.PHONY : GenInstances.i
+
+# target to preprocess a source file
+GenInstances.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/src.dir/build.make CMakeFiles/src.dir/GenInstances.cpp.i
+.PHONY : GenInstances.cpp.i
+
+GenInstances.s: GenInstances.cpp.s
+.PHONY : GenInstances.s
+
+# target to generate assembly for a file
+GenInstances.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/src.dir/build.make CMakeFiles/src.dir/GenInstances.cpp.s
+.PHONY : GenInstances.cpp.s
+
+HybridBatching.o: HybridBatching.cpp.o
+.PHONY : HybridBatching.o
+
+# target to build an object file
+HybridBatching.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/src.dir/build.make CMakeFiles/src.dir/HybridBatching.cpp.o
+.PHONY : HybridBatching.cpp.o
+
+HybridBatching.i: HybridBatching.cpp.i
+.PHONY : HybridBatching.i
+
+# target to preprocess a source file
+HybridBatching.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/src.dir/build.make CMakeFiles/src.dir/HybridBatching.cpp.i
+.PHONY : HybridBatching.cpp.i
+
+HybridBatching.s: HybridBatching.cpp.s
+.PHONY : HybridBatching.s
+
+# target to generate assembly for a file
+HybridBatching.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/src.dir/build.make CMakeFiles/src.dir/HybridBatching.cpp.s
+.PHONY : HybridBatching.cpp.s
+
+NaiveApproach.o: NaiveApproach.cpp.o
+.PHONY : NaiveApproach.o
+
+# target to build an object file
+NaiveApproach.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/src.dir/build.make CMakeFiles/src.dir/NaiveApproach.cpp.o
+.PHONY : NaiveApproach.cpp.o
+
+NaiveApproach.i: NaiveApproach.cpp.i
+.PHONY : NaiveApproach.i
+
+# target to preprocess a source file
+NaiveApproach.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/src.dir/build.make CMakeFiles/src.dir/NaiveApproach.cpp.i
+.PHONY : NaiveApproach.cpp.i
+
+NaiveApproach.s: NaiveApproach.cpp.s
+.PHONY : NaiveApproach.s
+
+# target to generate assembly for a file
+NaiveApproach.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/src.dir/build.make CMakeFiles/src.dir/NaiveApproach.cpp.s
+.PHONY : NaiveApproach.cpp.s
+
+PRF_crypto.o: PRF_crypto.cpp.o
+.PHONY : PRF_crypto.o
+
+# target to build an object file
+PRF_crypto.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/src.dir/build.make CMakeFiles/src.dir/PRF_crypto.cpp.o
+.PHONY : PRF_crypto.cpp.o
+
+PRF_crypto.i: PRF_crypto.cpp.i
+.PHONY : PRF_crypto.i
+
+# target to preprocess a source file
+PRF_crypto.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/src.dir/build.make CMakeFiles/src.dir/PRF_crypto.cpp.i
+.PHONY : PRF_crypto.cpp.i
+
+PRF_crypto.s: PRF_crypto.cpp.s
+.PHONY : PRF_crypto.s
+
+# target to generate assembly for a file
+PRF_crypto.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/src.dir/build.make CMakeFiles/src.dir/PRF_crypto.cpp.s
+.PHONY : PRF_crypto.cpp.s
+
+SubsetBatching.o: SubsetBatching.cpp.o
+.PHONY : SubsetBatching.o
+
+# target to build an object file
+SubsetBatching.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/src.dir/build.make CMakeFiles/src.dir/SubsetBatching.cpp.o
+.PHONY : SubsetBatching.cpp.o
+
+SubsetBatching.i: SubsetBatching.cpp.i
+.PHONY : SubsetBatching.i
+
+# target to preprocess a source file
+SubsetBatching.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/src.dir/build.make CMakeFiles/src.dir/SubsetBatching.cpp.i
+.PHONY : SubsetBatching.cpp.i
+
+SubsetBatching.s: SubsetBatching.cpp.s
+.PHONY : SubsetBatching.s
+
+# target to generate assembly for a file
+SubsetBatching.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/src.dir/build.make CMakeFiles/src.dir/SubsetBatching.cpp.s
+.PHONY : SubsetBatching.cpp.s
+
+batching.o: batching.cpp.o
+.PHONY : batching.o
+
+# target to build an object file
+batching.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/src.dir/build.make CMakeFiles/src.dir/batching.cpp.o
+.PHONY : batching.cpp.o
+
+batching.i: batching.cpp.i
+.PHONY : batching.i
+
+# target to preprocess a source file
+batching.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/src.dir/build.make CMakeFiles/src.dir/batching.cpp.i
+.PHONY : batching.cpp.i
+
+batching.s: batching.cpp.s
+.PHONY : batching.s
+
+# target to generate assembly for a file
+batching.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/src.dir/build.make CMakeFiles/src.dir/batching.cpp.s
+.PHONY : batching.cpp.s
+
 main.o: main.cpp.o
 .PHONY : main.o
 
@@ -153,6 +321,30 @@ main.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/src.dir/build.make CMakeFiles/src.dir/main.cpp.s
 .PHONY : main.cpp.s
 
+mpz_helper.o: mpz_helper.cpp.o
+.PHONY : mpz_helper.o
+
+# target to build an object file
+mpz_helper.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/src.dir/build.make CMakeFiles/src.dir/mpz_helper.cpp.o
+.PHONY : mpz_helper.cpp.o
+
+mpz_helper.i: mpz_helper.cpp.i
+.PHONY : mpz_helper.i
+
+# target to preprocess a source file
+mpz_helper.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/src.dir/build.make CMakeFiles/src.dir/mpz_helper.cpp.i
+.PHONY : mpz_helper.cpp.i
+
+mpz_helper.s: mpz_helper.cpp.s
+.PHONY : mpz_helper.s
+
+# target to generate assembly for a file
+mpz_helper.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/src.dir/build.make CMakeFiles/src.dir/mpz_helper.cpp.s
+.PHONY : mpz_helper.cpp.s
+
 proof.o: proof.cpp.o
 .PHONY : proof.o
 
@@ -176,6 +368,30 @@ proof.s: proof.cpp.s
 proof.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/src.dir/build.make CMakeFiles/src.dir/proof.cpp.s
 .PHONY : proof.cpp.s
+
+tests.o: tests.cpp.o
+.PHONY : tests.o
+
+# target to build an object file
+tests.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/src.dir/build.make CMakeFiles/src.dir/tests.cpp.o
+.PHONY : tests.cpp.o
+
+tests.i: tests.cpp.i
+.PHONY : tests.i
+
+# target to preprocess a source file
+tests.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/src.dir/build.make CMakeFiles/src.dir/tests.cpp.i
+.PHONY : tests.cpp.i
+
+tests.s: tests.cpp.s
+.PHONY : tests.s
+
+# target to generate assembly for a file
+tests.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/src.dir/build.make CMakeFiles/src.dir/tests.cpp.s
+.PHONY : tests.cpp.s
 
 wesolowski.o: wesolowski.cpp.o
 .PHONY : wesolowski.o
@@ -210,12 +426,39 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... src"
+	@echo "... BucketBatching.o"
+	@echo "... BucketBatching.i"
+	@echo "... BucketBatching.s"
+	@echo "... GenInstances.o"
+	@echo "... GenInstances.i"
+	@echo "... GenInstances.s"
+	@echo "... HybridBatching.o"
+	@echo "... HybridBatching.i"
+	@echo "... HybridBatching.s"
+	@echo "... NaiveApproach.o"
+	@echo "... NaiveApproach.i"
+	@echo "... NaiveApproach.s"
+	@echo "... PRF_crypto.o"
+	@echo "... PRF_crypto.i"
+	@echo "... PRF_crypto.s"
+	@echo "... SubsetBatching.o"
+	@echo "... SubsetBatching.i"
+	@echo "... SubsetBatching.s"
+	@echo "... batching.o"
+	@echo "... batching.i"
+	@echo "... batching.s"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"
+	@echo "... mpz_helper.o"
+	@echo "... mpz_helper.i"
+	@echo "... mpz_helper.s"
 	@echo "... proof.o"
 	@echo "... proof.i"
 	@echo "... proof.s"
+	@echo "... tests.o"
+	@echo "... tests.i"
+	@echo "... tests.s"
 	@echo "... wesolowski.o"
 	@echo "... wesolowski.i"
 	@echo "... wesolowski.s"
