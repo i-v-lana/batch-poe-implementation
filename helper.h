@@ -21,11 +21,9 @@ struct runparams {
 runparams get_runparams(int cnt, char *args[], errortype &error);
 
 
-BatchingResult run_naive();
-BatchingResult run_bucket();
-BatchingResult run_hybrid();
-BatchingResult run_subset();
-BatchingResult run_exponent();
+BatchingResult run_protocol(WesolowskiParams _w_params, BatchingParams _b_params,
+                            std::pair<std::vector<bigint>, std::vector<bigint>> xy,
+                            std::pair<bigint, bigint> _trapdoor, protocoltype _protocol);
 
 
 #endif //SRC_HELPER_H

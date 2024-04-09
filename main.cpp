@@ -42,41 +42,6 @@ void run_comparison(bigint N, std::pair<bigint, bigint> trapdoor, long logt, std
     std::ofstream text_file(file_name, std::ios::app);
     text_file << logt << "," << x.size() << ",";
 
-    switch (params.protocol) {
-        case naive:
-            run_naive(xy.first, xy.second, w_params, N, t, trapdoor);
-            break;
-        case bucket:
-            run_bucket(w_params, b_params, {x, y}, trapdoor);
-            break;
-        case hybrid:
-            run_hybrid(w_params, b_params, {x, y}, trapdoor);
-            break;
-        case subset:
-            run_subset(w_params, b_params, {x, y}, trapdoor);
-            break;
-        case exponent:
-            run_exponent(w_params, b_params, {x, y}, trapdoor);
-            break;
-    }
-
-//    Batching batch = Batching(w_params, b_params, {x, y}, trapdoor);
-//    BatchingResult batch_result = batch.batch();
-//    std::cout << "Total time of the rothem batching protocol: " << batch_result.time.count() << std::endl;
-////    std::cout << "BATCHING RESULT IS " << batch_result.result << std::endl;
-//    text_file << batch_result.time.count() << ",";
-//
-//    b_params.low_order_bits = 128;
-//    HybridBatching hybrid_batch = HybridBatching(w_params, b_params, {x, y}, trapdoor);
-//    BatchingResult hybrid_batch_result = hybrid_batch.batch(128);
-////    std::cout << "HYBRID BATCHING RESULT IS " << hybrid_batch_result.result << std::endl;
-//    text_file << hybrid_batch_result.time.count() << ",";
-//
-//    BucketBatching bucket_batch = BucketBatching(w_params, b_params, {x, y}, trapdoor);
-//    BatchingResult bucket_batch_result = bucket_batch.batch(11);
-////    std::cout << "BUCKET BATCHING RESULT IS " << bucket_batch_result.result << std::endl;
-//    text_file << bucket_batch_result.time.count() << ",";
-
 //    b_params.low_order_bits = 128;
     SubsetBatching subset_batch = SubsetBatching(w_params, b_params, {x, y}, trapdoor);
     BatchingResult subset_batch_result = subset_batch.batch(128);

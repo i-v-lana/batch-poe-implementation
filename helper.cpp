@@ -3,12 +3,37 @@
 //
 #include "batching.h"
 #include "helper.h"
+#include "HybridBatching.h"
+#include "BucketBatching.h"
+#include "SubsetBatching.h"
 
-BatchingResult run_naive();
-BatchingResult run_bucket();
-BatchingResult run_hybrid();
-BatchingResult run_subset();
-BatchingResult run_exponent();
+BatchingResult run_protocol(WesolowskiParams _w_params, BatchingParams _b_params,
+                          std::pair<std::vector<bigint>, std::vector<bigint>> xy,
+                          std::pair<bigint, bigint> _trapdoor, protocoltype _protocol) {
+    BatchingResult result;
+    switch(_protocol) {
+        /// TODO: why 128? wrap it to the parameter? why 11?
+        case hybrid:
+            _b_params.low_order_bits = 128;
+            HybridBatching hybrid_batch = HybridBatching(_w_params, _b_params, xy, _trapdoor);
+            result = hybrid_batch.batch(128);
+            break;
+        case naive:
+            break;
+        case bucket:
+            BucketBatching bucket_batch = BucketBatching(_w_params, _b_params, xy, _trapdoor);
+            result = bucket_batch.batch(11);
+            break;
+        case subset:
+            SubsetBatching subset_batch = SubsetBatching(_w_params, _b_params, xy, _trapdoor);
+            result = subset_batch.batch(128);
+            break;
+        case exponent:
+            Batching batch = Batching(_w_params, _b_params, xy, _trapdoor);
+            result = batch.batch();
+            break;
+    }
+}
 
 void print_error(std::string& error) {
     std::cout << "ERROR: " << error << std::endl;
