@@ -16,9 +16,10 @@
 #include "HybridBatching.h"
 #include "BucketBatching.h"
 #include "GenInstances.h"
+#include "helper.h"
 
 
-void run_comparison(bigint N, std::pair<bigint, bigint> trapdoor, long logt, std::vector<bigint> x, std::vector<bigint> y) {
+void run_comparison(bigint N, std::pair<bigint, bigint> trapdoor, long logt, std::vector<bigint> x, std::vector<bigint> y, runparams params) {
     std::cout << "=======STARTING COMPARISON=======" << std::endl;
 //    generator.gen(10000000, "instances.txt");
 //    generator.get_instances("instances.txt", 1000);
@@ -40,6 +41,24 @@ void run_comparison(bigint N, std::pair<bigint, bigint> trapdoor, long logt, std
     std::string file_name = "exp.csv";
     std::ofstream text_file(file_name, std::ios::app);
     text_file << logt << "," << x.size() << ",";
+
+    switch (params.protocol) {
+        case naive:
+            run_naive(xy.first, xy.second, w_params, N, t, trapdoor);
+            break;
+        case bucket:
+            run_bucket(w_params, b_params, {x, y}, trapdoor);
+            break;
+        case hybrid:
+            run_hybrid(w_params, b_params, {x, y}, trapdoor);
+            break;
+        case subset:
+            run_subset(w_params, b_params, {x, y}, trapdoor);
+            break;
+        case exponent:
+            run_exponent(w_params, b_params, {x, y}, trapdoor);
+            break;
+    }
 
 //    Batching batch = Batching(w_params, b_params, {x, y}, trapdoor);
 //    BatchingResult batch_result = batch.batch();
@@ -75,12 +94,13 @@ void run_comparison(bigint N, std::pair<bigint, bigint> trapdoor, long logt, std
 
 int main(int argc, char *argv[]) {
     /// second argument - protocol name (naive/bucket/hybrid/subset/exponential)
-    int i = 0;
-    while (i < argc) {
-        std::cout << "Argument " << i + 1 << ": " << argv[i]
-             << std::endl;
-        i++;
+    errortype error;
+    runparams params = get_runparams(argc, argv, error);
+    if (error.error) {
+        print_error(error.error_msg);
+        return -1;
     }
+
 
     // Argument parsing
     long logt = 25;
@@ -113,7 +133,7 @@ int main(int argc, char *argv[]) {
             cur_x.emplace_back(xy.first[j]);
             cur_y.emplace_back(xy.second[j]);
         }
-        run_comparison(N, {p, q}, logt, cur_x, cur_y);
+        run_comparison(N, {p, q}, logt, cur_x, cur_y, params);
     }
     return 0;
 }

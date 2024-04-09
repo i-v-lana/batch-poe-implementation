@@ -297,6 +297,30 @@ batching.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/src.dir/build.make CMakeFiles/src.dir/batching.cpp.s
 .PHONY : batching.cpp.s
 
+helper.o: helper.cpp.o
+.PHONY : helper.o
+
+# target to build an object file
+helper.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/src.dir/build.make CMakeFiles/src.dir/helper.cpp.o
+.PHONY : helper.cpp.o
+
+helper.i: helper.cpp.i
+.PHONY : helper.i
+
+# target to preprocess a source file
+helper.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/src.dir/build.make CMakeFiles/src.dir/helper.cpp.i
+.PHONY : helper.cpp.i
+
+helper.s: helper.cpp.s
+.PHONY : helper.s
+
+# target to generate assembly for a file
+helper.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/src.dir/build.make CMakeFiles/src.dir/helper.cpp.s
+.PHONY : helper.cpp.s
+
 main.o: main.cpp.o
 .PHONY : main.o
 
@@ -447,6 +471,9 @@ help:
 	@echo "... batching.o"
 	@echo "... batching.i"
 	@echo "... batching.s"
+	@echo "... helper.o"
+	@echo "... helper.i"
+	@echo "... helper.s"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"
