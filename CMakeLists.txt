@@ -16,7 +16,7 @@ add_executable(src
         proof.cpp
         proof.h
         wesolowski.cpp
-        wesolowski.h batching.cpp batching.h mpz_helper.cpp mpz_helper.h tests.cpp tests.h NaiveApproach.cpp NaiveApproach.h PRF_crypto.cpp PRF_crypto.h SubsetBatching.cpp SubsetBatching.h HybridBatching.cpp HybridBatching.h BucketBatching.cpp BucketBatching.h GenInstances.cpp GenInstances.h helper.cpp helper.h)
+        wesolowski.h batching.cpp batching.h mpz_helper.cpp mpz_helper.h tests.cpp tests.h NaiveApproach.cpp NaiveApproach.h PRF_crypto.cpp PRF_crypto.h SubsetBatching.cpp SubsetBatching.h HybridBatching.cpp HybridBatching.h BucketBatching.cpp BucketBatching.h GenInstances.cpp GenInstances.h helper.cpp helper.h Experiments.cpp Experiments.h)
 
 include_directories("/usr/local/include")
 include_directories("/usr/local/lib")

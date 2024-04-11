@@ -9,7 +9,7 @@ struct errortype {
     bool error = false;
     std::string error_msg = "";
 };
-void print_error(std::string& error);
+void print_error(std::string error);
 void print_info(std::string info);
 
 enum protocoltype {naive, bucket, hybrid, subset, exponent};
@@ -17,6 +17,11 @@ extern std::map<std::string, protocoltype> str_protocol;
 
 struct runparams {
     protocoltype protocol;
+    int logt;
+    int experiments;
+    long instances_per_exp;
+    bigint N;
+    std::pair<bigint, bigint> trapdoor;
 };
 runparams get_runparams(int cnt, char *args[], errortype &error);
 
