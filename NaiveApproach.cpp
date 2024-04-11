@@ -48,11 +48,11 @@ void NaiveApproach::set_trapdoor(bigint &_p, bigint &_q) {
 void NaiveApproach::naive_prover() {
     for (int i = 0; i < cnt; ++i) {
         Wesolowski vdf = Wesolowski();
-        vdf.setup(w_params.k, N.num);
+        vdf.setup(w_params.k, N.num, t);
         if (trapdoor && check_trapdoor(x[i]))
-            vdf.prover_trapdoor(l[i].num, pi[i].num, x[i].num, t, ((p - 1UL) * (q - 1UL)).num);
+            vdf.prover_trapdoor(l[i].num, pi[i].num, x[i].num, ((p - 1UL) * (q - 1UL)).num);
         else
-            vdf.prover(l[i].num, pi[i].num, x[i].num, t);
+            vdf.prover(l[i].num, pi[i].num, x[i].num);
     }
 }
 
@@ -62,8 +62,8 @@ void NaiveApproach::naive_verifier() {
     auto naive_start = std::chrono::high_resolution_clock::now();
     for (int i = 0; i < cnt; ++i) {
         Wesolowski vdf = Wesolowski();
-        vdf.setup(w_params.k, N.num);
-        results[i] = vdf.verifier(x[i].num, y[i].num, t, l[i].num, pi[i].num);
+        vdf.setup(w_params.k, N.num, t);
+        results[i] = vdf.verifier(x[i].num, y[i].num, l[i].num, pi[i].num);
         result = result && results[i];
     }
     auto naive_finish = std::chrono::high_resolution_clock::now();

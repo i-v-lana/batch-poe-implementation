@@ -123,15 +123,15 @@ void Batching::set_trapdoor(bigint& _p, bigint& _q) {
 
 void Batching::batch_prover_part(bigint* _l, bigint* _pi, bigint batch_x) {
     Wesolowski vdf = Wesolowski();
-    vdf.setup(w_params.k, b_params.N.num);
-    vdf.prover_trapdoor(_l->num, _pi->num, batch_x.num, b_params.t, ((p - 1UL) * (q - 1UL)).num);
+    vdf.setup(w_params.k, b_params.N.num, b_params.t);
+    vdf.prover_trapdoor(_l->num, _pi->num, batch_x.num, ((p - 1UL) * (q - 1UL)).num);
 }
 
 std::pair<bool, std::chrono::duration<double>> Batching::batch_verifier_part(bigint batch_x, bigint batch_y, bigint _l, bigint _pi) {
     auto wes_start = std::chrono::high_resolution_clock::now();
     Wesolowski vdf = Wesolowski();
-    vdf.setup(w_params.k, b_params.N.num);
-    bool result = vdf.verifier(batch_x.num, batch_y.num, b_params.t, _l.num, _pi.num);
+    vdf.setup(w_params.k, b_params.N.num, b_params.t);
+    bool result = vdf.verifier(batch_x.num, batch_y.num, _l.num, _pi.num);
     auto wes_end = std::chrono::high_resolution_clock::now();
     return std::make_pair(result, (wes_end - wes_start));
 }

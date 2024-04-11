@@ -4,6 +4,8 @@
 
 #ifndef SRC_HELPER_H
 #define SRC_HELPER_H
+#include "batching.h"
+#include <map>
 
 struct errortype {
     bool error = false;
