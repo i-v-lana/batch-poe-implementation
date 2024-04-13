@@ -17,7 +17,8 @@ public:
     SubsetBatching(WesolowskiParams& _w_params, BatchingParams& _b_params,
                    std::pair<std::vector<bigint>, std::vector<bigint>>& xy,
                    std::pair<bigint, bigint> _trapdoor) : Batching(_w_params, _b_params, xy, _trapdoor) {}
-    BatchingResult batch(int m=100);
+
+    virtual BatchingResult batch(int m);
 
 protected:
     std::vector<bool> get_take_inst(int run_num);
