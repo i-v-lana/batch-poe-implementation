@@ -5,7 +5,6 @@
 #include "BucketBatching.h"
 
 BatchingResult BucketBatching::batch(int _bucket_bit) {
-    /// TODO: batch_result by nemel podporovat vektory, je to nekonzistentni
     BatchingResult batch_result; batch_result.batch_y = {}; batch_result.batch_x = {}; batch_result.result = true;
     auto default_value = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double> total_time = (default_value - default_value);
@@ -19,10 +18,10 @@ BatchingResult BucketBatching::batch(int _bucket_bit) {
         buckets.clear();
         buckets.resize(bucket_num, {});
         for (int i = 0; i < b_params.cnt; ++i) {
-            bigint cur_i = bigint(j) + bigint(i);
-            /// TODO: FIX prf evaluation
+            bigint cur_i = bigint(j) + bigint(i) * bigint(b_params.cnt);
             buckets[bucket_prf.evaluate(cur_i).get_num()].push_back(i);
         }
+
         /// Preparing instances from buckets
         std::vector<bigint> buckets_x(0), buckets_y(0);
         for (int i = 0; i < bucket_num; ++i) {
@@ -35,6 +34,7 @@ BatchingResult BucketBatching::batch(int _bucket_bit) {
             buckets_x.push_back(cur_x);
             buckets_y.push_back(cur_y);
         }
+
         /// Batching instances from buckets into 1 with Random Exponent
         /// init
         /// TODO: no wesolowski proofs
