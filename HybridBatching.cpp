@@ -37,7 +37,8 @@ BatchingResult HybridBatching::batch(int m) {
     }
     BatchingParams rothem_params = b_params;
     rothem_params.cnt = m;
-    Batching rothem_batch = Batching(w_params, rothem_params, {batch_result.batch_x, batch_result.batch_y}, {p, q});
+    std::pair<std::vector<bigint>, std::vector<bigint> > batch_xy = {batch_result.batch_x, batch_result.batch_y};
+    Batching rothem_batch = Batching(w_params, rothem_params, batch_xy, {p, q});
     auto end_total = std::chrono::high_resolution_clock::now();
     batch_result = rothem_batch.batch();
     batch_result.time += end_total - start_total;

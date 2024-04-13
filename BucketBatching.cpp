@@ -42,7 +42,8 @@ BatchingResult BucketBatching::batch(int _bucket_bit) {
         /// TODO: fix, low_order bits to k.
         rothem_params.cnt = bucket_num;
         rothem_params.low_order_bits = bucket_bit;
-        Batching rothem_batch = Batching(w_params, rothem_params, {buckets_x, buckets_y}, {p, q});
+        std::pair<std::vector<bigint>, std::vector<bigint> > buckets_xy = {buckets_x, buckets_y};
+        Batching rothem_batch = Batching(w_params, rothem_params, buckets_xy, {p, q});
         auto end = std::chrono::high_resolution_clock::now();
         /// run
         auto rothem_batch_result = rothem_batch.combine();
@@ -61,7 +62,8 @@ BatchingResult BucketBatching::batch(int _bucket_bit) {
     auto start = std::chrono::high_resolution_clock::now();
     BatchingParams rothem_params = b_params;
     rothem_params.cnt = repeat;
-    Batching rothem_batch = Batching(w_params, rothem_params, {batch_result.batch_x, batch_result.batch_y}, {p, q});
+    std::pair<std::vector<bigint>, std::vector<bigint> > batch_xy = {batch_result.batch_x, batch_result.batch_y};
+    Batching rothem_batch = Batching(w_params, rothem_params, batch_xy, {p, q});
     auto end = std::chrono::high_resolution_clock::now();
     /// run
     batch_result = rothem_batch.batch();

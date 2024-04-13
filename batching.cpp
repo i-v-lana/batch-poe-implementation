@@ -7,7 +7,7 @@
 #include "helper.h"
 #include <iostream>
 
-void Batching::init(WesolowskiParams _w_params, BatchingParams _b_params) {
+void Batching::init(WesolowskiParams &_w_params, BatchingParams &_b_params) {
     b_params = _b_params;
     w_params = _w_params;
     helper = mpz_helper();
@@ -15,13 +15,13 @@ void Batching::init(WesolowskiParams _w_params, BatchingParams _b_params) {
     prf = PRF_crypto(helper.get_random(b_params.lambda_prf), _iv, b_params.low_order_bits);
 }
 
-Batching::Batching(WesolowskiParams _w_params, BatchingParams _b_params, std::pair<bigint, bigint> _trapdoor) {
+Batching::Batching(WesolowskiParams &_w_params, BatchingParams &_b_params, std::pair<bigint, bigint> _trapdoor) {
     init(_w_params, _b_params);
     set_trapdoor(_trapdoor.first, _trapdoor.second);
     gen();
 }
 
-Batching::Batching(WesolowskiParams _w_params, BatchingParams _b_params, std::pair<std::vector<bigint>, std::vector<bigint>> xy, std::pair<bigint, bigint> _trapdoor) {
+Batching::Batching(WesolowskiParams &_w_params, BatchingParams &_b_params, std::pair<std::vector<bigint>, std::vector<bigint>> &xy, std::pair<bigint, bigint> _trapdoor) {
     init(_w_params, _b_params);
     x.clear();
     y.clear();
@@ -122,13 +122,13 @@ void Batching::set_trapdoor(bigint& _p, bigint& _q) {
     }
 }
 
-void Batching::batch_prover_part(bigint* _l, bigint* _pi, bigint batch_x) {
+void Batching::batch_prover_part(bigint* _l, bigint* _pi, bigint& batch_x) {
     Wesolowski vdf = Wesolowski();
     vdf.setup(w_params.k, b_params.N.num, b_params.t);
     vdf.prover_trapdoor(_l->num, _pi->num, batch_x.num, ((p - 1UL) * (q - 1UL)).num);
 }
 
-std::pair<bool, std::chrono::duration<double>> Batching::batch_verifier_part(bigint batch_x, bigint batch_y, bigint _l, bigint _pi) {
+std::pair<bool, std::chrono::duration<double>> Batching::batch_verifier_part(bigint& batch_x, bigint& batch_y, bigint& _l, bigint& _pi) {
     auto wes_start = std::chrono::high_resolution_clock::now();
     Wesolowski vdf = Wesolowski();
     vdf.setup(w_params.k, b_params.N.num, b_params.t);
