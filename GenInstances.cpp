@@ -21,7 +21,8 @@ bigint GenInstances::trapdoor(bigint& _x) {
     /// N = pq -> phi = (p - 1) * (q - 1)
     bigint phi = (p - 1UL) * (q - 1UL);
     /// counting 2^t mod phi
-    bigint power = helper.pow(bigint(2), bigint(t), phi);
+    bigint two(2), big_t(t);
+    bigint power = helper.pow(two, big_t, phi);
     bigint ans = helper.pow(_x, power, N);
     return ans;
 }

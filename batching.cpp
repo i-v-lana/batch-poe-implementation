@@ -4,6 +4,7 @@
 
 #include "batching.h"
 #include "mpz_helper.h"
+#include "helper.h"
 #include <iostream>
 
 void Batching::init(WesolowskiParams _w_params, BatchingParams _b_params) {
@@ -52,7 +53,6 @@ BatchingResult Batching::combine() {
     auto end_total = std::chrono::high_resolution_clock::now();
     BatchingResult combine_result;
     combine_result.time = (end_total - start_total);
-//    std::cout << "ROTEM: exponensiation time is " << combine_result.time.count() << std::endl;
     combine_result.batch_x = {batch_x};
     combine_result.batch_y = {batch_y};
     combine_result.result = true;
@@ -106,7 +106,9 @@ bigint Batching::trapdoor(bigint& _x) {
     /// N = pq -> phi = (p - 1) * (q - 1)
     bigint phi = (p - 1UL) * (q - 1UL);
     /// counting 2^t mod phi
-    bigint power = helper.pow(bigint(2), bigint(b_params.t), phi);
+    bigint two(2);
+    bigint big_t(b_params.t);
+    bigint power = helper.pow(two, big_t, phi);
     bigint ans = helper.pow(_x, power, b_params.N);
     return ans;
 }
@@ -116,8 +118,7 @@ void Batching::set_trapdoor(bigint& _p, bigint& _q) {
         p = _p;
         q = _q;
     } else {
-        /// TODO: show error
-        std::cout << "BATCHING: trapdoor wasn't set." << std::endl;
+        print_error("BATCHING: trapdoor wasn't set");
     }
 }
 

@@ -5,9 +5,6 @@
 
 class Proof {
 public:
-Proof();
-private:
-mpz_class l;
-mpz_class pi;
+    Proof();
 };
 #endif
