@@ -11,6 +11,7 @@
 #include <iostream>
 #include <algorithm>
 #include <crypto++/config.h>
+#include <vector>
 
 
 struct bigint {
