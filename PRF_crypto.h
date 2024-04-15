@@ -19,7 +19,7 @@ private:
 public:
     PRF_crypto(bigint _k, std::string& _iv, int _output_bits);
     bigint evaluate(bigint& x);
-    bigint decrypt(bigint _cipher);
+    bigint decrypt(bigint& _cipher);
     int length();
 };
 

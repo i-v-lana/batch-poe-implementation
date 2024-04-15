@@ -36,7 +36,7 @@ bigint PRF_crypto::evaluate(bigint &x) {
     return result;
 }
 
-bigint PRF_crypto::decrypt(bigint _cipher) {
+bigint PRF_crypto::decrypt(bigint& _cipher) {
     std::string decryptedtext;
     std::string ciphertext = _cipher.bytes_string(CryptoPP::AES::BLOCKSIZE);
     CryptoPP::AES::Decryption aesDecryption(key, CryptoPP::AES::DEFAULT_KEYLENGTH);
