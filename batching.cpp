@@ -103,6 +103,14 @@ std::pair<std::vector<bigint>, std::vector<bigint> > Batching::get_instances() {
 }
 
 bigint Batching::trapdoor(bigint& _x) {
+    if (!trapdoor_flag) {
+        print_error("BATCHING: Can't calculate the trapdoor, as it wasn't correctly set");
+        return _x;
+    }
+    if (!check_trapdoor(_x)) {
+        print_error("BATCHING: input for trapdoor function isn't coprime with module");
+        return _x;
+    }
     /// N = pq -> phi = (p - 1) * (q - 1)
     bigint phi = (p - 1UL) * (q - 1UL);
     /// counting 2^t mod phi
@@ -117,7 +125,9 @@ void Batching::set_trapdoor(bigint& _p, bigint& _q) {
     if (b_params.N == _p * _q) {
         p = _p;
         q = _q;
+        trapdoor_flag = true;
     } else {
+        trapdoor_flag = false;
         print_error("BATCHING: trapdoor wasn't set");
     }
 }
@@ -125,7 +135,10 @@ void Batching::set_trapdoor(bigint& _p, bigint& _q) {
 void Batching::batch_prover_part(bigint* _l, bigint* _pi, bigint& batch_x) {
     Wesolowski vdf = Wesolowski();
     vdf.setup(w_params.k, b_params.N.num, b_params.t);
-    vdf.prover_trapdoor(_l->num, _pi->num, batch_x.num, ((p - 1UL) * (q - 1UL)).num);
+    if (trapdoor_flag)
+        vdf.prover_trapdoor(_l->num, _pi->num, batch_x.num, ((p - 1UL) * (q - 1UL)).num);
+    else
+        vdf.prover(_l->num, _pi->num, batch_x.num);
 }
 
 std::pair<bool, std::chrono::duration<double>> Batching::batch_verifier_part(bigint& batch_x, bigint& batch_y, bigint& _l, bigint& _pi) {
@@ -135,5 +148,10 @@ std::pair<bool, std::chrono::duration<double>> Batching::batch_verifier_part(big
     bool result = vdf.verifier(batch_x.num, batch_y.num, _l.num, _pi.num);
     auto wes_end = std::chrono::high_resolution_clock::now();
     return std::make_pair(result, (wes_end - wes_start));
+}
+
+bool Batching::check_trapdoor(bigint &_x) {
+    bigint gcd = helper.gcd(_x, b_params.N);
+    return (gcd == bigint(1));
 }
 

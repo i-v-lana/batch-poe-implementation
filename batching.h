@@ -31,10 +31,17 @@ struct BatchingResult {
     std::vector<bigint> batch_y;
     bool result;
     std::chrono::duration<double> time;
+    BatchingResult() {
+        auto default_value = std::chrono::high_resolution_clock::now();
+        time = std::chrono::duration<double>();
+        time = default_value - default_value;
+        result = true;
+    }
 };
 
 class Batching {
 protected:
+    bool trapdoor_flag = false;
     std::string iv = "ivnone";
     PRF_crypto prf = PRF_crypto(bigint(), iv, 128);
     bigint p, q;
@@ -46,6 +53,7 @@ protected:
     void gen();
     void init(WesolowskiParams &_w_params, BatchingParams &_b_params);
     void set_trapdoor(bigint& _p, bigint& _q);
+    bool check_trapdoor(bigint& _x);
     bigint trapdoor(bigint& _x);
 
     void batch_prover_part(bigint* _l, bigint* _pi, bigint& batch_x);
@@ -57,7 +65,8 @@ public:
     void print_cout();
     std::pair<std::vector<bigint>, std::vector<bigint> > get_instances();
     BatchingResult combine();
-    BatchingResult batch();
+
+    virtual BatchingResult batch();
 };
 
 
