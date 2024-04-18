@@ -8,6 +8,15 @@
 #include "SubsetBatching.h"
 #include "NaiveApproach.h"
 
+void print_info(std::string info) {
+    std::cout << "INFO: " << info << std::endl;
+}
+
+template <typename T>
+void print_info(std::string info, T param) {
+    std::cout << "INFO: " << info <<  " " << param << std::endl;
+}
+
 BatchingResult run_protocol(WesolowskiParams _w_params, BatchingParams _b_params,
                           std::pair<std::vector<bigint>, std::vector<bigint>> xy,
                           std::pair<bigint, bigint> _trapdoor, protocoltype _protocol) {
@@ -18,27 +27,44 @@ BatchingResult run_protocol(WesolowskiParams _w_params, BatchingParams _b_params
             _b_params.low_order_bits = 128;
             HybridBatching hybrid_batch = HybridBatching(_w_params, _b_params, xy, _trapdoor);
             result = hybrid_batch.batch(128);
+            print_info("Running time of the hybrid protocol is", result.time.count());
             break;
         }
         case naive: {
             NaiveApproach naive_batch = NaiveApproach(_w_params, _b_params, xy, _trapdoor);
             result = naive_batch.batch();
+            print_info("Running time of the naive protocol is", result.time.count());
             break;
         }
         case bucket: {
             BucketBatching bucket_batch = BucketBatching(_w_params, _b_params, xy, _trapdoor);
             result = bucket_batch.batch(11);
+            print_info("Running time of the bucket protocol is", result.time.count());
             break;
         }
         case subset: {
             //    b_params.low_order_bits = 128;
             SubsetBatching subset_batch = SubsetBatching(_w_params, _b_params, xy, _trapdoor);
             result = subset_batch.batch(128);
+            print_info("Running time of the subset protocol is", result.time.count());
             break;
         }
         case exponent: {
             Batching batch = Batching(_w_params, _b_params, xy, _trapdoor);
             result = batch.batch();
+            print_info("Running time of the exponent protocol is", result.time.count());
+            break;
+        }
+        case all_but_naive: {
+            run_protocol(_w_params, _b_params, xy, _trapdoor, hybrid);
+            run_protocol(_w_params, _b_params, xy, _trapdoor, bucket);
+            run_protocol(_w_params, _b_params, xy, _trapdoor, subset);
+            run_protocol(_w_params, _b_params, xy, _trapdoor, exponent);
+            break;
+        }
+        case all: {
+            run_protocol(_w_params, _b_params, xy, _trapdoor, all_but_naive);
+            run_protocol(_w_params, _b_params, xy, _trapdoor, naive);
             break;
         }
     }
@@ -49,16 +75,14 @@ void print_error(std::string error) {
     std::cout << "ERROR: " << error << std::endl;
 }
 
-void print_info(std::string info) {
-    std::cout << "INFO: " << info << std::endl;
-}
-
 std::map<std::string, protocoltype> str_protocol = {
         {"naive", naive},
         {"bucket", bucket},
         {"hybrid", hybrid},
         {"subset", subset},
-        {"exponential", exponent}
+        {"exponential", exponent},
+        {"all", all},
+        {"all_but_naive", all_but_naive}
 };
 
 runparams get_runparams(int cnt, char *args[], errortype &error) {

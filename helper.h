@@ -14,7 +14,7 @@ struct errortype {
 void print_error(std::string error);
 void print_info(std::string info);
 
-enum protocoltype {naive, bucket, hybrid, subset, exponent};
+enum protocoltype {naive, bucket, hybrid, subset, exponent, all, all_but_naive};
 extern std::map<std::string, protocoltype> str_protocol;
 
 struct runparams {
