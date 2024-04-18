@@ -20,12 +20,11 @@ BatchingResult run_protocol(WesolowskiParams _w_params, BatchingParams _b_params
             result = hybrid_batch.batch(128);
             break;
         }
-        case naive:
-            /// TODO: fix naive approach
-            //    NaiveApproach naive = NaiveApproach(xy.first, xy.second, w_params, N, t);
-//    naive.set_trapdoor(p, q);
-//    naive.naive_approach();
+        case naive: {
+            NaiveApproach naive_batch = NaiveApproach(_w_params, _b_params, xy, _trapdoor);
+            result = naive_batch.batch();
             break;
+        }
         case bucket: {
             BucketBatching bucket_batch = BucketBatching(_w_params, _b_params, xy, _trapdoor);
             result = bucket_batch.batch(11);
@@ -59,7 +58,7 @@ std::map<std::string, protocoltype> str_protocol = {
         {"bucket", bucket},
         {"hybrid", hybrid},
         {"subset", subset},
-        {"exponent", exponent}
+        {"exponential", exponent}
 };
 
 runparams get_runparams(int cnt, char *args[], errortype &error) {

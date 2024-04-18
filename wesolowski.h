@@ -12,7 +12,6 @@ public:
     Wesolowski();
     ~Wesolowski() {
         mpz_clear(N);
-        free(rstate);
     }
 
     void setup(int k, const mpz_t& _N, long long _t);

@@ -58,7 +58,7 @@ int main(int argc, char *argv[]) {
 
 
     /// TODO: create a db with the instances; connect to the db from c++ to read the instances
-    Experiments experiment(10, params.N, params.trapdoor, pow(2, params.logt));
+    Experiments experiment(100, params.N, params.trapdoor, pow(2, params.logt));
     auto xys = experiment.get(params.instances_per_exp, params.experiments);
     for (auto&& xy : xys) {
         /// run_comparison(params, xy.first, xy.second);
