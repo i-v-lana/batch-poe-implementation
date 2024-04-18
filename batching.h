@@ -18,7 +18,7 @@ struct WesolowskiParams {
 };
 
 struct BatchingParams {
-    long t;
+    long long t;
     int cnt;
     int lambda_prf;
     bigint N;

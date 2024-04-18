@@ -58,34 +58,35 @@ int main(int argc, char *argv[]) {
 
 
     /// TODO: create a db with the instances; connect to the db from c++ to read the instances
-    Experiments experiment = Experiments();
+    Experiments experiment(10, params.N, params.trapdoor, pow(2, params.logt));
     auto xys = experiment.get(params.instances_per_exp, params.experiments);
     for (auto&& xy : xys) {
         /// run_comparison(params, xy.first, xy.second);
+        run_comparison(params, xy.first, xy.second);
     }
 
-    /// TODO: why _t is used? should be logt! Also only params should be used here.
-    GenInstances generator = GenInstances(params.N, params.trapdoor, pow(2, params.logt));
-    auto xy = generator.get_instances("instances.txt", params.experiments * params.instances_per_exp);
-    std::vector<int> indecies;
-    for (int i = 0; i < xy.first.size(); ++i) {
-        indecies.push_back(i);
-    }
-    std::random_device rd;
-    auto rng = std::default_random_engine { rd() };
-    std::shuffle(std::begin(indecies), std::end(indecies), rng);
-    for (int i = 0; i < params.experiments; ++i) {
-        /// TODO: fix later
-        std::vector<bigint> cur_x;
-        std::vector<bigint> cur_y;
-        for (auto j : indecies) {
-            if (cur_x.size() == params.instances_per_exp) {
-                break;
-            }
-            cur_x.emplace_back(xy.first[j]);
-            cur_y.emplace_back(xy.second[j]);
-        }
-        run_comparison(params, cur_x, cur_y);
-    }
+//    ///
+//    GenInstances generator = GenInstances(params.N, params.trapdoor, pow(2, params.logt));
+//    auto xy = generator.get_instances("instances.txt", params.experiments * params.instances_per_exp);
+//    std::vector<int> indecies;
+//    for (int i = 0; i < xy.first.size(); ++i) {
+//        indecies.push_back(i);
+//    }
+//    std::random_device rd;
+//    auto rng = std::default_random_engine { rd() };
+//    std::shuffle(std::begin(indecies), std::end(indecies), rng);
+//    for (int i = 0; i < params.experiments; ++i) {
+//        /// TODO: fix later
+//        std::vector<bigint> cur_x;
+//        std::vector<bigint> cur_y;
+//        for (auto j : indecies) {
+//            if (cur_x.size() == params.instances_per_exp) {
+//                break;
+//            }
+//            cur_x.emplace_back(xy.first[j]);
+//            cur_y.emplace_back(xy.second[j]);
+//        }
+//        run_comparison(params, cur_x, cur_y);
+//    }
     return 0;
 }

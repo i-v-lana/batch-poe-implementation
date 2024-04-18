@@ -41,6 +41,10 @@ struct bigint {
         mpz_init(num);
         mpz_set_ui(num, x);
     }
+    bigint(long long x) {
+        mpz_init(num);
+        mpz_set_ui(num, x);
+    }
     bigint(const std::string& bytes, int bits_cnt=-1) {
         mpz_init(num);
         mpz_set_ui(num, 0);
