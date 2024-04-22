@@ -10,8 +10,10 @@
 #include <cmath>
 #include <iostream>
 #include <algorithm>
-#include <crypto++/config.h>
+#include <cryptopp/config.h>
 #include <vector>
+#include <bitset>
+#include <gmpxx.h>
 
 
 struct bigint {
