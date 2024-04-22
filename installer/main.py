@@ -6,11 +6,11 @@ import os
 # Define the commands
 commands = [
     "git clone https://github.com/microsoft/vcpkg",
-    r".\vcpkg\bootstrap-vcpkg.bat",
-    r".\vcpkg\vcpkg install pkgconf",
-    r".\vcpkg\vcpkg install gmp",
-    r".\vcpkg\vcpkg install cryptopp",
-    r".\vcpkg\vcpkg integrate install"
+    r"./vcpkg/bootstrap-vcpkg.bat",
+    r"./vcpkg/vcpkg install pkgconf",
+    r"./vcpkg/vcpkg install gmp",
+    r"./vcpkg/vcpkg install cryptopp",
+    r"./vcpkg/vcpkg integrate install"
 ]
 
 include_dir = "./../../include"
