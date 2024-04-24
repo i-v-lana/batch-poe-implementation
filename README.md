@@ -1,4 +1,4 @@
-# Installation and Usage Instructions
+# Installation and User Documentation
 
 ## Step 0: Clonning this repository
 Create a folder with some name *name*. Clone the repository as a subfolder of *name*. Installer will then create a folder *include* in *name*.
@@ -67,7 +67,8 @@ After running the appropriate script, you can run your code with CMake from one 
 
 # User Documentation
 
-This project implements various batching techniques for the [Wesolowski protocol](https://eprint.iacr.org/2018/623).
+This project implements various batching techniques for the [Wesolowski protocol](https://eprint.iacr.org/2018/623). It builds up on the [implementation of Wesolowski protocol](https://github.com/iotaledger/vdf) by the Network team of the IOTA Foundation by Vidal Attias, Luigi Vigneri and Vassil Dimitrov.
+
 You can build the program using CMake and then run it with the following command:
 ```bash
 ./src protocol_type logt experiments instances_per_exp
