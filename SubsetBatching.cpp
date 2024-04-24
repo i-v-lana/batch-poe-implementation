@@ -5,7 +5,9 @@
 #include "SubsetBatching.h"
 
 BatchingResult SubsetBatching::batch(int m) {
-    std::chrono::duration<double> total_time;
+    auto default_value = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> total_time = {};
+    total_time = default_value - default_value;
     BatchingResult batch_result; batch_result.batch_y = {}; batch_result.batch_x = {}; batch_result.result = true;
     for (int j = 0; j < m; ++j) {
         auto start_total = std::chrono::high_resolution_clock::now();

@@ -6,6 +6,7 @@
 #include "mpz_helper.h"
 #include "helper.h"
 #include <iostream>
+#include <gmpxx.h>
 
 void Batching::init(WesolowskiParams &_w_params, BatchingParams &_b_params) {
     b_params = _b_params;
@@ -75,15 +76,17 @@ BatchingResult Batching::batch() {
 
 void Batching::print(std::ofstream& file) {
     for (int i = 0; i < b_params.cnt; ++i) {
-        file << x[i].num << " " << y[i].num << std::endl;
-        file << alpha[i].num << std::endl;
+        /// todo: can't print mpz_t on windows?
+//        gmp_printf("%Zd %Zd\n", x[i].num, y[i].num);
+//        file << x[i].num << " " << y[i].num << std::endl;
+//        file << alpha[i].num << std::endl;
     }
 }
 
 void Batching::print_cout() {
     for (int i = 0; i < b_params.cnt; ++i) {
-        std::cout << "x = " << x[i].num << "; y = " << y[i].num << std::endl;
-        std::cout << "alpha[i] = " << alpha[i].num << std::endl;
+        gmp_printf("x = %Zd; y = %Zd\n", x[i].num, y[i].num);
+        gmp_printf("alpha[i] = %Zd\n", alpha[i].num);
     }
 }
 
