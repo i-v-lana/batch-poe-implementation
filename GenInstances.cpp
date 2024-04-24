@@ -4,6 +4,7 @@
 
 #include "GenInstances.h"
 #include <fstream>
+#include "helper.h"
 
 void GenInstances::gen(long long cnt, std::string file_name) {
     file_name = "t_" + std::to_string(t) + "_" + file_name;
@@ -20,7 +21,8 @@ bigint GenInstances::trapdoor(bigint& _x) {
     /// N = pq -> phi = (p - 1) * (q - 1)
     bigint phi = (p - 1UL) * (q - 1UL);
     /// counting 2^t mod phi
-    bigint power = helper.pow(bigint(2), bigint(t), phi);
+    bigint two(2), big_t(t);
+    bigint power = helper.pow(two, big_t, phi);
     bigint ans = helper.pow(_x, power, N);
     return ans;
 }
@@ -30,8 +32,7 @@ void GenInstances::set_trapdoor(bigint& _p, bigint& _q) {
         p = _p;
         q = _q;
     } else {
-        /// TODO: show error
-        std::cout << "GenInstances: trapdoor wasn't set." << std::endl;
+        print_error("GenInstances: trapdoor wasn't set.");
     }
 }
 

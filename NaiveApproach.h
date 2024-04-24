@@ -9,24 +9,19 @@
 #include "mpz_helper.h"
 #include "batching.h"
 
-class NaiveApproach {
+class NaiveApproach : public Batching {
 private:
-    std::vector<bigint> x, y, l, pi;
-    int cnt = 0;
-    void naive_prover();
-    void naive_verifier();
-    void init(std::vector<bigint>& _x, std::vector<bigint>& _y, WesolowskiParams _w_params, bigint& in_N, long _t);
-    bool check_trapdoor(bigint& _x);
-    WesolowskiParams w_params;
-    bigint N, p, q;
-    bool trapdoor = false;
-    long t;
+    std::vector<bigint> l, pi;
 public:
-    void naive_approach();
-    void set_trapdoor(bigint& _p, bigint& _q);
-    NaiveApproach();
-    NaiveApproach(std::vector<bigint>& _x, std::vector<bigint>& _y,
-                  WesolowskiParams _w_params, bigint& in_N, long _t);
+    NaiveApproach(WesolowskiParams _w_params, BatchingParams _b_params,
+                  std::pair<std::vector<bigint>, std::vector<bigint>> xy,
+                  std::pair<bigint, bigint> _trapdoor) : Batching(_w_params, _b_params, xy, _trapdoor) {
+        l.clear();
+        pi.clear();
+        l.resize(x.size());
+        pi.resize(y.size());
+    }
+    BatchingResult batch() override;
 };
 
 

@@ -7,9 +7,9 @@
 
 #include "string.h"
 #include "mpz_helper.h"
-#include <crypto++/modes.h>
-#include <crypto++/aes.h>
-#include <crypto++/filters.h>
+#include <cryptopp/modes.h>
+#include <cryptopp/aes.h>
+#include <cryptopp/filters.h>
 
 
 class PRF_crypto {
@@ -19,7 +19,7 @@ private:
 public:
     PRF_crypto(bigint _k, std::string& _iv, int _output_bits);
     bigint evaluate(bigint& x);
-    bigint decrypt(bigint _cipher);
+    bigint decrypt(bigint& _cipher);
     int length();
 };
 

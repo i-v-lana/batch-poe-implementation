@@ -10,7 +10,10 @@
 #include <cmath>
 #include <iostream>
 #include <algorithm>
-#include <crypto++/config.h>
+#include <cryptopp/config.h>
+#include <vector>
+#include <bitset>
+#include <gmpxx.h>
 
 
 struct bigint {
@@ -37,6 +40,10 @@ struct bigint {
         mpz_set_ui(num, x);
     }
     bigint(long x) {
+        mpz_init(num);
+        mpz_set_ui(num, x);
+    }
+    bigint(long long x) {
         mpz_init(num);
         mpz_set_ui(num, x);
     }
@@ -72,15 +79,13 @@ struct bigint {
     unsigned long int get_num() {
         return mpz_get_ui(num);
     }
-    bigint last_n_bits(int n) {
+    bigint last_n_bits(int &n) {
         bigint ans = bigint();
         int exp = std::max(n, 0);
         mpz_tdiv_r_2exp(ans.num, num, exp);
         return ans;
     }
     std::string bytes_string(int bytes_cnt) {
-        mpz_t cur;
-        mpz_init(cur);
         std::string bytes = "";
         int bytes_len = (this->bits() + 7) / 8;
         for (size_t i = 0; i < bytes_cnt - bytes_len; ++i) {
@@ -142,12 +147,12 @@ struct bigint {
 
 class mpz_helper {
 public:
-    bigint get_random(int bit_cnt);
-    bigint get_random_mod(bigint mod);
+    bigint get_random(int &bit_cnt);
+    bigint get_random_mod(bigint &mod);
     bigint generate_prime(int bit_cnt);
     bigint gcd(bigint &a, bigint &b);
-    bigint pow(bigint x, bigint p, bigint mod);
-    bigint mul_mod(bigint a, bigint b, bigint mod);
+    bigint pow(bigint &x, bigint &p, bigint &mod);
+    bigint mul_mod(bigint &a, bigint &b, bigint &mod);
     mpz_helper();
 private:
     gmp_randstate_t state;

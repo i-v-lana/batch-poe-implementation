@@ -10,40 +10,23 @@
 class Wesolowski {
 public:
     Wesolowski();
+    ~Wesolowski() {
+        mpz_clear(N);
+    }
 
-    void setup(int k, const mpz_t& _N);
-    void generate(mpz_t& dest);
-    Proof evaluate(mpz_t l, mpz_t pi, const mpz_t x,
-                   long challenge);
-    Proof prover_trapdoor(mpz_t l, mpz_t pi, const mpz_t x, const long challenge, const mpz_t phi_N);
-    Proof prover(mpz_t l, mpz_t pi, const mpz_t x, const long challenge);
-    bool parallel_verify(mpz_t x, long challenge, mpz_t l, mpz_t pi);
-    bool parallel_diff_verify(mpz_t x, long challenge, mpz_t l, mpz_t pi);
-    bool naive_verify(mpz_t x, long challenge, mpz_t l, mpz_t pi);
-    bool verifier(mpz_t x, mpz_t y_check, long challenge, mpz_t l, mpz_t pi);
-    bool optimized_verify(mpz_t x, long challenge, mpz_t l, mpz_t pi, int w);
-    std::chrono::duration<double> setup_time;
-    std::chrono::duration<double> eval_time;
-    std::chrono::duration<double> proof_time;
+    void setup(int k, const mpz_t& _N, long long _t);
+    Proof prover_trapdoor(mpz_t l, mpz_t pi, const mpz_t x, const mpz_t phi_N);
+    Proof prover(mpz_t l, mpz_t pi, const mpz_t x);
+    bool verifier(mpz_t x, mpz_t y_check, mpz_t l, mpz_t pi);
+
     std::chrono::duration<double> verif_time;
-    std::chrono::duration<double> verif_time_opti;
-    mpz_t y_saved;
 
 private:
     mpz_t N;
-    mpz_t p;
-    mpz_t q;
     int k;
-    mpz_t challenge;
-
+    long long t;
     gmp_randstate_t rstate;
-
-    void HashG(mpz_t& dest, mpz_t hashed);
-    void hash_prime(mpz_t l, const mpz_t input);
-
-    void unit_test();
-
-    int bit_length;
+    void sample_prime(mpz_t l, const mpz_t x);
 };
 
 #endif

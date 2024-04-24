@@ -129,7 +129,7 @@ batching_tests::batching_tests() = default;
 
 bool wesolowski_tests::run() {
     bool tests_result = true;
-    vdf.setup(k, N.num);
+    vdf.setup(k, N.num, t);
 
     /// test for prover
     bigint l = bigint();
@@ -151,7 +151,7 @@ wesolowski_tests::wesolowski_tests() {
 }
 
 bool wesolowski_tests::prover_test(bigint &l, bigint &pi) {
-    vdf.prover(l.num, pi.num, x.num, t);
+    vdf.prover(l.num, pi.num, x.num);
 
     unsigned long int exp = pow(2, t);
     exp = exp / l.get_num();
@@ -171,7 +171,7 @@ bool wesolowski_tests::prover_test(bigint &l, bigint &pi) {
 
 
 bool wesolowski_tests::trapdoor_prover_test(bigint &l, bigint &pi, bigint _p, bigint _q) {
-    vdf.prover_trapdoor(l.num, pi.num, x.num, t, ((_p - 1UL) * (_q - 1UL)).num);
+    vdf.prover_trapdoor(l.num, pi.num, x.num, ((_p - 1UL) * (_q - 1UL)).num);
 
     unsigned long int exp = pow(2, t);
     exp = exp / l.get_num();
@@ -191,7 +191,7 @@ bool wesolowski_tests::trapdoor_prover_test(bigint &l, bigint &pi, bigint _p, bi
 
 
 bool wesolowski_tests::verifier_test(bigint l, bigint pi) {
-    bool verify_result = vdf.verifier(x.num, y.num, t, l.num, pi.num);
+    bool verify_result = vdf.verifier(x.num, y.num, l.num, pi.num);
     unsigned long int exp = pow(2, t);
     unsigned long int r = exp % l.get_num();
     unsigned long int xr = pow(x.get_num(), r);

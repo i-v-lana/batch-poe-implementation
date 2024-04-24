@@ -12,12 +12,13 @@
 #include <fstream>
 #include "PRF_crypto.h"
 #include "batching.h"
+#include "SubsetBatching.h"
 
-class HybridBatching : public Batching {
+class HybridBatching : public SubsetBatching {
 public:
     HybridBatching(WesolowskiParams _w_params, BatchingParams _b_params,
                    std::pair<std::vector<bigint>, std::vector<bigint>> xy,
-                   std::pair<bigint, bigint> _trapdoor) : Batching(_w_params, _b_params, xy, _trapdoor) {}
+                   std::pair<bigint, bigint> _trapdoor) : SubsetBatching(_w_params, _b_params, xy, _trapdoor) {}
     BatchingResult batch(int m=100);
 };
 
