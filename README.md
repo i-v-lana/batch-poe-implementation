@@ -105,7 +105,7 @@ See the [programmer_documentation.md](https://gitlab.mff.cuni.cz/teaching/nprg04
 Runs all the above types for the same parameters and instances. Used for the comparison of the protocols.
 
 ## Protocol_type=all_but_naive
-Runs all the above types of protocols except for naive for the same parameters and instances. Used for the comparison of the protocols.
+Runs all the above types of protocols except for the `naive` for the same parameters and instances. Used for the comparison of the protocols.
 
 
 
