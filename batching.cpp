@@ -87,9 +87,6 @@ void Batching::print_cout() {
     for (int i = 0; i < b_params.cnt; ++i) {
         gmp_printf("x = %Zd; y = %Zd\n", x[i].num, y[i].num);
         gmp_printf("alpha[i] = %Zd\n", alpha[i].num);
-        /// TODO: can't print mpz_t on windows?
-//        std::cout << "x = " << x[i].num << "; y = " << y[i].num << std::endl;
-//        std::cout << "alpha[i] = " << alpha[i].num << std::endl;
     }
 }
 
