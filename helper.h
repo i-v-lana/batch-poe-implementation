@@ -24,13 +24,14 @@ struct runparams {
     long instances_per_exp;
     bigint N;
     std::pair<bigint, bigint> trapdoor;
+    std::string output_file="";
 };
 runparams get_runparams(int cnt, char *args[], errortype &error);
 
 
 BatchingResult run_protocol(WesolowskiParams _w_params, BatchingParams _b_params,
-                            std::pair<std::vector<bigint>, std::vector<bigint>> xy,
-                            std::pair<bigint, bigint> _trapdoor, protocoltype _protocol);
+                            std::pair<std::vector<bigint>, std::vector<bigint>> xy, std::pair<bigint, bigint> _trapdoor,
+                            protocoltype _protocol, std::string _output_path="");
 
 
 #endif //SRC_HELPER_H

@@ -32,12 +32,17 @@ void run_comparison(runparams params, std::vector<bigint> x, std::vector<bigint>
     b_params.cnt = x.size();
 
     /// TODO: better write down the result of the experiments;
-    std::string file_name = "exp.csv";
-    std::ofstream text_file(file_name, std::ios::app);
-    text_file << params.logt << "," << x.size() << ",";
-    BatchingResult result = run_protocol(w_params, b_params, {x, y}, params.trapdoor, params.protocol);
+//    std::string file_name = "exp.csv";
+//    std::ofstream text_file(file_name, std::ios::app);
+//    text_file << params.logt << "," << x.size() << ",";
+    BatchingResult result = run_protocol(w_params,
+                                         b_params,
+                                         {x, y},
+                                         params.trapdoor,
+                                         params.protocol,
+                                         params.output_file);
 //    std::cout << "the protocol running time is " << result.time.count() << std::endl;
-    text_file.close();
+//    text_file.close();
     print_info("COMPARISON FINISHED");
 }
 
@@ -48,6 +53,7 @@ int main(int argc, char *argv[]) {
     /// argv[2] - logT
     /// argv[3] - experiments number
     /// argv[4] - number of instances per experiment
+    /// argv[5] (voluntary) - the path to the file for storing output data
     /// TODO: add arguments for the testing run
     /// TODO: add to the cmakelists.txt the compiler flags for optimization.
     errortype error;
