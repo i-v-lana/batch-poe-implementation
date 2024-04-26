@@ -1,5 +1,21 @@
 import subprocess
 
+import plotly.graph_objs as go
+import pandas as pd
+
+
+def show_x_y(df, x_name, y_names, _names, x_q, y_q, _title):
+    traces = []
+    i = 0
+    for y_name in y_names:
+        trace = go.Scatter(x=df[x_name], y=df[y_name], mode='lines+markers', name=_names[i])
+        traces.append(trace)
+        i += 1
+    layout = go.Layout(yaxis=dict(title=y_q), xaxis=dict(title=x_q), title=_title)
+    fig = go.Figure(data=traces, layout=layout)
+    fig.show(renderer='browser')
+
+
 def basic_run(run_args):
     cmd = run_args['build_path'] + ' ' + run_args['protocol_type'] + ' ' + str(run_args['logt']) + ' '
     cmd += str(run_args['experiments']) + ' ' + str(run_args['instances_per_exp']) + ' ' + run_args['output_file']
