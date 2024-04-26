@@ -4,7 +4,7 @@ import pandas as pd
 import os
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="This script compares the separate vs joint lunch of the protocols.")
+    parser = argparse.ArgumentParser(description="This script compares the separate vs joint launch of the protocols.")
 
     parser.add_argument('--comp', type=int, help="Number of comparisons")
     parser.add_argument('--inst', type=int, help="Number of batch instances")
