@@ -20,29 +20,22 @@ void run_comparison(runparams params, std::vector<bigint> x, std::vector<bigint>
     long long t = pow(2, params.logt);
     WesolowskiParams w_params;
     /// l <- prime(1..2^(2k))
-    /// k bylo 1024, melo by byt 128.
     w_params.k = 128;
     BatchingParams b_params;
     b_params.t = t;
-    /// TODO: think about 100 vs 128. PRF returns 128 bits numbers - the length of the alpha is log^2(lambda)
+    /// PRF returns 128 bits numbers
     b_params.low_order_bits = 128;
     /// and takes 128 bits key.
     b_params.lambda_prf = 128;
     b_params.N = params.N;
     b_params.cnt = x.size();
 
-    /// TODO: better write down the result of the experiments;
-//    std::string file_name = "exp.csv";
-//    std::ofstream text_file(file_name, std::ios::app);
-//    text_file << params.logt << "," << x.size() << ",";
     BatchingResult result = run_protocol(w_params,
                                          b_params,
                                          {x, y},
                                          params.trapdoor,
                                          params.protocol,
                                          params.output_file);
-//    std::cout << "the protocol running time is " << result.time.count() << std::endl;
-//    text_file.close();
     print_info("COMPARISON FINISHED");
 }
 
@@ -63,7 +56,6 @@ int main(int argc, char *argv[]) {
     }
 
 
-    /// TODO: create a db with the instances; connect to the db from c++ to read the instances
     Experiments experiment(100, params.N, params.trapdoor, pow(2, params.logt));
     auto xys = experiment.get(params.instances_per_exp, params.experiments);
     for (auto&& xy : xys) {

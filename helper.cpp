@@ -30,6 +30,7 @@ BatchingResult run_protocol(WesolowskiParams _w_params, BatchingParams _b_params
     switch(_protocol) {
         /// TODO: why 128? wrap it to the parameter? why 11?
         case hybrid: {
+            /// TODO: if low_order_bits for the Random Exponents is incorrect, this is too.
             _b_params.low_order_bits = 128;
             HybridBatching hybrid_batch = HybridBatching(_w_params, _b_params, xy, _trapdoor);
             result = hybrid_batch.batch(128);
@@ -55,7 +56,6 @@ BatchingResult run_protocol(WesolowskiParams _w_params, BatchingParams _b_params
             break;
         }
         case subset: {
-            //    b_params.low_order_bits = 128;
             SubsetBatching subset_batch = SubsetBatching(_w_params, _b_params, xy, _trapdoor);
             result = subset_batch.batch(128);
             output_file << "subset," << _b_params.t << "," << _b_params.cnt << "," << result.time.count() << ",smt" << std::endl;
