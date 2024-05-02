@@ -51,7 +51,7 @@ protected:
     mpz_helper helper;
     std::vector<bigint> x, y;
     void gen();
-    void init(WesolowskiParams &_w_params, BatchingParams &_b_params);
+    void init(WesolowskiParams _w_params, BatchingParams _b_params);
     void set_trapdoor(bigint& _p, bigint& _q);
     bool check_trapdoor(bigint& _x);
     bigint trapdoor(bigint& _x);

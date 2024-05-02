@@ -8,7 +8,7 @@
 #include <iostream>
 #include <gmpxx.h>
 
-void Batching::init(WesolowskiParams &_w_params, BatchingParams &_b_params) {
+void Batching::init(WesolowskiParams _w_params, BatchingParams _b_params) {
     b_params = _b_params;
     w_params = _w_params;
     helper = mpz_helper();

@@ -39,7 +39,6 @@ BatchingResult BucketBatching::batch(int _bucket_bit) {
         /// init
         /// TODO: no wesolowski proofs
         BatchingParams rothem_params = b_params;
-        /// TODO: fix, low_order bits to k.
         rothem_params.cnt = bucket_num;
         rothem_params.low_order_bits = bucket_bit;
         std::pair<std::vector<bigint>, std::vector<bigint> > buckets_xy = {buckets_x, buckets_y};
