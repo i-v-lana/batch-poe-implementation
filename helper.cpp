@@ -21,7 +21,6 @@ void print_info(std::string info, T param) {
 }
 
 int bucket_optimal_k(int wesolowski_k, int cnt) {
-    std::cout << "cnt = " << cnt << "; l = " << wesolowski_k << std::endl;
     double min_value = -1.0;
     int optimal_k = 3;
     for (int i = 3; i <= wesolowski_k; ++i) {
