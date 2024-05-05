@@ -34,10 +34,8 @@ BatchingResult BucketBatching::batch(int _bucket_bit) {
             buckets_x.push_back(cur_x);
             buckets_y.push_back(cur_y);
         }
-
         /// Batching instances from buckets into 1 with Random Exponent
         /// init
-        /// TODO: no wesolowski proofs
         BatchingParams rothem_params = b_params;
         rothem_params.cnt = bucket_num;
         rothem_params.low_order_bits = bucket_bit;

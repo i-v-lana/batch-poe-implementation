@@ -9,6 +9,7 @@
 #include "NaiveApproach.h"
 #include <iostream>
 #include <fstream>
+#include <cmath>
 
 void print_info(std::string info) {
     std::cout << "INFO: " << info << std::endl;
@@ -17,6 +18,20 @@ void print_info(std::string info) {
 template <typename T>
 void print_info(std::string info, T param) {
     std::cout << "INFO: " << info <<  " " << param << std::endl;
+}
+
+int bucket_optimal_k(int wesolowski_k, int cnt) {
+    std::cout << "cnt = " << cnt << "; l = " << wesolowski_k << std::endl;
+    double min_value = -1.0;
+    int optimal_k = 3;
+    for (int i = 3; i <= wesolowski_k; ++i) {
+        double cur_mult = ceil((double)(wesolowski_k) / double(i - 2)) * (2 * cnt + (3 * i + 2) * pow(2,i) + (3 * wesolowski_k + 2));
+        if ((cur_mult < min_value) || (min_value == -1)) {
+            min_value = cur_mult;
+            optimal_k = i;
+        }
+    }
+    return optimal_k;
 }
 
 BatchingResult run_protocol(WesolowskiParams _w_params, BatchingParams _b_params,
@@ -28,9 +43,7 @@ BatchingResult run_protocol(WesolowskiParams _w_params, BatchingParams _b_params
         output_file = std::ofstream(_output_path, std::ios::app);
     }
     switch(_protocol) {
-        /// TODO: why 128? wrap it to the parameter? why 11?
         case hybrid: {
-            /// TODO: if low_order_bits for the Random Exponents is incorrect, this is too.
             _b_params.low_order_bits = 128;
             HybridBatching hybrid_batch = HybridBatching(_w_params, _b_params, xy, _trapdoor);
             result = hybrid_batch.batch(128);
@@ -50,7 +63,9 @@ BatchingResult run_protocol(WesolowskiParams _w_params, BatchingParams _b_params
         }
         case bucket: {
             BucketBatching bucket_batch = BucketBatching(_w_params, _b_params, xy, _trapdoor);
-            result = bucket_batch.batch(11);
+            int bucket_bit = bucket_optimal_k(_w_params.k, _b_params.cnt);
+            print_info("For the bucket protocol, the chosen optimal bit-length of the number of buckets is", bucket_bit);
+            result = bucket_batch.batch(bucket_bit);
             output_file << "bucket," << _b_params.t << "," << _b_params.cnt << "," << result.time.count() << ",smt" << std::endl;
             print_info("Running time of the bucket protocol is", result.time.count());
             break;
