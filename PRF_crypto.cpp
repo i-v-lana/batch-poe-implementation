@@ -20,10 +20,9 @@ PRF_crypto::PRF_crypto(bigint _k, std::string &_iv, int _output_bits) {
 }
 
 bigint PRF_crypto::evaluate(bigint &x) {
-    /// TODO: why 15 bytes?
+    // 15 bytes, because the PRF is run on maximal 15 bytes numbers and it also corresponds to one block
     std::string plaintext = x.bytes_string(15);
     std::string ciphertext;
-
 
     CryptoPP::AES::Encryption aesEncryption(key, CryptoPP::AES::DEFAULT_KEYLENGTH);
     CryptoPP::CBC_Mode_ExternalCipher::Encryption cbcEncryption( aesEncryption, iv );
@@ -31,6 +30,7 @@ bigint PRF_crypto::evaluate(bigint &x) {
     CryptoPP::StreamTransformationFilter stfEncryptor(cbcEncryption, new CryptoPP::StringSink( ciphertext ) );
     stfEncryptor.Put( reinterpret_cast<const unsigned char*>( plaintext.c_str() ), plaintext.length() );
     stfEncryptor.MessageEnd();
+
 
     bigint result = bigint(ciphertext, output_bits);
     return result;

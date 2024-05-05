@@ -40,7 +40,6 @@ void run_comparison(runparams params, std::vector<bigint> x, std::vector<bigint>
 }
 
 
-/// TODO: IMPORTAN - COMPARE THE ALL_BUT_NAIVE AND SEPARATE PROTOCOLS RUNNING TIMES - DO SOME TEST!
 int main(int argc, char *argv[]) {
     /// argv[1] - protocol name (naive/bucket/hybrid/subset/exponential/all/all_but_naive)
     /// argv[2] - logT
