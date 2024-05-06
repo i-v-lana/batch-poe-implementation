@@ -15,6 +15,9 @@
 
 struct WesolowskiParams {
     int k;
+    void print() {
+        std::cout << "Wesolowski security parameter " << k << std::endl;
+    }
 };
 
 struct BatchingParams {
@@ -24,6 +27,10 @@ struct BatchingParams {
     bigint N;
     int low_order_bits;
     bigint low_order;
+    void print() {
+        std::cout << "Batching parameters: number of instances " << cnt << "; exponents size = ";
+        std::cout << low_order_bits << "; t = " << t << std::endl;
+    }
 };
 
 struct BatchingResult {

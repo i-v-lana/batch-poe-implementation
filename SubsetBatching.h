@@ -21,7 +21,7 @@ public:
     virtual BatchingResult batch(int m);
 
 protected:
-    std::vector<bool> get_take_inst(int run_num);
+    void get_take_inst(int run_num, std::vector<bool> &take);
 };
 
 #endif //SRC_SUBSETBATCHING_H

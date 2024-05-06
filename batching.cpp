@@ -36,6 +36,9 @@ Batching::Batching(WesolowskiParams &_w_params, BatchingParams &_b_params, std::
 }
 
 BatchingResult Batching::combine() {
+//    std::cout << "Running combine() for exponents protocol with params" << std::endl;
+//    w_params.print();
+//    b_params.print();
     alpha.clear();
     alpha.resize(b_params.cnt);
     auto start_total = std::chrono::high_resolution_clock::now();

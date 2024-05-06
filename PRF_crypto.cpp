@@ -20,6 +20,7 @@ PRF_crypto::PRF_crypto(bigint _k, std::string &_iv, int _output_bits) {
 }
 
 bigint PRF_crypto::evaluate(bigint &x) {
+//    std::cout << "Using the prf with output_bits = " << output_bits << std::endl;
     // 15 bytes, because the PRF is run on maximal 15 bytes numbers and it also corresponds to one block
     std::string plaintext = x.bytes_string(15);
     std::string ciphertext;

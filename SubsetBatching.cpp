@@ -11,8 +11,9 @@ BatchingResult SubsetBatching::batch(int m) {
     BatchingResult batch_result; batch_result.batch_y = {}; batch_result.batch_x = {}; batch_result.result = true;
     for (int j = 0; j < m; ++j) {
         auto start_total = std::chrono::high_resolution_clock::now();
+        std::vector<bool> take = {};
 
-        std::vector<bool> take = get_take_inst(j);
+        get_take_inst(j, take);
         bigint batch_x = bigint(1);
         bigint batch_y = bigint(1);
         for (int i = 0; i < b_params.cnt; ++i) {
@@ -37,9 +38,8 @@ BatchingResult SubsetBatching::batch(int m) {
     return batch_result;
 }
 
-std::vector<bool> SubsetBatching::get_take_inst(int run_num) {
-    /// TODO: should I resample the key for every run?
-    std::vector<bool> take = {};
+void SubsetBatching::get_take_inst(int run_num, std::vector<bool> &take) {
+//    std::vector<bool> take = {};
     int repeat_times = ceil((double)b_params.cnt / (double)prf.length());
     for (int i = 0; i < repeat_times; ++i) {
         bigint prf_arg = bigint(i) + bigint(run_num) * bigint(repeat_times);
@@ -48,6 +48,6 @@ std::vector<bool> SubsetBatching::get_take_inst(int run_num) {
 
         take.insert(std::end(take), std::begin(cur_take), std::end(cur_take));
     }
-    return take;
+//    return take;
 }
 

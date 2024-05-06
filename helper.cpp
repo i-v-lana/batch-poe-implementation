@@ -43,6 +43,7 @@ BatchingResult run_protocol(WesolowskiParams _w_params, BatchingParams _b_params
     }
     switch(_protocol) {
         case hybrid: {
+            print_info("HYBRID PROTOCOL:");
             _b_params.low_order_bits = 128;
             HybridBatching hybrid_batch = HybridBatching(_w_params, _b_params, xy, _trapdoor);
             result = hybrid_batch.batch(128);
@@ -54,6 +55,7 @@ BatchingResult run_protocol(WesolowskiParams _w_params, BatchingParams _b_params
             break;
         }
         case naive: {
+            print_info("NAIVE PROTOCOL:");
             NaiveApproach naive_batch = NaiveApproach(_w_params, _b_params, xy, _trapdoor);
             result = naive_batch.batch();
             output_file << "naive," << _b_params.t << "," << _b_params.cnt << "," << result.time.count() << ",smt" << std::endl;
@@ -61,6 +63,7 @@ BatchingResult run_protocol(WesolowskiParams _w_params, BatchingParams _b_params
             break;
         }
         case bucket: {
+            print_info("BUCKET PROTOCOL:");
             BucketBatching bucket_batch = BucketBatching(_w_params, _b_params, xy, _trapdoor);
             int bucket_bit = bucket_optimal_k(_w_params.k, _b_params.cnt);
             print_info("For the bucket protocol, the chosen optimal bit-length of the number of buckets is", bucket_bit);
@@ -70,6 +73,7 @@ BatchingResult run_protocol(WesolowskiParams _w_params, BatchingParams _b_params
             break;
         }
         case subset: {
+            print_info("SUBSET PROTOCOL:");
             SubsetBatching subset_batch = SubsetBatching(_w_params, _b_params, xy, _trapdoor);
             result = subset_batch.batch(128);
             output_file << "subset," << _b_params.t << "," << _b_params.cnt << "," << result.time.count() << ",smt" << std::endl;
@@ -77,6 +81,7 @@ BatchingResult run_protocol(WesolowskiParams _w_params, BatchingParams _b_params
             break;
         }
         case exponent: {
+            print_info("EXPONENT PROTOCOL:");
             Batching batch = Batching(_w_params, _b_params, xy, _trapdoor);
             result = batch.batch();
             output_file << "exponent," << _b_params.t << "," << _b_params.cnt << "," << result.time.count() << ",smt" << std::endl;
@@ -86,7 +91,7 @@ BatchingResult run_protocol(WesolowskiParams _w_params, BatchingParams _b_params
         case all_but_naive: {
             run_protocol(_w_params, _b_params, xy, _trapdoor, hybrid, _output_path);
             run_protocol(_w_params, _b_params, xy, _trapdoor, bucket, _output_path);
-            run_protocol(_w_params, _b_params, xy, _trapdoor, subset, _output_path);
+//            run_protocol(_w_params, _b_params, xy, _trapdoor, subset, _output_path);
             run_protocol(_w_params, _b_params, xy, _trapdoor, exponent, _output_path);
             break;
         }

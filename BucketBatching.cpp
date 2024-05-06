@@ -5,11 +5,14 @@
 #include "BucketBatching.h"
 
 BatchingResult BucketBatching::batch(int _bucket_bit) {
-    BatchingResult batch_result; batch_result.batch_y = {}; batch_result.batch_x = {}; batch_result.result = true;
     auto default_value = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double> total_time = (default_value - default_value);
 
     init_bucket(_bucket_bit);
+    BatchingResult batch_result; batch_result.batch_y.resize(repeat, bigint(1)); batch_result.batch_x.resize(repeat, bigint(1)); batch_result.result = true;
+    std::cout << "Running batch() for Bucket protocol with bucket_bit = " << _bucket_bit << "; and repeat = " << repeat << std::endl;
+    w_params.print();
+    b_params.print();
 
     for (int j = 0; j < repeat; ++j) {
         auto start = std::chrono::high_resolution_clock::now();
@@ -23,48 +26,42 @@ BatchingResult BucketBatching::batch(int _bucket_bit) {
         }
 
         /// Preparing instances from buckets
-        std::vector<bigint> buckets_x(0), buckets_y(0);
+        std::vector<bigint> buckets_x(bucket_num, bigint(1)), buckets_y(bucket_num, bigint(1));
         for (int i = 0; i < bucket_num; ++i) {
-            bigint cur_x = bigint(1);
-            bigint cur_y = bigint(1);
             for (int ind: buckets[i]) {
-                cur_x = helper.mul_mod(cur_x, x[ind], b_params.N);
-                cur_y = helper.mul_mod(cur_y, y[ind], b_params.N);
+                buckets_x[i] = helper.mul_mod(buckets_x[i], x[ind], b_params.N);
+                buckets_y[i] = helper.mul_mod(buckets_y[i], y[ind], b_params.N);
             }
-            buckets_x.push_back(cur_x);
-            buckets_y.push_back(cur_y);
         }
         /// Batching instances from buckets into 1 with Random Exponent
         /// init
         BatchingParams rothem_params = b_params;
         rothem_params.cnt = bucket_num;
         rothem_params.low_order_bits = bucket_bit;
+        auto end = std::chrono::high_resolution_clock::now();
         std::pair<std::vector<bigint>, std::vector<bigint> > buckets_xy = {buckets_x, buckets_y};
         Batching rothem_batch = Batching(w_params, rothem_params, buckets_xy, {p, q});
-        auto end = std::chrono::high_resolution_clock::now();
         /// run
         auto rothem_batch_result = rothem_batch.combine();
         total_time += (end - start) + rothem_batch_result.time;
 
 
         start = std::chrono::high_resolution_clock::now();
-        batch_result.batch_x.push_back(rothem_batch_result.batch_x[0]);
-        batch_result.batch_y.push_back(rothem_batch_result.batch_y[0]);
+        batch_result.batch_x[j] = rothem_batch_result.batch_x[0];
+        batch_result.batch_y[j] = rothem_batch_result.batch_y[0];
         end = std::chrono::high_resolution_clock::now();
         total_time += (end - start);
     }
 
     /// Batching instances from repeated run of the protocol
     /// init
-    auto start = std::chrono::high_resolution_clock::now();
     BatchingParams rothem_params = b_params;
     rothem_params.cnt = repeat;
     std::pair<std::vector<bigint>, std::vector<bigint> > batch_xy = {batch_result.batch_x, batch_result.batch_y};
     Batching rothem_batch = Batching(w_params, rothem_params, batch_xy, {p, q});
-    auto end = std::chrono::high_resolution_clock::now();
     /// run
     batch_result = rothem_batch.batch();
-    batch_result.time += total_time + (end - start);
+    batch_result.time += total_time;
     return batch_result;
 }
 
