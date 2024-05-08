@@ -27,11 +27,10 @@ mpz_helper::mpz_helper() {
     gmp_randinit_mt(state);
 }
 
-bigint mpz_helper::mul_mod(bigint &a, bigint &b, bigint &mod) {
-    bigint ans = bigint();
-    mpz_mul(ans.num, a.num, b.num);
-    mpz_mod(ans.num, ans.num, mod.num);
-    return ans;
+/// res = (a * b) % mod
+void mpz_helper::mul_mod(bigint &res, bigint &a, bigint &b, bigint &mod) {
+    mpz_mul(res.num, a.num, b.num);
+    mpz_mod(res.num, a.num, mod.num);
 }
 
 bigint mpz_helper::get_random_mod(bigint &mod) {

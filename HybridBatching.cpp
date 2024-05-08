@@ -5,22 +5,26 @@
 #include "HybridBatching.h"
 
 BatchingResult HybridBatching::batch(int m) {
-    BatchingResult batch_result; batch_result.batch_y = {}; batch_result.batch_x = {}; batch_result.result = true;
-    auto start_total = std::chrono::high_resolution_clock::now();
-    for (int j = 0; j < m; ++j) {
-        /// should I resample the key for every run?
-        std::vector<bool> take = SubsetBatching::get_take_inst(j);
+    BatchingResult batch_result; batch_result.result = true;
+    batch_result.batch_y.resize(m, bigint(1)); batch_result.batch_x.resize(m, bigint(1));
 
-        bigint batch_x = bigint(1);
-        bigint batch_y = bigint(1);
-        for (int i = 0; i < b_params.cnt; ++i) {
-            if (take[i]) {
-                batch_x = helper.mul_mod(batch_x, x[i], b_params.N);
-                batch_y = helper.mul_mod(batch_y, y[i], b_params.N);
-            }
+    auto default_start = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> total_time = default_start - default_start;
+    for (int j = 0; j < m; ++j) {
+        std::vector<int> taken = {};
+        SubsetBatching::get_take_inst(j, taken);
+
+        auto start = std::chrono::high_resolution_clock::now();
+
+        for (int ind : taken) {
+            helper.mul_mod(batch_result.batch_x[j], batch_result.batch_x[j], x[ind], b_params.N);
+            helper.mul_mod(batch_result.batch_y[j], batch_result.batch_y[j], y[ind], b_params.N);
         }
-        batch_result.batch_x.push_back(batch_x);
-        batch_result.batch_y.push_back(batch_y);
+
+        auto finish = std::chrono::high_resolution_clock::now();
+
+        total_time += (finish - start);
+
     }
 
     BatchingParams rothem_params = b_params;
@@ -29,8 +33,7 @@ BatchingResult HybridBatching::batch(int m) {
 
     Batching rothem_batch = Batching(w_params, rothem_params, batch_xy, {p, q});
 
-    auto end_total = std::chrono::high_resolution_clock::now();
     batch_result = rothem_batch.batch();
-    batch_result.time += end_total - start_total;
+    batch_result.time += total_time;
     return batch_result;
 }

@@ -10,14 +10,14 @@ BatchingResult SubsetBatching::batch(int m) {
     for (int j = 0; j < m; ++j) {
         auto start_total = std::chrono::high_resolution_clock::now();
 
-        std::vector<bool> take = get_take_inst(j);
+        std::vector<int> taken = {};
+
+        get_take_inst(j, taken);
         bigint batch_x = bigint(1);
         bigint batch_y = bigint(1);
-        for (int i = 0; i < b_params.cnt; ++i) {
-            if (take[i]) {
-                batch_x = helper.mul_mod(batch_x, x[i], b_params.N);
-                batch_y = helper.mul_mod(batch_y, y[i], b_params.N);
-            }
+        for (int ind : taken) {
+            helper.mul_mod(batch_x, batch_x, x[ind], b_params.N);
+            helper.mul_mod(batch_y, batch_y, y[ind], b_params.N);
         }
 
         bigint _l = bigint();
@@ -35,17 +35,24 @@ BatchingResult SubsetBatching::batch(int m) {
     return batch_result;
 }
 
-std::vector<bool> SubsetBatching::get_take_inst(int run_num) {
+void SubsetBatching::get_take_inst(int run_num, std::vector<int> &subset) {
     /// TODO: should I resample the key for every run?
-    std::vector<bool> take = {};
     int repeat_times = ceil((double)b_params.cnt / (double)prf.length());
+    int cur_ind = 0;
     for (int i = 0; i < repeat_times; ++i) {
         bigint prf_arg = bigint(i) + bigint(run_num) * bigint(repeat_times);
 
         std::vector<bool> cur_take = prf.evaluate(prf_arg).get_bool_bits(prf.length());
+        for (bool take : cur_take) {
+            if (cur_ind >= b_params.cnt) {
+                return;
+            }
 
-        take.insert(std::end(take), std::begin(cur_take), std::end(cur_take));
+            if (take) {
+                subset.push_back(cur_ind);
+            }
+            ++cur_ind;
+        }
     }
-    return take;
 }
 

@@ -37,18 +37,18 @@ Batching::Batching(WesolowskiParams &_w_params, BatchingParams &_b_params, std::
 BatchingResult Batching::combine() {
     alpha.clear();
     alpha.resize(b_params.cnt);
-    auto start_total = std::chrono::high_resolution_clock::now();
     for (int i = 0; i < b_params.cnt; ++i) {
         bigint cur_i = bigint(i);
         alpha[i] = prf.evaluate(cur_i);
     }
     bigint batch_x = bigint(1);
     bigint batch_y = bigint(1);
+    auto start_total = std::chrono::high_resolution_clock::now();
     for (int i = 0; i < b_params.cnt; ++i) {
         bigint xi = helper.pow(x[i], alpha[i], b_params.N);
         bigint yi = helper.pow(y[i], alpha[i], b_params.N);
-        batch_x = helper.mul_mod(batch_x, xi, b_params.N);
-        batch_y = helper.mul_mod(batch_y, yi, b_params.N);
+        helper.mul_mod(batch_x, batch_x, xi, b_params.N);
+        helper.mul_mod(batch_y, batch_y, yi, b_params.N);
     }
     auto end_total = std::chrono::high_resolution_clock::now();
     BatchingResult combine_result;
