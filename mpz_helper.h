@@ -152,7 +152,7 @@ public:
     bigint generate_prime(int bit_cnt);
     bigint gcd(bigint &a, bigint &b);
     bigint pow(bigint &x, bigint &p, bigint &mod);
-    bigint mul_mod(bigint &a, bigint &b, bigint &mod);
+    void mul_mod(bigint &res, bigint &a, bigint &b, bigint &mod);
     mpz_helper();
 private:
     gmp_randstate_t state;

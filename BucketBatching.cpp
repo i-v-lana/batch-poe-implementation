@@ -12,7 +12,6 @@ BatchingResult BucketBatching::batch(int _bucket_bit) {
     init_bucket(_bucket_bit);
 
     for (int j = 0; j < repeat; ++j) {
-        auto start = std::chrono::high_resolution_clock::now();
         /// should I resample the key for every run?
         /// generating buckets
         buckets.clear();
@@ -23,17 +22,15 @@ BatchingResult BucketBatching::batch(int _bucket_bit) {
         }
 
         /// Preparing instances from buckets
-        std::vector<bigint> buckets_x(0), buckets_y(0);
+        std::vector<bigint> buckets_x(bucket_num, bigint(1)), buckets_y(bucket_num, bigint(1));
+        auto start = std::chrono::high_resolution_clock::now();
         for (int i = 0; i < bucket_num; ++i) {
-            bigint cur_x = bigint(1);
-            bigint cur_y = bigint(1);
             for (int ind: buckets[i]) {
-                cur_x = helper.mul_mod(cur_x, x[ind], b_params.N);
-                cur_y = helper.mul_mod(cur_y, y[ind], b_params.N);
+                helper.mul_mod(buckets_x[i], buckets_x[i], x[ind], b_params.N);
+                helper.mul_mod(buckets_y[i], buckets_y[i], y[ind], b_params.N);
             }
-            buckets_x.push_back(cur_x);
-            buckets_y.push_back(cur_y);
         }
+        auto end = std::chrono::high_resolution_clock::now();
         /// Batching instances from buckets into 1 with Random Exponent
         /// init
         BatchingParams rothem_params = b_params;
@@ -41,30 +38,24 @@ BatchingResult BucketBatching::batch(int _bucket_bit) {
         rothem_params.low_order_bits = bucket_bit;
         std::pair<std::vector<bigint>, std::vector<bigint> > buckets_xy = {buckets_x, buckets_y};
         Batching rothem_batch = Batching(w_params, rothem_params, buckets_xy, {p, q});
-        auto end = std::chrono::high_resolution_clock::now();
         /// run
         auto rothem_batch_result = rothem_batch.combine();
         total_time += (end - start) + rothem_batch_result.time;
 
 
-        start = std::chrono::high_resolution_clock::now();
         batch_result.batch_x.push_back(rothem_batch_result.batch_x[0]);
         batch_result.batch_y.push_back(rothem_batch_result.batch_y[0]);
-        end = std::chrono::high_resolution_clock::now();
-        total_time += (end - start);
     }
 
     /// Batching instances from repeated run of the protocol
     /// init
-    auto start = std::chrono::high_resolution_clock::now();
     BatchingParams rothem_params = b_params;
     rothem_params.cnt = repeat;
     std::pair<std::vector<bigint>, std::vector<bigint> > batch_xy = {batch_result.batch_x, batch_result.batch_y};
     Batching rothem_batch = Batching(w_params, rothem_params, batch_xy, {p, q});
-    auto end = std::chrono::high_resolution_clock::now();
     /// run
     batch_result = rothem_batch.batch();
-    batch_result.time += total_time + (end - start);
+    batch_result.time += total_time;
     return batch_result;
 }
 
