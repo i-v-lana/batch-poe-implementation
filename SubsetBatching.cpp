@@ -36,7 +36,6 @@ BatchingResult SubsetBatching::batch(int m) {
 }
 
 void SubsetBatching::get_take_inst(int run_num, std::vector<int> &subset) {
-    /// TODO: should I resample the key for every run?
     int repeat_times = ceil((double)b_params.cnt / (double)prf.length());
     int cur_ind = 0;
     for (int i = 0; i < repeat_times; ++i) {

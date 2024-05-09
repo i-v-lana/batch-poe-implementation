@@ -33,28 +33,28 @@ BatchingResult BucketBatching::batch(int _bucket_bit) {
         auto end = std::chrono::high_resolution_clock::now();
         /// Batching instances from buckets into 1 with Random Exponent
         /// init
-        BatchingParams rothem_params = b_params;
-        rothem_params.cnt = bucket_num;
-        rothem_params.low_order_bits = bucket_bit;
+        BatchingParams rotem_params = b_params;
+        rotem_params.cnt = bucket_num;
+        rotem_params.low_order_bits = bucket_bit;
         std::pair<std::vector<bigint>, std::vector<bigint> > buckets_xy = {buckets_x, buckets_y};
-        Batching rothem_batch = Batching(w_params, rothem_params, buckets_xy, {p, q});
+        RandomExponents rotem_batch = RandomExponents(w_params, rotem_params, buckets_xy, {p, q});
         /// run
-        auto rothem_batch_result = rothem_batch.combine();
-        total_time += (end - start) + rothem_batch_result.time;
+        auto rotem_batch_result = rotem_batch.combine();
+        total_time += (end - start) + rotem_batch_result.time;
 
 
-        batch_result.batch_x.push_back(rothem_batch_result.batch_x[0]);
-        batch_result.batch_y.push_back(rothem_batch_result.batch_y[0]);
+        batch_result.batch_x.push_back(rotem_batch_result.batch_x[0]);
+        batch_result.batch_y.push_back(rotem_batch_result.batch_y[0]);
     }
 
-    /// Batching instances from repeated run of the protocol
+    /// RandomExponents instances from repeated run of the protocol
     /// init
-    BatchingParams rothem_params = b_params;
-    rothem_params.cnt = repeat;
+    BatchingParams rotem_params = b_params;
+    rotem_params.cnt = repeat;
     std::pair<std::vector<bigint>, std::vector<bigint> > batch_xy = {batch_result.batch_x, batch_result.batch_y};
-    Batching rothem_batch = Batching(w_params, rothem_params, batch_xy, {p, q});
+    RandomExponents rotem_batch = RandomExponents(w_params, rotem_params, batch_xy, {p, q});
     /// run
-    batch_result = rothem_batch.batch();
+    batch_result = rotem_batch.batch();
     batch_result.time += total_time;
     return batch_result;
 }

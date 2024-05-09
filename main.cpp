@@ -46,7 +46,6 @@ int main(int argc, char *argv[]) {
     /// argv[3] - experiments number
     /// argv[4] - number of instances per experiment
     /// argv[5] (voluntary) - the path to the file for storing output data
-    /// TODO: add arguments for the testing run
     errortype error;
     runparams params = get_runparams(argc, argv, error);
     if (error.error) {

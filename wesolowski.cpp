@@ -11,7 +11,6 @@ void Wesolowski::sample_prime(mpz_t l, const mpz_t x) {
 
     mpz_set_ui(one, 1);
     /// choose random number from the set 1...2^(2k)
-    /// TODO: it's not the set containing the first 2^(2k) primes!
     mpz_urandomb(num, rstate, 2*k);
 
     mpz_nextprime(l, num);

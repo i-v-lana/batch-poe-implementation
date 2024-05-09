@@ -12,7 +12,7 @@
 #include "batching.h"
 
 
-class BucketBatching : public Batching {
+class BucketBatching : public RandomExponents {
 private:
     std::vector<std::vector<int> > buckets;
     int repeat = 0;
@@ -23,7 +23,7 @@ private:
 public:
     BucketBatching(WesolowskiParams _w_params, BatchingParams _b_params,
             std::pair<std::vector<bigint>, std::vector<bigint>> xy,
-    std::pair<bigint, bigint> _trapdoor) : Batching(_w_params, _b_params, xy, _trapdoor) {}
+    std::pair<bigint, bigint> _trapdoor) : RandomExponents(_w_params, _b_params, xy, _trapdoor) {}
     BatchingResult batch(int _bucket_bit=5);
 };
 

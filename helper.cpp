@@ -47,7 +47,6 @@ BatchingResult run_protocol(WesolowskiParams _w_params, BatchingParams _b_params
             HybridBatching hybrid_batch = HybridBatching(_w_params, _b_params, xy, _trapdoor);
             result = hybrid_batch.batch(128);
             if (_output_path != "") {
-                /// TODO: print security parameter
                 output_file << "hybrid," << _b_params.t << "," << _b_params.cnt << "," << result.time.count() << ",smt" << std::endl;
             }
             print_info("Running time of the hybrid protocol is", result.time.count());
@@ -77,7 +76,7 @@ BatchingResult run_protocol(WesolowskiParams _w_params, BatchingParams _b_params
             break;
         }
         case exponent: {
-            Batching batch = Batching(_w_params, _b_params, xy, _trapdoor);
+            RandomExponents batch = RandomExponents(_w_params, _b_params, xy, _trapdoor);
             result = batch.batch();
             output_file << "exponent," << _b_params.t << "," << _b_params.cnt << "," << result.time.count() << ",smt" << std::endl;
             print_info("Running time of the exponent protocol is", result.time.count());
@@ -137,7 +136,6 @@ runparams get_runparams(int cnt, char *args[], errortype &error) {
     }
     result.protocol = str_protocol[protocol_arg];
 
-    /// TODO: add errors when not numbers
     result.logt = std::stoi(str_args[2]);
     result.experiments = std::stoi(str_args[3]);
     result.instances_per_exp = std::stol(str_args[4]);
@@ -161,7 +159,6 @@ runparams get_runparams(int cnt, char *args[], errortype &error) {
     bigint p = helper.generate_prime(1024);
     bigint q = helper.generate_prime(1024);
     bigint N = p * q;
-    /// TODO: kopirovani? Pokud ano, memory leak;
     result.N = N;
     result.trapdoor = {p, q};
 

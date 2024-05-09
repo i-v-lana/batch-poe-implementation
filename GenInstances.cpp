@@ -44,7 +44,6 @@ GenInstances::GenInstances(bigint _N, std::pair<bigint, bigint> _trapdoor, long 
 }
 
 std::pair<std::vector<bigint>, std::vector<bigint> > GenInstances::get_instances(std::string file_name, long long cnt) {
-    /// TODO: fix the random choice of instances.
     bigint zero = bigint(0);
     if (cnt > pow(10, 7)) {
         cnt = pow(10, 7);

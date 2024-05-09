@@ -12,11 +12,11 @@
 #include "PRF_crypto.h"
 #include "batching.h"
 
-class SubsetBatching : public Batching {
+class SubsetBatching : public RandomExponents {
 public:
     SubsetBatching(WesolowskiParams& _w_params, BatchingParams& _b_params,
                    std::pair<std::vector<bigint>, std::vector<bigint>>& xy,
-                   std::pair<bigint, bigint> _trapdoor) : Batching(_w_params, _b_params, xy, _trapdoor) {}
+                   std::pair<bigint, bigint> _trapdoor) : RandomExponents(_w_params, _b_params, xy, _trapdoor) {}
 
     virtual BatchingResult batch(int m);
 
