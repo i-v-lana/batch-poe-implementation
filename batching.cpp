@@ -8,7 +8,7 @@
 #include <iostream>
 #include <gmpxx.h>
 
-void Batching::init(WesolowskiParams _w_params, BatchingParams _b_params) {
+void RandomExponents::init(WesolowskiParams _w_params, BatchingParams _b_params) {
     b_params = _b_params;
     w_params = _w_params;
     helper = mpz_helper();
@@ -16,13 +16,13 @@ void Batching::init(WesolowskiParams _w_params, BatchingParams _b_params) {
     prf = PRF_crypto(helper.get_random(b_params.lambda_prf), _iv, b_params.low_order_bits);
 }
 
-Batching::Batching(WesolowskiParams &_w_params, BatchingParams &_b_params, std::pair<bigint, bigint> _trapdoor) {
+RandomExponents::RandomExponents(WesolowskiParams &_w_params, BatchingParams &_b_params, std::pair<bigint, bigint> _trapdoor) {
     init(_w_params, _b_params);
     set_trapdoor(_trapdoor.first, _trapdoor.second);
     gen();
 }
 
-Batching::Batching(WesolowskiParams &_w_params, BatchingParams &_b_params, std::pair<std::vector<bigint>, std::vector<bigint>> &xy, std::pair<bigint, bigint> _trapdoor) {
+RandomExponents::RandomExponents(WesolowskiParams &_w_params, BatchingParams &_b_params, std::pair<std::vector<bigint>, std::vector<bigint>> &xy, std::pair<bigint, bigint> _trapdoor) {
     init(_w_params, _b_params);
     x.clear();
     y.clear();
@@ -35,7 +35,7 @@ Batching::Batching(WesolowskiParams &_w_params, BatchingParams &_b_params, std::
     set_trapdoor(_trapdoor.first, _trapdoor.second);
 }
 
-BatchingResult Batching::combine() {
+BatchingResult RandomExponents::combine() {
     alpha.clear();
     alpha.resize(b_params.cnt);
     for (int i = 0; i < b_params.cnt; ++i) {
@@ -60,21 +60,21 @@ BatchingResult Batching::combine() {
     return combine_result;
 }
 
-BatchingResult Batching::batch() {
+BatchingResult RandomExponents::batch() {
     BatchingResult batch_result = combine();
     bigint _l = bigint();
     bigint _pi = bigint();
     batch_prover_part(&_l, &_pi, batch_result.batch_x[0]);
     std::pair<bool, std::chrono::duration<double>> result = batch_verifier_part(batch_result.batch_x[0], batch_result.batch_y[0], _l, _pi);
 
-    auto total_lior_rothem_time = batch_result.time + result.second;
+    auto total_lior_rotem_time = batch_result.time + result.second;
 
     batch_result.result = result.first;
-    batch_result.time = total_lior_rothem_time;
+    batch_result.time = total_lior_rotem_time;
     return batch_result;
 }
 
-void Batching::print(std::ofstream& file) {
+void RandomExponents::print(std::ofstream& file) {
     for (int i = 0; i < b_params.cnt; ++i) {
         /// todo: can't print mpz_t on windows?
 //        gmp_printf("%Zd %Zd\n", x[i].num, y[i].num);
@@ -83,14 +83,14 @@ void Batching::print(std::ofstream& file) {
     }
 }
 
-void Batching::print_cout() {
+void RandomExponents::print_cout() {
     for (int i = 0; i < b_params.cnt; ++i) {
         gmp_printf("x = %Zd; y = %Zd\n", x[i].num, y[i].num);
         gmp_printf("alpha[i] = %Zd\n", alpha[i].num);
     }
 }
 
-void Batching::gen() {
+void RandomExponents::gen() {
     x.clear();
     y.clear();
     x.resize(b_params.cnt);
@@ -101,11 +101,11 @@ void Batching::gen() {
     }
 }
 
-std::pair<std::vector<bigint>, std::vector<bigint> > Batching::get_instances() {
+std::pair<std::vector<bigint>, std::vector<bigint> > RandomExponents::get_instances() {
     return {x, y};
 }
 
-bigint Batching::trapdoor(bigint& _x) {
+bigint RandomExponents::trapdoor(bigint& _x) {
     if (!trapdoor_flag) {
         print_error("BATCHING: Can't calculate the trapdoor, as it wasn't correctly set");
         return _x;
@@ -124,7 +124,7 @@ bigint Batching::trapdoor(bigint& _x) {
     return ans;
 }
 
-void Batching::set_trapdoor(bigint& _p, bigint& _q) {
+void RandomExponents::set_trapdoor(bigint& _p, bigint& _q) {
     if (b_params.N == _p * _q) {
         p = _p;
         q = _q;
@@ -135,7 +135,7 @@ void Batching::set_trapdoor(bigint& _p, bigint& _q) {
     }
 }
 
-void Batching::batch_prover_part(bigint* _l, bigint* _pi, bigint& batch_x) {
+void RandomExponents::batch_prover_part(bigint* _l, bigint* _pi, bigint& batch_x) {
     Wesolowski vdf = Wesolowski();
     vdf.setup(w_params.k, b_params.N.num, b_params.t);
     if (trapdoor_flag)
@@ -144,7 +144,7 @@ void Batching::batch_prover_part(bigint* _l, bigint* _pi, bigint& batch_x) {
         vdf.prover(_l->num, _pi->num, batch_x.num);
 }
 
-std::pair<bool, std::chrono::duration<double>> Batching::batch_verifier_part(bigint& batch_x, bigint& batch_y, bigint& _l, bigint& _pi) {
+std::pair<bool, std::chrono::duration<double>> RandomExponents::batch_verifier_part(bigint& batch_x, bigint& batch_y, bigint& _l, bigint& _pi) {
     auto wes_start = std::chrono::high_resolution_clock::now();
     Wesolowski vdf = Wesolowski();
     vdf.setup(w_params.k, b_params.N.num, b_params.t);
@@ -153,7 +153,7 @@ std::pair<bool, std::chrono::duration<double>> Batching::batch_verifier_part(big
     return std::make_pair(result, (wes_end - wes_start));
 }
 
-bool Batching::check_trapdoor(bigint &_x) {
+bool RandomExponents::check_trapdoor(bigint &_x) {
     bigint gcd = helper.gcd(_x, b_params.N);
     return (gcd == bigint(1));
 }

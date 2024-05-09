@@ -27,13 +27,13 @@ BatchingResult HybridBatching::batch(int m) {
 
     }
 
-    BatchingParams rothem_params = b_params;
-    rothem_params.cnt = m;
+    BatchingParams rotem_params = b_params;
+    rotem_params.cnt = m;
     std::pair<std::vector<bigint>, std::vector<bigint> > batch_xy = {batch_result.batch_x, batch_result.batch_y};
 
-    Batching rothem_batch = Batching(w_params, rothem_params, batch_xy, {p, q});
+    RandomExponents rotem_batch = RandomExponents(w_params, rotem_params, batch_xy, {p, q});
 
-    batch_result = rothem_batch.batch();
+    batch_result = rotem_batch.batch();
     batch_result.time += total_time;
     return batch_result;
 }

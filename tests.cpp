@@ -62,7 +62,7 @@ bool batching_tests::small_test() {
     b_params.cnt = 10;
 
 
-    Batching batch = Batching(w_params, b_params, {p, q});
+    RandomExponents batch = RandomExponents(w_params, b_params, {p, q});
     BatchingResult batch_result = batch.batch();
     bool result = (batch_result.batch_x[0] == bigint(418)) && (batch_result.batch_y[0] == bigint(171)) && batch_result.result;
     if (!result) {
@@ -94,7 +94,7 @@ bool batching_tests::normal_test() {
     b_params.cnt = 10;
 
 
-    Batching batch = Batching(w_params, b_params, {p, q});
+    RandomExponents batch = RandomExponents(w_params, b_params, {p, q});
     BatchingResult batch_result = batch.batch();
     const char *test_result_x = "188815551064059700799729473638480500879704544260"
             "860773062472340755036998819289877257449822956749293719208991079293780"

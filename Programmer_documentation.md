@@ -22,7 +22,7 @@
     - `l`: Input parameter representing the generated prime.
     - `pi`: Input parameter representing the proof.
 
-## 2. `Batching`
+## 2. `RandomExponents`
 - **Description**: Base class for batching protocols. Represents [the exponent batching](https://eprint.iacr.org/2021/1209) approach from Lior Rotem's paper
 - **Methods**:
   - `batch()`: Chooses a random exponent `alpha_i` for every instance, then calculates the product of `x_i^alpha_i`, and the product `y_i^alpha_i`, and finally runs the Wesolowski protocol for the batched instance.

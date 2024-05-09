@@ -25,8 +25,6 @@ private:
     bigint trapdoor(bigint& _x);
 public:
     Experiments() = default;
-    /// TODO:
-    /// Experiments(source, connection_key);
     Experiments(int sample_size, bigint& mod_N, std::pair<bigint, bigint> _trapdoor, long long _t);
     std::vector<std::pair<std::vector<bigint>, std::vector<bigint> > > get(long instances_per_exp, int exp);
 };
