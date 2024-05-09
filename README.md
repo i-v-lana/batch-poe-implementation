@@ -92,18 +92,18 @@ For every instance runs the Wesolowski protocol separately.
 ## Protocol_type=exponential as the Random Exponents Protocol
 Represents the [Random Exponents batching approach](https://eprint.iacr.org/2021/1209) from Lior Rotem's paper (the random exponent compiler). 
 
-See the [programmer_documentation.md](https://gitlab.mff.cuni.cz/teaching/nprg045/hubacek/ivanova/-/blob/master/Programmer_documentation.md) for further details.
+See the [programmer_documentation.md](https://github.com/i-v-lana/batch-poe-implementation/blob/master/Programmer_documentation.md) for further details.
 
 ## Protocol_type=subset as the Random Subsets Protocol
 Represents the [Random Subsets batching protocol](https://eprint.iacr.org/2021/1209) from Lior Rotem's paper (the random subset compiler). 
 
-See the [programmer_documentation.md](https://gitlab.mff.cuni.cz/teaching/nprg045/hubacek/ivanova/-/blob/master/Programmer_documentation.md) for further details.
+See the [programmer_documentation.md](https://github.com/i-v-lana/batch-poe-implementation/blob/master/Programmer_documentation.md) for further details.
 
 ## Protocol_type=bucket as the Bucket Protocol
-See the [programmer_documentation.md](https://gitlab.mff.cuni.cz/teaching/nprg045/hubacek/ivanova/-/blob/master/Programmer_documentation.md) for further details.
+See the [programmer_documentation.md](https://github.com/i-v-lana/batch-poe-implementation/blob/master/Programmer_documentation.md) for further details.
 
 ## Protocol_type=hybrid as the Hybrid Protocol
-See the [programmer_documentation.md](https://gitlab.mff.cuni.cz/teaching/nprg045/hubacek/ivanova/-/blob/master/Programmer_documentation.md) for further details.
+See the [programmer_documentation.md](https://github.com/i-v-lana/batch-poe-implementation/blob/master/Programmer_documentation.md) for further details.
 
 ## Protocol_type=all
 Runs all the above types for the same parameters and instances. Used for the comparison of the protocols.
